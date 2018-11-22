@@ -128,8 +128,8 @@ d3.csv(dataDir + 'movies.csv', function(error, dataset) {
         console.log(nestedByDecade)
         console.log(themesByGenre)
         // Create groups per decade
-        var decadeRightMargin = 5;
-        var decadeWidth = Math.floor(svgWidth / themesByGenre.length) - decadeRightMargin;
+        var decadeRightMargin = 50;
+        var decadeWidth = Math.floor(svgWidth / (1 + themesByGenre.length)) - decadeRightMargin;
         decadeG = svg.selectAll('.decade')
             .data(themesByGenre)
             .enter()
@@ -152,7 +152,7 @@ d3.csv(dataDir + 'movies.csv', function(error, dataset) {
             .style('text-decoration', 'underline')
             .style('font-family', 'Open Sans')
             .attr('transform', function(d, i) {
-                return 'translate(' + [decadeWidth/2, 15] + ')';
+                return 'translate(' + [decadeWidth + 20, 15] + ')';
             });
 
         // Create bars for themes for each decade
