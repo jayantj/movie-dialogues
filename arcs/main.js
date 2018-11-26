@@ -73,29 +73,23 @@ d3.json('./m0.json', function(error, dataset) {
     const femaleG = svg.append('g').attr('class', 'female');
     linearLayout(male, malexfix, maleScale);
     linearLayout(female, femaleyfix, femaleScale);
-    male.forEach((m, i) => {
-      m.idx = i;
-    });
-    const maleLen = male.length;
-    female.forEach((f, i) => {
-      f.idx = i+maleLen;
-    });
+
     const allCharacters = male.concat(female);
     
     links.forEach(function(d, i) {
       // d.source = isNaN(d.source) ? d.source : male[d.source-1];
       d.source = allCharacters.find(el => el.id === d.source);
       // d.target = isNaN(d.target) ? d.target : male[d.target-1];
-      d.target = allCharacters.find((el, i) => el.id === d.target);
+      d.target = allCharacters.find(el => el.id === d.target);
     });
 
     cLinks.forEach((d, i) => {
       d.source = allCharacters.find(el => el.id === d.source);
-      d.target = allCharacters.find((el, i) => el.id === d.target);
+      d.target = allCharacters.find(el => el.id === d.target);
     });
 
     drawLinks(maleG, links, mRadianScale);
-    drawCrossLinks(cLinks, maleScale, femaleScale, maleLen);
+    drawCrossLinks(cLinks, maleScale, femaleScale);
     drawNodes(maleG, male, malexfix, maleScale);
     drawNodes(femaleG, female, femaleyfix, femaleScale);
 });
@@ -106,7 +100,7 @@ function linearLayout(nodes, fix, scale) {
       d.y = scale(i);
   })
 }
-function drawCrossLinks (links, s1, s2, maleLen) {
+function drawCrossLinks (links, s1, s2) {
   console.log("cross", links);
   svg.selectAll('line')
   .data(links)
@@ -115,11 +109,11 @@ function drawCrossLinks (links, s1, s2, maleLen) {
   .attr('class', 'cLink')
   .attr('x1', malexfix)
   .attr('y1', function(d, i) {
-    return s1(d.source.idx - 1);
+    return d.source.y;
   })
   .attr('x2', femaleyfix)
   .attr('y2', function(d, i) {
-    return s2(d.target.idx - (maleLen + 1));
+    return d.target.y;
   })
   .style('stroke', '#000');
 }
