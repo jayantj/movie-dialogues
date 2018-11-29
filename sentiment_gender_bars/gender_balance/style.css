@@ -1,0 +1,26 @@
+.axis-label {
+    text-anchor: middle;
+    font-size: 12px;
+    font-weight: semibold;
+}
+
+body {
+    font-family: "Open Sans";
+    margin: 0;
+}
+
+#main {
+    margin: 20px;
+}
+
+.genderBar {
+	stroke-width: 1;
+	stroke: black;
+    stroke-opacity: 0.4;
+}
+.legendOrdinal {
+    font-size:12px;
+}
+.sentimentBar {
+    background: -webkit-linear-gradient(to right,blue, red); 
+}
