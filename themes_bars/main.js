@@ -50,7 +50,7 @@ function themeScoresByGenre(movies) {
         themesOfInterest.forEach(function (t) {
             themeScores[t] = 0;
         })
-        themesByGenre[g] = {'themes': themeScores, 'key': g, 'total': 0};
+        themesByGenre[g] = {'themes': themeScores, 'total': 0};
     })
 
     movies.forEach(function(d) {
@@ -98,34 +98,39 @@ d3.csv(dataDir + 'movies.csv', function(error, dataset) {
         });
         moviesData = dataset;
         // Create grouping by decade
-        var nestedByDecade = d3.nest()
-            // .key(function(row) {
-            //     return row.genres;
-            // })
-            .key(decadeForRow)
-            .sortKeys(d3.ascending)
-            .rollup(function(group) {
-                // Aggregate theme stats per decade
-                var totalConv = d3.sum(group, function(row) {
-                    return row['tot_conv'];
-                });
-                var themeScores = [];
-                themesOfInterest.forEach(function(theme) {
-                    themeScores.push({
-                        'key': theme,
-                        'value': d3.sum(group, function(row) {
-                            return row[theme + '_conv'] / totalConv
-                        })
-                    });
-                });
-                return {
-                    'total': totalConv,
-                    'themes': themeScores
-                }
-            })
-            .entries(moviesData)
+        // var nestedByDecade = d3.nest()
+        //     // .key(function(row) {
+        //     //     return row.genres;
+        //     // })
+        //     .key(decadeForRow)
+        //     .sortKeys(d3.ascending)
+        //     .rollup(function(group) {
+        //         // Aggregate theme stats per decade
+        //         var totalConv = d3.sum(group, function(row) {
+        //             return row['tot_conv'];
+        //         });
+        //         var themeScores = [];
+        //         themesOfInterest.forEach(function(theme) {
+        //             themeScores.push({
+        //                 'key': theme,
+        //                 'value': d3.sum(group, function(row) {
+        //                     return row[theme + '_conv'] / totalConv
+        //                 })
+        //             });
+        //         });
+        //         return {
+        //             'total': totalConv,
+        //             'themes': themeScores
+        //         }
+        //     })
+        //     .entries(moviesData)
         var themesByGenre = d3.entries(themeScoresByGenre(moviesData));
-        console.log(nestedByDecade)
+        var maxThemeScore = d3.max(themesByGenre, function(d) {
+            return d3.max(d3.values(d.value.themes))
+        });
+        var minThemeScore = d3.min(themesByGenre, function(d) {
+            return d3.min(d3.values(d.value.themes))
+        });
         console.log(themesByGenre)
         // Create groups per decade
         var decadeRightMargin = 50;
@@ -163,8 +168,8 @@ d3.csv(dataDir + 'movies.csv', function(error, dataset) {
             .range([0, decadeWidth])
 
         var radiusScale = d3.scaleSqrt()
-            .domain([0, 1])
-            .range([0, 30])
+            .domain([minThemeScore, maxThemeScore])
+            .range([1, 20])
 
         var themeColorScale = d3.scaleOrdinal(d3.schemeCategory20);
         var titleHeight = 30;
