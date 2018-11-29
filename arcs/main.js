@@ -6,7 +6,9 @@ var svg = d3.select('svg');
 var svgWidth = +svg.attr('width');
 var svgHeight = +svg.attr('height');
 
-var padding = {t: 40, r: 40, b: 40, l: 40};
+var padding = {t: 40, r: 90, b: 40, l: 90};
+
+var rectNodeSize = 30;
 
 // Compute chart dimensions
 var chartWidth = svgWidth - padding.l - padding.r;
@@ -73,29 +75,23 @@ d3.json('./m0.json', function(error, dataset) {
     const femaleG = svg.append('g').attr('class', 'female');
     linearLayout(male, malexfix, maleScale);
     linearLayout(female, femaleyfix, femaleScale);
-    male.forEach((m, i) => {
-      m.idx = i;
-    });
-    const maleLen = male.length;
-    female.forEach((f, i) => {
-      f.idx = i+maleLen;
-    });
+
     const allCharacters = male.concat(female);
     
     links.forEach(function(d, i) {
       // d.source = isNaN(d.source) ? d.source : male[d.source-1];
       d.source = allCharacters.find(el => el.id === d.source);
       // d.target = isNaN(d.target) ? d.target : male[d.target-1];
-      d.target = allCharacters.find((el, i) => el.id === d.target);
+      d.target = allCharacters.find(el => el.id === d.target);
     });
 
     cLinks.forEach((d, i) => {
       d.source = allCharacters.find(el => el.id === d.source);
-      d.target = allCharacters.find((el, i) => el.id === d.target);
+      d.target = allCharacters.find(el => el.id === d.target);
     });
 
-    drawLinks(maleG, links, mRadianScale);
-    drawCrossLinks(cLinks, maleScale, femaleScale, maleLen);
+    drawLinks(maleG, links, mRadianScale, malexfix);
+    drawCrossLinks(cLinks, maleScale, femaleScale);
     drawNodes(maleG, male, malexfix, maleScale);
     drawNodes(femaleG, female, femaleyfix, femaleScale);
 });
@@ -106,8 +102,8 @@ function linearLayout(nodes, fix, scale) {
       d.y = scale(i);
   })
 }
-function drawCrossLinks (links, s1, s2, maleLen) {
-  console.log("cross", links);
+
+function drawCrossLinks (links, s1, s2) {
   svg.selectAll('line')
   .data(links)
   .enter()
@@ -115,28 +111,57 @@ function drawCrossLinks (links, s1, s2, maleLen) {
   .attr('class', 'cLink')
   .attr('x1', malexfix)
   .attr('y1', function(d, i) {
-    return s1(d.source.idx - 1);
+    return d.source.y;
   })
   .attr('x2', femaleyfix)
   .attr('y2', function(d, i) {
-    return s2(d.target.idx - (maleLen + 1));
+    return d.target.y;
   })
   .style('stroke', '#000');
 }
 
-function drawLinks(group, links, scale) {
+function drawLinks(group, links, scale, xFix) {
   var arc = d3.lineRadial()
   // .interpolate()
   // .tension(0)
   .angle(function(d) { return scale(d); });
 
+  const linksOfConv = links.flatMap((l, i) => {
+    const conversations = Array.from({length: l.lines.length}, (c, j) => {
+      let {y, ...source} = l.source;
+      const temp = {
+        source: {
+          cname: l.source.cname,
+          gender: l.source.gender,
+          id: l.source.id,
+          movieId: l.source.movieId,
+          movieTitle: l.source.movieTitle,
+          x: l.source.x,
+          y: (rectNodeSize / l.counts) * j + l.source.y,
+        },
+        target: {
+          cname: l.target.cname,
+          gender: l.target.gender,
+          id: l.target.id,
+          movieId: l.target.movieId,
+          movieTitle: l.target.movieTitle,
+          x: l.target.x,
+          y: (rectNodeSize / l.counts) * j + l.target.y,
+        },
+        movieId: l.movieId,
+      };
+      return temp;
+    });
+    return conversations;
+  });
+
   group.selectAll('path')
-  .data(links)
+  .data(linksOfConv)
   .enter()
   .append('path')
   .attr('class', 'link')
   .attr('transform', function(d, i) {
-    return `translate(140,${d.source.y + (d.target.y-d.source.y)/2}) rotate(90)`
+    return `translate(${xFix},${d.source.y + (d.target.y-d.source.y)/2}) rotate(90)`
   })
   .attr('d', function(d, i) {
       var xDist = Math.abs(d.target.y - d.source.y);
@@ -153,13 +178,15 @@ function drawNodes(group, nodes, fix, scale) {
   group.selectAll('circle')
   .data(nodes)
   .enter()
-  .append('circle')
+  .append('rect')
   .attr('class', 'node')
-  .attr('cx', function(d, i) {
+  .attr('x', function(d, i) {
       return fix;
   })
-  .attr('cy', function(d, i) {
+  .attr('y', function(d, i) {
       return scale(i);
   })
-  .attr('r', radius);
+  .attr('width', '5px')
+  .attr('height', `${rectNodeSize}px`)
+  .attr('fill', 'red');
 };
