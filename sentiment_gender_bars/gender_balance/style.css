@@ -24,3 +24,18 @@ body {
 .sentimentBar {
     background: -webkit-linear-gradient(to right,blue, red); 
 }
+.themeBar {
+    opacity: 0.8;
+}
+.themeBar.hovered rect {
+    fill: #fe902b;
+}
+.themeBar.selected rect {
+    opacity:1;
+}
+.themeBar.filteredout rect {
+    opacity:0.4;
+}
+.themeBar text {
+    font-size:12px;
+}

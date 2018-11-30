@@ -105,6 +105,15 @@ d3.csv('./movies.csv',
             .domain([0,100])
             .range([0,chartWidth-140]);
 
+        xThemeScale = d3.scaleLinear()
+            .domain([0,80])
+            .range([0,chartWidth-140]);
+
+        chartG.append('g')
+            .attr('transform', 'translate(80,370)')
+            .call(d3.axisTop(xThemeScale).ticks(5));
+
+
         xSentimentScale = d3.scaleLinear()
             .domain([-1,1])
             .range([0,chartWidth-140]);
@@ -164,6 +173,8 @@ function updateChart(movie) {
         .append('g');
         
     barsEnter.append('rect')
+        //.attr('x', 150)
+        //.attr('y', 200)
         .attr('height', '30px')
         .attr('width', function(d){
             return xScale(100);
@@ -174,6 +185,8 @@ function updateChart(movie) {
         }); 
 
     barsEnter.append('rect')
+        //.attr('x', 150)
+        //.attr('y', 200)
         .attr('height', '30px')
         .attr('width', function(d){
             return xScale(d.mm+d.mf+d.ff);
@@ -184,6 +197,8 @@ function updateChart(movie) {
         });
 
     barsEnter.append('rect')
+        //.attr('x', 150)
+        //.attr('y', 200)
         .attr('height', '30px')
         .attr('width', function(d){
             return xScale(d.mf+d.mm);
@@ -194,6 +209,8 @@ function updateChart(movie) {
         });
 
     barsEnter.append('rect')
+        //.attr('x', 150)
+        //.attr('y', 200)
         .attr('height', '30px')
         .attr('width', function(d){
             return xScale(d.mm);
@@ -212,6 +229,7 @@ function updateChart(movie) {
         .append('g');
         
     barsEnter.append('rect')
+        //.attr('x', 150)
         .attr('y', 60)
         .attr('height', '30px')
         .attr('width', function(d){
@@ -223,6 +241,7 @@ function updateChart(movie) {
         });
 
     barsEnter.append('rect')
+        //.attr('x', 150)
         .attr('y', 60)
         .attr('height', '30px')
         .attr('width', function(d){
@@ -234,6 +253,7 @@ function updateChart(movie) {
         });
 
     barsEnter.append('rect')
+        //.attr('x', 150)
         .attr('y', 60)
         .attr('height', '30px')
         .attr('width', function(d){
@@ -245,6 +265,7 @@ function updateChart(movie) {
         });
 
     barsEnter.append('rect')
+        //.attr('x', 150)
         .attr('y', 60)
         .attr('height', '30px')
         .attr('width', function(d){
@@ -299,6 +320,8 @@ function updateChart(movie) {
     //     })
     //     .attr('class','sentimentBar');
 
+    chartG = svg.append('g')
+        .attr('transform', 'translate('+[padding.l, padding.t]+')');
 
     var sentimentColorRange = ['green','red']
         
@@ -333,88 +356,157 @@ function updateChart(movie) {
         .attr("y2", 260);
 
     // Top 3 Themes
-    rScale.domain([0,filteredMovie[0].topThreeThemes[0].value]);
-    var bubbles = chartG.selectAll('.bubble')
-        .data(filteredMovie);
-    var bubblesEnter = bubbles.enter()
-        .append('g');
+    // rScale.domain([0,filteredMovie[0].topThreeThemes[0].value]);
+    // var bubbles = chartG.selectAll('.bubble')
+    //     .data(filteredMovie);
+    // var bubblesEnter = bubbles.enter()
+    //     .append('g');
 
-    bubblesEnter.append('text')
-        .attr('x', 80)
-        .attr('y', 330)
-        .attr('dy', '0.3em')
-        .text('Top Themes');
+    // bubblesEnter.append('text')
+    //     .attr('x', 80)
+    //     .attr('y', 330)
+    //     .attr('dy', '0.3em')
+    //     .text('Top Themes');
 
-    bubblesEnter.append('circle')
-        .attr('cx', 50)
-        .attr('cy', 400)
-        .attr('r', function(d){
-            return rScale(parseFloat(d.topThreeThemes[0].value));
+    // bubblesEnter.append('circle')
+    //     .attr('cx', 50)
+    //     .attr('cy', 400)
+    //     .attr('r', function(d){
+    //         return rScale(parseFloat(d.topThreeThemes[0].value));
+    //     })
+    //     .style("fill", '#3978AF')
+    //     .style('stroke-width','1px');
+
+    // bubblesEnter.append('text')
+    //     .attr('x', 0)
+    //     .attr('y', 465)
+    //     .attr('dy', '0.3em')
+    //     .text(function(d){
+    //         return d.topThreeThemes[0].key;
+    //     })
+    //     .attr('font-size','12px');
+
+    // bubblesEnter.append('circle')
+    //     .attr('cx', function(d) {
+    //         return 50 + (0 + 2*rScale(parseFloat(d.topThreeThemes[0].value)))
+    //     })        
+    //     .attr('cy', 400)
+    //     .attr('r', function(d){
+    //         return rScale(parseFloat(d.topThreeThemes[1].value));
+    //     })
+    //     .style("fill", '#3978AF')
+    //     .style('stroke-width','1px');
+
+
+    // bubblesEnter.append('text')
+    //     .attr('x', function(d) {
+    //         return (0 + 0 + 2*rScale(parseFloat(d.topThreeThemes[0].value)))
+    //     }) 
+    //     .attr('y', 465)
+    //     .attr('dy', '0.3em')
+    //     .text(function(d){
+    //         return d.topThreeThemes[1].key;
+    //     })
+    //     .attr('font-size','12px');
+
+    // bubblesEnter.append('circle')
+    //     .attr('cx', function(d) {
+    //         return 50 + (0 + 2*rScale(parseFloat(d.topThreeThemes[0].value)) + (0 + 2*rScale(parseFloat(d.topThreeThemes[1].value))))
+    //     })
+    //     .attr('cy', 400)
+    //     .attr('r', function(d){
+    //         return rScale(parseFloat(d.topThreeThemes[2].value));
+    //     })
+    //     .style("fill", '#3978AF')
+    //     .style('stroke-width','1px');
+
+    // bubblesEnter.append('text')
+    //     .attr('x', function(d) {
+    //         return 40 + (0 + 2*rScale(parseFloat(d.topThreeThemes[0].value)) + (0 + 2*rScale(parseFloat(d.topThreeThemes[1].value))))
+    //     })
+    //     .attr('y', 465)
+    //     .attr('dy', '0.3em')
+    //     .text(function(d){
+    //         return d.topThreeThemes[2].key;
+    //     })
+    //     .attr('font-size','12px');
+
+    // barsEnter.append('text')
+    //     .attr('x', 100)
+    //     .attr('dy', '0.9em')
+    //     .text(function(d){
+    //         return d.movie_title;
+    //     });
+
+    //themes
+    chartG = svg.append('g')
+        .attr('transform', 'translate('+[padding.l, padding.t]+')');
+
+    var tBars = chartG.selectAll('.themeBars')
+        .data(props);
+
+    var tBarsEnter = tBars.enter()
+        .append('g')
+        .attr('class', 'themeBar')
+        .on('mouseover', function(d) {
+            // Use this to select the hovered element
+            var hovered = d3.select(this);
+            // add hovered class to style the group
+            hovered.classed('hovered', true);
         })
-        .style("fill", '#3978AF')
-        .style('stroke-width','1px');
-
-    bubblesEnter.append('text')
-        .attr('x', 0)
-        .attr('y', 465)
-        .attr('dy', '0.3em')
-        .text(function(d){
-            return d.topThreeThemes[0].key;
+        .on('mouseout', function(d) {
+            // Clean up the actions that happened in mouseover
+            var hovered = d3.select(this);
+            hovered.classed('hovered', false);
         })
-        .attr('font-size','12px');
+        .on('click', function(){
+            // Remove the currently selected classname from that element
+            d3.select('.themeBar.selected').classed('selected', false);
+            var clicked = d3.select(this);
+            // Add the selected classname to element that was just clicked
+            d3.selectAll('.themeBar').classed('filteredout',true);
 
-    bubblesEnter.append('circle')
-        .attr('cx', function(d) {
-            return 50 + (0 + 2*rScale(parseFloat(d.topThreeThemes[0].value)))
-        })        
-        .attr('cy', 400)
-        .attr('r', function(d){
-            return rScale(parseFloat(d.topThreeThemes[1].value));
-        })
-        .style("fill", '#3978AF')
-        .style('stroke-width','1px');
-
-
-    bubblesEnter.append('text')
-        .attr('x', function(d) {
-            return (0 + 0 + 2*rScale(parseFloat(d.topThreeThemes[0].value)))
-        }) 
-        .attr('y', 465)
-        .attr('dy', '0.3em')
-        .text(function(d){
-            return d.topThreeThemes[1].key;
-        })
-        .attr('font-size','12px');
-
-    bubblesEnter.append('circle')
-        .attr('cx', function(d) {
-            return 50 + (0 + 2*rScale(parseFloat(d.topThreeThemes[0].value)) + (0 + 2*rScale(parseFloat(d.topThreeThemes[1].value))))
-        })
-        .attr('cy', 400)
-        .attr('r', function(d){
-            return rScale(parseFloat(d.topThreeThemes[2].value));
-        })
-        .style("fill", '#3978AF')
-        .style('stroke-width','1px');
-
-    bubblesEnter.append('text')
-        .attr('x', function(d) {
-            return 40 + (0 + 2*rScale(parseFloat(d.topThreeThemes[0].value)) + (0 + 2*rScale(parseFloat(d.topThreeThemes[1].value))))
-        })
-        .attr('y', 465)
-        .attr('dy', '0.3em')
-        .text(function(d){
-            return d.topThreeThemes[2].key;
-        })
-        .attr('font-size','12px');
-
-    barsEnter.append('text')
-        .attr('x', 100)
-        .attr('dy', '0.9em')
-        .text(function(d){
-            return d.movie_title;
+            clicked.classed('filteredout', false);
+            clicked.classed('hovered', false);
+            clicked.classed('selected', true);
+            //call function here? to find which arcs are of the selected theme
+            //filteredArcs();
         });
-    bars.exit().remove();
+
+        
+    tBars.merge(tBarsEnter)
+        .attr('transform', function(d,i){
+            return 'translate('+[0, i * 10 + 4]+')';
+        });
+
+    tBarsEnter.append('rect')
+        .attr('x', 80)
+        .attr('y', function(d,i){
+            return 380+parseFloat(i/2)*20;
+        })
+        .attr('height', 10)
+        .attr('width', function(d){
+            return xThemeScale(parseInt(d.value));
+        })
+        .attr('fill','#4778AA')
+        .attr('class','themeBar');
+
+    tBarsEnter.append('text')
+        .attr('x', 20)
+        .attr('y', function(d,i){
+            return 380+parseFloat(i/2)*20;
+        })
+        .style('color', 'black')
+        .attr('dy', '0.8em')
+        // .attr('transform', function(d,i) {
+        //     return 'translate('+[-60, i * 10 + 4]+')';
+        // })
+        .text(function(d) {
+            return d.key;
+        })
+        .attr('class','themeBar');
+
+    tBars.exit().remove();
     // **** Draw and Update your chart here ****
 
 }
