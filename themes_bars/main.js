@@ -249,7 +249,7 @@ d3.csv(dataDir + 'movies.csv', function(error, dataset) {
             //     });
             themesGEnter.append('rect')
 
-            var labelSize = 20;
+            var labelSize = 10;
             themesGEnter.append('text')
 
             // Propagates data to child
@@ -275,7 +275,7 @@ d3.csv(dataDir + 'movies.csv', function(error, dataset) {
                 .duration(750)
                 .text(function(d) {
                     console.log(d);
-                    return d.value.toFixed(0);
+                    return d.value.toFixed(2);
                 })
                 .style('text-anchor', 'middle')
                 .style('fill', 'white')
