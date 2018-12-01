@@ -66,7 +66,7 @@ function themeScoresByGenre(movies) {
             [...genres].filter(x => genresOfInterest.has(x)));
         if (intersection.size > 0) {
             intersection.forEach(function (g) {
-                themesByGenre[g]['total'] += d['tot_conv'];
+                themesByGenre[g]['total'] += 1;
                 themesOfInterest.forEach(function (t) {
                     themesByGenre[g]['themes'][t] += d[t + '_conv'];
                 })
@@ -77,8 +77,12 @@ function themeScoresByGenre(movies) {
     for(var genre in themesByGenre) {
         var genreScores = themesByGenre[genre];
         for(var theme in genreScores['themes'])
-            genreScores['themes'][theme] /= genreScores['total'];
+            if(genreScores['total'])
+                genreScores['themes'][theme] /= genreScores['total'];
+            else
+                genreScores['themes'][theme] = 0;
     }
+    console.log(themesByGenre)
     return d3.entries(themesByGenre);
 }
 
@@ -124,6 +128,7 @@ d3.csv(dataDir + 'movies.csv', function(error, dataset) {
                 var tx = 30 + i * (genreWidth + genreRightMargin);
                 return 'translate('+[tx, 10]+')';
             })
+        genreG
             .append('text')
             .text(function(d) {
                 return d;
@@ -145,53 +150,38 @@ d3.csv(dataDir + 'movies.csv', function(error, dataset) {
         var titleHeight = 30;
 
         var themesShown = new Set([]);
+        var themesGenreScores = themeScoresByGenre(moviesData)
+        var maxThemeScore = d3.max(themesGenreScores, function(d) {
+            return d3.max(Object.values(d.value.themes));
+        });
+        var minThemeScore = d3.min(themesGenreScores, function(d) {
+            return d3.min(Object.values(d.value.themes))
+        });
+        console.log(minThemeScore, maxThemeScore)
+        var radiusScale = d3.scaleSqrt()
+                .domain([minThemeScore, maxThemeScore])
+                .range([1, 20])
 
-        createBubbleChart = function(themesGenreScores) {
-            var radiusScales = {};
-            themesOfInterest.forEach(function(theme) {
-                var maxThemeScore = d3.max(themesGenreScores, function(d) {
-                    return d.value.themes[theme];
-                });
-                var minThemeScore = d3.min(themesGenreScores, function(d) {
-                    return d.value.themes[theme];
-                });
-                radiusScales[theme] = d3.scaleSqrt()
-                    .domain([minThemeScore, maxThemeScore])
-                    .range([3, 15])
-            });
-            console.log(themesGenreScores[9])
-            var genreG = svg.selectAll('.genre')
-                .data(themesGenreScores)
+        createBubbleChart = function(filteredScores) {
+            var genreG = svg
+                .selectAll('.genre')
+                .data(filteredScores);
             var themesG = genreG.selectAll('.theme')
                 .data(function(d) {
-                    return d3.entries(d.value.themes);
-                })
-            var themesGEnter = themesG.enter()
-
+                    var data = d3.entries(d.value.themes);
+                    return data
+                });
             var textWidth = 25;
             var textShiftX = 25;
             var textShiftY = 8;
-            themesGEnter.append('g')
+            var themesGEnter = themesG.enter()
+                .append('g')
                 .attr('class', 'theme')
                 .attr('transform', function(d, i) {
                     var ty = i * (barHeight + themeBottomMargin) + titleHeight;
                     return 'translate('+ [0, ty] + ')';
                 })
-                .append('text')
-                .text(function(d) {
-                    if(themesShown.has(d.key))
-                        return "";
-                    themesShown.add(d.key);
-                    return d.key;
-                })
-                .attr('dy', '0.3em')
-                .style('text-anchor', 'middle')
-                .style('fill', 'black')
-                .style('font-size', 15)
-                .style('font-family', 'Open Sans')
-                .attr('transform', 'translate(' + [0, textShiftY] + ')');
-
-            themesGEnter.selectAll('.theme')
+            themesGEnter
                 .append('circle')
                 .attr('transform', function(d) {
                     return 'translate(' + [textWidth + textShiftX, textShiftY] + ')';
@@ -200,23 +190,48 @@ d3.csv(dataDir + 'movies.csv', function(error, dataset) {
                     return themeColorScale(d.key);
                 });
 
-            Object.keys(radiusScales).forEach(function(t){
-                var scale = radiusScales[t];
-                // console.log(t, scale.domain()[0], scale.domain()[1])
-            });
-            themesG.merge(themesGEnter)
+            themesGEnter
+                .append('text')
+                .text(function(d) {
+                    if(themesShown.has(d.key))
+                        return "";
+                    themesShown.add(d.key);
+                    return d.key;
+                })
+                .attr('dy', '0.3em')
+                .attr('transform', 'translate(' + [0, textShiftY] + ')')
+                .style('text-anchor', 'middle')
+                .style('fill', 'black')
+                .style('font-size', 15)
+                .style('font-family', 'Open Sans');
+
+            // Propagates data to child
+            themesG.select('circle')
+
+            d3.selectAll('.genre')
+                .selectAll('.theme circle')
                 .transition()
                 .duration(750)
-                .selectAll('circle')
-                .attr('r', function(d, i) {
-                    var scale = radiusScales[d.key]
-                    var maxVal = scale.domain()[1];
-                    var minVal = scale.domain()[0];
-                    if (d.value > maxVal || d.value < minVal)
-                        console.log('Invalid', d.key, d.value, maxVal, minVal)
-                    return scale(d.value);
+                .attr('r', function(d) {
+                    // if (d.key == "death")
+                    //     console.log(d);
+                    // var maxVal = scale.domain()[1];
+                    // var minVal = scale.domain()[0];
+                    // if (d.value > maxVal || d.value < minVal)
+                    //     console.log('Invalid', d.key, d.value, maxVal, minVal)
+                    return radiusScale(d.value);
                 })
         }
-        createBubbleChart(themeScoresByGenre(moviesData));
+        createBubbleChart(themesGenreScores);
         filteredThemesByGenre = themeScoresByGenre(filterMoviesByDecade(moviesData, 1990))
+        d3.select('#decadeSelect').on(
+            'change', function() {
+                if(this.value == 'All')
+                    createBubbleChart(themesGenreScores)
+                else {
+                    var decade = parseInt(this.value.slice(0, -1))
+                    createBubbleChart(themeScoresByGenre(filterMoviesByDecade(moviesData, decade)))
+                }
+            }
+        )
     });
