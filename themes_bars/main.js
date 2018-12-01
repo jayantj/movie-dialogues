@@ -247,14 +247,32 @@ d3.csv(dataDir + 'movies.csv', function(error, dataset) {
             //     .attr('fill', function(d) {
             //         return themeColorScale(d.key);
             //     });
-            themesGEnter
-                .append('rect')
+            themesGEnter.append('rect')
+
+            var labelSize = 20;
+            themesGEnter.append('text')
+
+            // Propagates data to child
+            // themesG.select('circle')
+            themesG.select('rect')
+
+            d3.selectAll('.genre')
+                .selectAll('.theme rect')
+                .transition()
+                .duration(750)
+                .attr('height', function(d) {
+                    return rowHeight;
+                })
+                .attr('width', function(d) {
+                    return columnWidth;
+                })
                 .attr('fill', function(d) {
                     return themeColorScale(d.value);
                 })
-            var labelSize = 20;
-            themesGEnter
-                .append('text')
+            d3.selectAll('.genre')
+                .selectAll('.theme text')
+                .transition()
+                .duration(750)
                 .text(function(d) {
                     console.log(d);
                     return d.value.toFixed(0);
@@ -267,37 +285,6 @@ d3.csv(dataDir + 'movies.csv', function(error, dataset) {
                     return 'translate('+ [columnWidth / 2, rowHeight / 2] + ')';
                 })
 
-
-            // Propagates data to child
-            // themesG.select('circle')
-            themesG.select('rect')
-
-            d3.selectAll('.genre')
-                .selectAll('.theme rect')
-                // .transition()
-                // .duration(750)
-                .attr('height', function(d) {
-                    return rowHeight;
-                })
-                .attr('width', function(d) {
-                    return columnWidth;
-                })
-                .text(function(d) {
-                    return 'a'
-                })
-            d3.selectAll('.genre')
-                .selectAll('.theme rect')
-                // .transition()
-                // .duration(750)
-                .attr('height', function(d) {
-                    return rowHeight;
-                })
-                .attr('width', function(d) {
-                    return columnWidth;
-                })
-                .text(function(d) {
-                    return 'a'
-                })
                 // .attr('', function(d) {
                 //     return radiusScale(d.value);
                 // })
