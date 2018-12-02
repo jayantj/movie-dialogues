@@ -1,3 +1,5 @@
+var onDecadeChange;
+
 (function() {    
     var dataDir = '../data/'
     var svg = d3.select('#genres-themes svg');
@@ -280,16 +282,19 @@
 
         };
         createBubbleChart(themesGenreScores);
-        d3.select('#decadeSelect').on(
-            'change', function() {
-                if(this.value == 'All')
-                    createBubbleChart(themesGenreScores)
-                else {
-                    var decade = parseInt(this.value.slice(0, -1))
-                    createBubbleChart(themeScoresByGenre(filterMoviesByDecade(moviesData, decade)))
-                }
-            }
-        );
-    });
 
+        onDecadeChange = function(decade) {
+            if(decade == 'All')
+                createBubbleChart(themesGenreScores)
+            else
+                createBubbleChart(themeScoresByGenre(filterMoviesByDecade(moviesData, decade)))
+        }
+
+        d3.select('#decadeSelect').on('change', function() {
+            if(this.value == 'All')
+                onDecadeChange(this.value)
+            else
+                onDecadeChange(parseInt(this.value.slice(0, -1)))
+        });
+    });
 })();
