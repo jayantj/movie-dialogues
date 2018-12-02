@@ -6,24 +6,24 @@ var svgMain = d3.select('#main').select('svg');
 var svgMainWidth = +svgMain.attr('width');
 var svgMainHeight = +svgMain.attr('height');
 
-var padding = {t: 40, r: 90, b: 40, l: 90};
+var MainPadding = {t: 40, r: 180, b: 40, l: 180};
 
-var rectNodeHeight = 40;
+var rectNodeHeight = 60;
 var rectNodeWidth = 5;
 
 // Compute chart dimensions
-var mainChartWidth = svgMainWidth - padding.l - padding.r;
-var mainChartHeight = svgMainHeight - padding.t - padding.b;
+var mainChartWidth = svgMainWidth - MainPadding.l - MainPadding.r;
+var mainChartHeight = svgMainHeight - MainPadding.t - MainPadding.b;
 console.log('width and height: ', mainChartHeight);
 
 // fixed node radius
 var radius = 4;
-var malexfix = padding.l + 100;
-var femalefix = svgMainWidth - padding.r - 100;
+var malexfix = MainPadding.l + 100;
+var femalefix = svgMainWidth - MainPadding.r - 100;
 
 // Create a group element for appending chart elements
 var chartG = svgMain.append('g')
-    .attr('transform', 'translate('+[padding.l, padding.t]+')');
+    .attr('transform', 'translate('+[MainPadding.l, MainPadding.t]+')');
 
 // Create groups for the x- and y-axes
 var xAxisG = chartG.append('g')
@@ -60,10 +60,10 @@ d3.json('./../data/conv/m0.json', function(error, dataset) {
     cLinks = dataset.crossGenderLinks;
     maleScale = d3.scaleLinear()
     .domain([0, male.length - 1])
-    .range([padding.t, mainChartHeight - padding.b]);
+    .range([MainPadding.t, mainChartHeight - MainPadding.b]);
     femaleScale = d3.scaleLinear()
     .domain([0, female.length - 1])
-    .range([padding.t, mainChartHeight - padding.b]);
+    .range([MainPadding.t, mainChartHeight - MainPadding.b]);
 
     mRadianScale = d3.scaleLinear()
     .range([Math.PI / 2, 3 * Math.PI / 2]);
