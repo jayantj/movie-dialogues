@@ -58,17 +58,17 @@ d3.csv(dataDir + 'movies.csv',
     // Load data and use this function to process each row
     function(row) {
         return {
-            'index': row['index'],
-            'movie_id': +row['movie_id'],
+            'index': +row['index'],
+            'movie_id': row['movie_id'],
             'mm_percent': +row['mm_percent'],
             'mf_percent': +row['mf_percent'],
             'ff_percent': +row['ff_percent'],
-            'movie_title': +row['movie_title'],
+            'movie_title': row['movie_title'],
             'movie_year': +row['movie_year'],
             'imdb_rating': +row['imdb_rating'],
             'imdb_votes': +row['imdb_votes'],
-            'genres': +row['genres'],
-            'bechdel': +row['bechdel'],
+            'genres': row['genres'],
+            'bechdel': row['bechdel'],
             'sentiment': +row['sentiment'],
             'tot_conv': +row['tot_conv'],
             'affect_conv': +row['affect_conv'],
@@ -150,9 +150,9 @@ d3.csv(dataDir + 'movies.csv',
             cell.init(this);
             cell.update(this, dataset);
         });
-        cellEnter.append('g')
+        /*cellEnter.append('g')
 	        .attr('class', 'brush')
-            .call(brush);
+            .call(brush);*/
 });
 
 //Splom Cell Methods
@@ -186,7 +186,24 @@ SplomCell.prototype.update = function(g, data) {
         .append('circle')
         .attr('class', 'dot')
         .style("fill", function(d) { return colorScale(d.bechdel); })
-        .attr('r', 3);
+        .attr('r', 3)
+        .on('click', function(d,i){
+            var movieid = d.movie_id;
+            var selected = svg.select(this);
+            console.log(selected);
+            if(d.classed('selected')){
+                d.classed('selected', false);
+                svg.selectAll(".dot")
+                .classed("hidden", false);
+            }
+            else{
+                d.classed('selected', true);
+                svg.selectAll(".dot")
+                    .classed("hidden", function(d){
+                        return d.movie_id != movieid;
+                    })
+            }
+        });
 
 
     dots.merge(dotsEnter).attr('cx', function(d){
