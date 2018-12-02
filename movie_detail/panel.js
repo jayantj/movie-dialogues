@@ -1,11 +1,12 @@
-// Global function called - needed?
-// function onMovieSelected() {
-//     var select = d3.select('#movieSelect').node();
-//     // Get current value of select element
-//     var movie = select.options[select.selectedIndex].value;
-//     // Update chart with the selected category of letters
-//     updateChart(movie);
-// }
+function filterArcs(selectedTheme, arcs) {
+    arcs.each(function(d,i) {
+        d3.select(this).classed('themeFade',false);
+        var themeList = ['anxiety','anger','sad','sexual','work','leisure','home','money','religion','death','swear'];
+        if(!d.source.conv.themes[themeList.indexOf(selectedTheme.toLowerCase())]) {
+            d3.select(this).classed('themeFade',true);
+        }
+    });
+}
 
 var svg = d3.select('#side_panel').select('svg');
 
@@ -23,13 +24,7 @@ var chartHeight = svgHeight - padding.t - padding.b;
 var chartG = svg.append('g')
     .attr('transform', 'translate('+[padding.l, padding.t]+')');
 
-//var colorMap = {'mm':'plum','mf':'coral','ff':'blue','unknown':'gray'};
-
 var genderColorMap = {'mm':'#FFD700','mf':'#FFB14E','ff':'#FA8775','unknown':'gray'};
-
-//var themesColorMap = {'posemo_conv':'#FFD700','negemo_conv':'#FFB14E','anx_conv':,'anger_conv':,'sad_conv':,'sexual_conv':,'work_conv':,'leisure_conv':,'home_conv':,'money_conv':,'relig_conv':,'death_conv':,'swear_conv':,'netspeak_conv':};
-//'mm':'#FFD700','mf':'#FFB14E','ff':'#FA8775','unknown':'gray'};
-
 
 d3.csv('./data/movies.csv',
     // Load data and use this function to process each row
@@ -138,13 +133,6 @@ d3.csv('./data/movies.csv',
         rScale = d3.scaleLinear()
             .range([0,50]);
 
-        // rScale = d3.scaleSqrt()
-        //     .domain([0,0.2]);
-
-        // Create global variables here and intialize the chart
-
-        // **** Your JavaScript code goes here ****
-        // Update the chart for all letters to initialize
         updateChart('m0');
     });
 
@@ -453,90 +441,6 @@ function updateChart(movie) {
     //     .attr('height',"30px")
     //     .attr('width',"4px");
 
-
-    // Top 3 Themes
-    // rScale.domain([0,filteredMovie[0].topThreeThemes[0].value]);
-    // var bubbles = chartG.selectAll('.bubble')
-    //     .data(filteredMovie);
-    // var bubblesEnter = bubbles.enter()
-    //     .append('g');
-
-    // bubblesEnter.append('text')
-    //     .attr('x', 80)
-    //     .attr('y', 330)
-    //     .attr('dy', '0.3em')
-    //     .text('Top Themes');
-
-    // bubblesEnter.append('circle')
-    //     .attr('cx', 50)
-    //     .attr('cy', 400)
-    //     .attr('r', function(d){
-    //         return rScale(parseFloat(d.topThreeThemes[0].value));
-    //     })
-    //     .style("fill", '#3978AF')
-    //     .style('stroke-width','1px');
-
-    // bubblesEnter.append('text')
-    //     .attr('x', 0)
-    //     .attr('y', 465)
-    //     .attr('dy', '0.3em')
-    //     .text(function(d){
-    //         return d.topThreeThemes[0].key;
-    //     })
-    //     .attr('font-size','12px');
-
-    // bubblesEnter.append('circle')
-    //     .attr('cx', function(d) {
-    //         return 50 + (0 + 2*rScale(parseFloat(d.topThreeThemes[0].value)))
-    //     })        
-    //     .attr('cy', 400)
-    //     .attr('r', function(d){
-    //         return rScale(parseFloat(d.topThreeThemes[1].value));
-    //     })
-    //     .style("fill", '#3978AF')
-    //     .style('stroke-width','1px');
-
-
-    // bubblesEnter.append('text')
-    //     .attr('x', function(d) {
-    //         return (0 + 0 + 2*rScale(parseFloat(d.topThreeThemes[0].value)))
-    //     }) 
-    //     .attr('y', 465)
-    //     .attr('dy', '0.3em')
-    //     .text(function(d){
-    //         return d.topThreeThemes[1].key;
-    //     })
-    //     .attr('font-size','12px');
-
-    // bubblesEnter.append('circle')
-    //     .attr('cx', function(d) {
-    //         return 50 + (0 + 2*rScale(parseFloat(d.topThreeThemes[0].value)) + (0 + 2*rScale(parseFloat(d.topThreeThemes[1].value))))
-    //     })
-    //     .attr('cy', 400)
-    //     .attr('r', function(d){
-    //         return rScale(parseFloat(d.topThreeThemes[2].value));
-    //     })
-    //     .style("fill", '#3978AF')
-    //     .style('stroke-width','1px');
-
-    // bubblesEnter.append('text')
-    //     .attr('x', function(d) {
-    //         return 40 + (0 + 2*rScale(parseFloat(d.topThreeThemes[0].value)) + (0 + 2*rScale(parseFloat(d.topThreeThemes[1].value))))
-    //     })
-    //     .attr('y', 465)
-    //     .attr('dy', '0.3em')
-    //     .text(function(d){
-    //         return d.topThreeThemes[2].key;
-    //     })
-    //     .attr('font-size','12px');
-
-    // barsEnter.append('text')
-    //     .attr('x', 100)
-    //     .attr('dy', '0.9em')
-    //     .text(function(d){
-    //         return d.movie_title;
-    //     });
-
     //themes
     chartG = svg.append('g')
         .attr('transform', 'translate('+[padding.l, padding.t]+')');
@@ -564,7 +468,7 @@ function updateChart(movie) {
             var hovered = d3.select(this);
             hovered.classed('hovered', false);
         })
-        .on('click', function(){
+        .on('click', function(d){
             // Remove the currently selected classname from that element
             d3.select('.themeBar.selected').classed('selected', false);
             var clicked = d3.select(this);
@@ -574,8 +478,14 @@ function updateChart(movie) {
             clicked.classed('filteredout', false);
             clicked.classed('hovered', false);
             clicked.classed('selected', true);
-            //call function here? to find which arcs are of the selected theme
-            //filteredArcs();
+
+            var maleArcs = d3.select('.male').selectAll('path');
+            var femaleArcs = d3.select('.female').selectAll('path');
+            var crossGenderLines = d3.select('.cross-g').selectAll('line');
+
+            filterArcs(d.key,maleArcs);
+            filterArcs(d.key,femaleArcs);
+            //filterArcs(d.key,crossGenderLines);
         });
 
         
@@ -612,7 +522,5 @@ function updateChart(movie) {
         .attr('class','themeBar');
 
     tBars.exit().remove();
-    // **** Draw and Update your chart here ****
 
 }
-// Remember code outside of the data callback function will run before the data loads

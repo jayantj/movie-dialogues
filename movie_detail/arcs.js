@@ -128,8 +128,8 @@ function drawCrossLinks (group, links, s1, s2) {
   .attr('x2', femalefix)
   .attr('y2', function(d, i) {
     return d.target.y;
-  })
-  .style('stroke', '#000');
+  });
+  //.style('stroke', '#000');
 }
 
 function drawLinks(group, links, scale, xFix) {
@@ -145,6 +145,7 @@ function drawLinks(group, links, scale, xFix) {
         source: {
           source,
           y: (rectNodeSize / l.counts) * j + l.source.y,
+          conv: l.lines[j],
         },
         target: {
           cname: l.target.cname,
@@ -154,6 +155,7 @@ function drawLinks(group, links, scale, xFix) {
           movieTitle: l.target.movieTitle,
           x: l.target.x,
           y: (rectNodeSize / l.counts) * j + l.target.y,
+          conv: l.lines[j],
         },
         movieId: l.movieId,
       };
@@ -177,7 +179,7 @@ function drawLinks(group, links, scale, xFix) {
       scale.domain([0, points.length - 1]);
       return arc(points);
   })
-  .style('stroke', '#000')
+  //.style('stroke', '#000')
   .style('fill', 'none');
 }
 

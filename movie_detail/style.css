@@ -20,7 +20,7 @@ body {
 .genderBar {
 	stroke-width: 1;
 	stroke: black;
-    stroke-opacity: 0.4;
+  stroke-opacity: 0.4;
 }
 .legendOrdinal {
     font-size:12px;
@@ -74,7 +74,30 @@ body {
 .dot:hover text {
     opacity: 1;
 }
-
-path:hover {
-    stroke-opacity: 0.6;
+.male path {
+    stroke: #7e7e7e;
+    stroke-width: 1;
+}
+.female path {
+    stroke: #7e7e7e;
+    stroke-width: 1;
+}
+.male path:hover {
+    stroke:orange;
+}
+.female path:hover {
+    stroke:orange;
+}
+.cross-g line {
+    stroke: #7e7e7e;
+    stroke-width: 0.7;
+}
+.cross-g line:hover {
+    stroke:orange;
+}
+.link.themeFade {
+    stroke-width: 0;
+}
+.clink.themeFade {
+    stroke-width: 0;
 }
