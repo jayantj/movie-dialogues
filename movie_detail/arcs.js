@@ -78,6 +78,7 @@ d3.json('./data/conv/m0.json', function(error, dataset) {
     // });
     const maleG = svgMain.append('g').attr('class', 'male');
     const femaleG = svgMain.append('g').attr('class', 'female');
+    const crossG = svgMain.append('g').attr('class', 'cross-g');
     linearLayout(male, malexfix, maleScale);
     linearLayout(female, femalefix, femaleScale);
 
@@ -102,7 +103,7 @@ d3.json('./data/conv/m0.json', function(error, dataset) {
 
     drawLinks(maleG, maleLinks, mRadianScale, malexfix);
     drawLinks(femaleG, femaleLinks, fRadianScale, femalefix);
-    drawCrossLinks(cLinks, maleScale, femaleScale);
+    drawCrossLinks(crossG, cLinks, maleScale, femaleScale);
     drawNodes(maleG, male, malexfix, maleScale);
     drawNodes(femaleG, female, femalefix, femaleScale);
 });
@@ -114,8 +115,8 @@ function linearLayout(nodes, fix, scale) {
   })
 }
 
-function drawCrossLinks (links, s1, s2) {
-  svgMain.selectAll('line')
+function drawCrossLinks (group, links, s1, s2) {
+  group.selectAll('line')
   .data(links)
   .enter()
   .append('line')
@@ -142,12 +143,7 @@ function drawLinks(group, links, scale, xFix) {
       let {y, ...source} = l.source;
       const temp = {
         source: {
-          cname: l.source.cname,
-          gender: l.source.gender,
-          id: l.source.id,
-          movieId: l.source.movieId,
-          movieTitle: l.source.movieTitle,
-          x: l.source.x,
+          source,
           y: (rectNodeSize / l.counts) * j + l.source.y,
         },
         target: {
