@@ -1,100 +1,100 @@
-var dataDir = '../data/'
-var svg = d3.select('svg');
+(function() {    
+    var dataDir = '../data/'
+    var svg = d3.select('#genres-themes svg');
 
-// Get layout parameters
-var svgWidth = +svg.attr('width');
-var svgHeight = +svg.attr('height');
+    // Get layout parameters
+    var svgWidth = +svg.attr('width');
+    var svgHeight = +svg.attr('height');
 
-// Global dataset
-var moviesData;
+    // Global dataset
+    var moviesData;
 
-var themesOfInterest = [
-    // 'posemo',
-    // 'negemo',
-    'anx',
-    'anger',
-    'sad',
-    'sexual',
-    // 'work',
-    'leisure',
-    'home',
-    'money',
-    'relig',
-    'death',
-    'swear',
-    // 'netspeak',
-];
-var genresOfInterest = [
-    'drama',
-    'thriller',
-    'comedy',
-    'action',
-    'crime',
-    'romance',
-    'sci-fi',
-    'adventure',
-    'mystery',
-    'horror',
-    'fantasy',
-    'war'
-];
+    var themesOfInterest = [
+        // 'posemo',
+        // 'negemo',
+        'anx',
+        'anger',
+        'sad',
+        'sexual',
+        // 'work',
+        'leisure',
+        'home',
+        'money',
+        'relig',
+        'death',
+        'swear',
+        // 'netspeak',
+    ];
+    var genresOfInterest = [
+        'drama',
+        'thriller',
+        'comedy',
+        'action',
+        'crime',
+        'romance',
+        'sci-fi',
+        'adventure',
+        'mystery',
+        'horror',
+        'fantasy',
+        'war'
+    ];
 
-function decadeForRow(row) {
-    return row.movie_year - row.movie_year % 10;
-};
+    function decadeForRow(row) {
+        return row.movie_year - row.movie_year % 10;
+    };
 
-function filterMoviesByDecade(movies, decade) {
-    var filteredMovies = movies.filter(function(m) {
-        return decadeForRow(m) == decade;
-    })
-    return filteredMovies
-}
-
-function capitalizeFirstLetter(string) {
-    if(string == 'sci-fi')
-        return 'Sci-Fi'
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-
-function themeScoresByGenre(movies) {
-    var themesByGenre = {}
-    genresOfInterest.forEach(function (g) {
-        themeScores = {}
-        themesOfInterest.forEach(function (t) {
-            themeScores[t] = 0;
+    function filterMoviesByDecade(movies, decade) {
+        var filteredMovies = movies.filter(function(m) {
+            return decadeForRow(m) == decade;
         })
-        themesByGenre[g] = {'themes': themeScores, 'total': 0};
-    })
-    var genresSet = new Set(genresOfInterest)
-    movies.forEach(function(d) {
-        var genres = new Set(d.genres);
-        var intersection = new Set(
-            [...genres].filter(x => genresSet.has(x)));
-        if (intersection.size > 0) {
-            intersection.forEach(function (g) {
-                themesByGenre[g]['total'] += 1;
-                themesOfInterest.forEach(function (t) {
-                    themesByGenre[g]['themes'][t] += d[t + '_conv'];
-                })
-            })
-        }
-    });
-
-    for(var genre in themesByGenre) {
-        var genreScores = themesByGenre[genre];
-        for(var theme in genreScores['themes'])
-            if(genreScores['total'])
-                genreScores['themes'][theme] /= genreScores['total'];
-            else
-                genreScores['themes'][theme] = 0;
+        return filteredMovies
     }
-    console.log(themesByGenre)
-    return d3.entries(themesByGenre);
-}
+
+    function capitalizeFirstLetter(string) {
+        if(string == 'sci-fi')
+            return 'Sci-Fi'
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 
 
-d3.csv(dataDir + 'movies.csv', function(error, dataset) {
+    function themeScoresByGenre(movies) {
+        var themesByGenre = {}
+        genresOfInterest.forEach(function (g) {
+            themeScores = {}
+            themesOfInterest.forEach(function (t) {
+                themeScores[t] = 0;
+            })
+            themesByGenre[g] = {'themes': themeScores, 'total': 0};
+        })
+        var genresSet = new Set(genresOfInterest)
+        movies.forEach(function(d) {
+            var genres = new Set(d.genres);
+            var intersection = new Set(
+                [...genres].filter(x => genresSet.has(x)));
+            if (intersection.size > 0) {
+                intersection.forEach(function (g) {
+                    themesByGenre[g]['total'] += 1;
+                    themesOfInterest.forEach(function (t) {
+                        themesByGenre[g]['themes'][t] += d[t + '_conv'];
+                    })
+                })
+            }
+        });
+
+        for(var genre in themesByGenre) {
+            var genreScores = themesByGenre[genre];
+            for(var theme in genreScores['themes'])
+                if(genreScores['total'])
+                    genreScores['themes'][theme] /= genreScores['total'];
+                else
+                    genreScores['themes'][theme] = 0;
+        }
+        return d3.entries(themesByGenre);
+    }
+
+
+    d3.csv(dataDir + 'movies.csv', function(error, dataset) {
         // Log and return from an error
         if(error) {
             console.error('Error while loading ./cars.csv dataset.');
@@ -126,7 +126,6 @@ d3.csv(dataDir + 'movies.csv', function(error, dataset) {
 
         var columnWidth = Math.floor((svgWidth - rowLabelWidth - rightMargin) / genresOfInterest.length);
         var rowHeight = Math.floor((svgHeight - columnLabelHeight - bottomMargin) / themesOfInterest.length);
-        console.log(rowHeight, themesOfInterest)
         var genreG = svg.selectAll('.genre')
             .data(Array.from(genresOfInterest), function(d) {
                 return d;
@@ -276,11 +275,10 @@ d3.csv(dataDir + 'movies.csv', function(error, dataset) {
                 .transition()
                 .duration(750)
                 .text(function(d) {
-                    console.log(d);
                     return d.value.toFixed(2);
                 })
 
-        }
+        };
         createBubbleChart(themesGenreScores);
         d3.select('#decadeSelect').on(
             'change', function() {
@@ -291,5 +289,7 @@ d3.csv(dataDir + 'movies.csv', function(error, dataset) {
                     createBubbleChart(themeScoresByGenre(filterMoviesByDecade(moviesData, decade)))
                 }
             }
-        )
+        );
     });
+
+})();
