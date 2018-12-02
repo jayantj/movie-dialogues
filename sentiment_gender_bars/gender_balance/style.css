@@ -1,0 +1,58 @@
+.axis-label {
+    text-anchor: middle;
+    font-size: 12px;
+    font-weight: semibold;
+}
+
+body {
+    font-family: "Open Sans";
+    margin: 0;
+}
+
+.wrapper {
+  display: flex;
+}
+
+.divLayout {
+    margin: 20px;
+}
+
+.genderBar {
+	stroke-width: 1;
+	stroke: black;
+    stroke-opacity: 0.4;
+}
+.legendOrdinal {
+    font-size:12px;
+}
+.sentimentBar {
+    background: -webkit-linear-gradient(to right,blue, red); 
+}
+.themeBar {
+    opacity: 0.8;
+}
+.themeBar.hovered rect {
+    fill: #fe902b;
+}
+.themeBar.selected rect {
+    opacity:1;
+}
+.themeBar.filteredout rect {
+    opacity:0.4;
+}
+.themeBar text {
+    font-size:12px;
+}
+.genderBarText {
+    font-size:12px;
+}
+.toolTip {
+      position: absolute;
+      display: none;
+      min-width: 80px;
+      height: auto;
+      background: none repeat scroll 0 0 #ffffff;
+      border: 1px solid #6F257F;
+      padding: 14px;
+      text-align: center;
+}
