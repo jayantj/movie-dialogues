@@ -26,7 +26,7 @@ var chartG = svg.append('g')
 
 var genderColorMap = {'mm':'#FFD700','mf':'#FFB14E','ff':'#FA8775','unknown':'gray'};
 
-d3.csv('./data/movies.csv',
+d3.csv('./../data/movies.csv',
     // Load data and use this function to process each row
     row = function(row) {
         return {

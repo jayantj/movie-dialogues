@@ -42,7 +42,7 @@ var mRadianScale = function() { return ;};
 var fRadianScale = function() { return ;};
 
 
-d3.json('./data/conv/m0.json', function(error, dataset) {
+d3.json('./../data/conv/m0.json', function(error, dataset) {
     // Log and return from an error
     console.log(dataset);
     if(error) {
