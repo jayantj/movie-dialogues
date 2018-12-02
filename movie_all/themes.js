@@ -1,3 +1,5 @@
+var onDecadeChange;
+
 (function() {    
     var dataDir = '../data/'
     var svg = d3.select('#genres-themes svg');
@@ -144,7 +146,8 @@
             })
         genreG.on('click', function() {
             // Call function to filter by genre here
-            console.log(this.id)
+            onGenreChanged(this.id)
+            // console.log(this.id)
         })
         var tableTextSize = 18;
         genreG
@@ -153,7 +156,7 @@
                 return capitalizeFirstLetter(d);
             })
             .attr('transform', function(d) {
-                return 'translate(' + [10, topMargin] + '), rotate(330)'
+                return 'translate(' + [10, svgHeight - topMargin] + '), rotate(330)'
             })
             .style('fill', 'black')
             .style('font-size', tableTextSize)
@@ -172,7 +175,7 @@
             .attr('width', columnWidth)
             .attr('height', rowHeight)
             .attr('transform', function(d, i) {
-                return 'translate('+[leftMargin, columnLabelHeight + i * rowHeight]+')';
+                return 'translate('+[leftMargin, topMargin + rowHeight / 2 + tableTextSize / 2 + i * rowHeight]+')';
             })
         themeLabelG
             .append('text')
@@ -235,7 +238,7 @@
                 .append('g')
                 .attr('class', 'theme')
                 .attr('transform', function(d, i) {
-                    var ty = columnLabelHeight - topMargin + i * rowHeight;
+                    var ty = topMargin + i * rowHeight;
                     return 'translate('+ [0, ty] + ')';
                 })
             themesGEnter.append('rect')
@@ -280,16 +283,19 @@
 
         };
         createBubbleChart(themesGenreScores);
-        d3.select('#decadeSelect').on(
-            'change', function() {
-                if(this.value == 'All')
-                    createBubbleChart(themesGenreScores)
-                else {
-                    var decade = parseInt(this.value.slice(0, -1))
-                    createBubbleChart(themeScoresByGenre(filterMoviesByDecade(moviesData, decade)))
-                }
-            }
-        );
-    });
 
+        onDecadeChange = function(decade) {
+            if(decade == 'All')
+                createBubbleChart(themesGenreScores)
+            else
+                createBubbleChart(themeScoresByGenre(filterMoviesByDecade(moviesData, decade)))
+        }
+
+        d3.select('#decadeSelect').on('change', function() {
+            if(this.value == 'All')
+                onDecadeChange(this.value)
+            else
+                onDecadeChange(parseInt(this.value.slice(0, -1)))
+        });
+    });
 })();

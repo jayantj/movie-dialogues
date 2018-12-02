@@ -223,7 +223,6 @@ var onGenreChanged;
                 }
             });
 
-
         dots.merge(dotsEnter)
         .transition()
         .duration(550)
