@@ -146,7 +146,8 @@ var onDecadeChange;
             })
         genreG.on('click', function() {
             // Call function to filter by genre here
-            console.log(this.id)
+            onGenreChanged(this.id)
+            // console.log(this.id)
         })
         var tableTextSize = 18;
         genreG
