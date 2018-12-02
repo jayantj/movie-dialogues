@@ -156,7 +156,7 @@ var onDecadeChange;
                 return capitalizeFirstLetter(d);
             })
             .attr('transform', function(d) {
-                return 'translate(' + [10, topMargin] + '), rotate(330)'
+                return 'translate(' + [10, svgHeight - topMargin] + '), rotate(330)'
             })
             .style('fill', 'black')
             .style('font-size', tableTextSize)
@@ -175,7 +175,7 @@ var onDecadeChange;
             .attr('width', columnWidth)
             .attr('height', rowHeight)
             .attr('transform', function(d, i) {
-                return 'translate('+[leftMargin, columnLabelHeight + i * rowHeight]+')';
+                return 'translate('+[leftMargin, topMargin + rowHeight / 2 + tableTextSize / 2 + i * rowHeight]+')';
             })
         themeLabelG
             .append('text')
@@ -238,7 +238,7 @@ var onDecadeChange;
                 .append('g')
                 .attr('class', 'theme')
                 .attr('transform', function(d, i) {
-                    var ty = columnLabelHeight - topMargin + i * rowHeight;
+                    var ty = topMargin + i * rowHeight;
                     return 'translate('+ [0, ty] + ')';
                 })
             themesGEnter.append('rect')
