@@ -131,6 +131,20 @@ var onGenreChanged;
                         .attr('transform', 'translate('+[-26, chartHeight / 2]+')rotate(270)');
                 });
 
+            d3.selectAll(".x.axis .tick")
+            .on("click", function(d) {
+                var d3_tick = d3.select(this)
+                if(d3_tick.classed('tick-selected')){
+                    d3_tick.classed('tick-selected', false)
+                    onDecadeChange("All")
+                }
+                else {
+                    d3_tick.classed('tick-selected', true)
+                    onDecadeChange(d);
+                }
+
+            });
+
             cellEnter = chartG.selectAll('.cell')
             .data(cells)
             .enter()
