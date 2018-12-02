@@ -1,29 +1,29 @@
 // Global functions called when select elements changed
 
 var svgMain = d3.select('#main').select('svg');
-console.log(svgMain);
 
 // Get layout parameters
 var svgMainWidth = +svgMain.attr('width');
 var svgMainHeight = +svgMain.attr('height');
 
-var padding = {t: 40, r: 90, b: 40, l: 90};
+var MainPadding = {t: 40, r: 180, b: 40, l: 180};
 
-var rectNodeSize = 30;
+var rectNodeHeight = 60;
+var rectNodeWidth = 5;
 
 // Compute chart dimensions
-var mainChartWidth = svgMainWidth - padding.l - padding.r;
-var mainChartHeight = svgMainHeight - padding.t - padding.b;
+var mainChartWidth = svgMainWidth - MainPadding.l - MainPadding.r;
+var mainChartHeight = svgMainHeight - MainPadding.t - MainPadding.b;
 console.log('width and height: ', mainChartHeight);
 
 // fixed node radius
 var radius = 4;
-var malexfix = padding.l + 100;
-var femalefix = svgMainWidth - padding.r - 100;
+var malexfix = MainPadding.l + 100;
+var femalefix = svgMainWidth - MainPadding.r - 100;
 
 // Create a group element for appending chart elements
 var chartG = svgMain.append('g')
-    .attr('transform', 'translate('+[padding.l, padding.t]+')');
+    .attr('transform', 'translate('+[MainPadding.l, MainPadding.t]+')');
 
 // Create groups for the x- and y-axes
 var xAxisG = chartG.append('g')
@@ -42,7 +42,7 @@ var mRadianScale = function() { return ;};
 var fRadianScale = function() { return ;};
 
 
-d3.json('./data/conv/m0.json', function(error, dataset) {
+d3.json('./../data/conv/m0.json', function(error, dataset) {
     // Log and return from an error
     console.log(dataset);
     if(error) {
@@ -60,10 +60,10 @@ d3.json('./data/conv/m0.json', function(error, dataset) {
     cLinks = dataset.crossGenderLinks;
     maleScale = d3.scaleLinear()
     .domain([0, male.length - 1])
-    .range([padding.t, mainChartHeight - padding.b]);
+    .range([MainPadding.t, mainChartHeight - MainPadding.b]);
     femaleScale = d3.scaleLinear()
     .domain([0, female.length - 1])
-    .range([padding.t, mainChartHeight - padding.b]);
+    .range([MainPadding.t, mainChartHeight - MainPadding.b]);
 
     mRadianScale = d3.scaleLinear()
     .range([Math.PI / 2, 3 * Math.PI / 2]);
@@ -116,20 +116,55 @@ function linearLayout(nodes, fix, scale) {
 }
 
 function drawCrossLinks (group, links, s1, s2) {
+  const linksOfConv = links.flatMap((l, i) => {
+    const conversations = Array.from({length: l.lines.length}, (c, j) => {
+      const interval = (l.counts > 1) ? (l.counts - 1) : l.counts;
+      const temp = {
+        source: {
+          cname: l.source.cname,
+          gender: l.source.gender,
+          id: l.source.id,
+          movieId: l.source.movieId,
+          movieTitle: l.source.movieTitle,
+          x: l.source.x + rectNodeWidth,
+          y: (rectNodeHeight / interval) * j + l.source.y,
+          conv: l.lines[j],
+        },
+        target: {
+          cname: l.target.cname,
+          gender: l.target.gender,
+          id: l.target.id,
+          movieId: l.target.movieId,
+          movieTitle: l.target.movieTitle,
+          x: l.target.x,
+          y: (rectNodeHeight / interval) * j + l.target.y,
+          conv: l.lines[j],
+        },
+        movieId: l.movieId,
+      };
+      return temp;
+    });
+    return conversations;
+  });
+
   group.selectAll('line')
-  .data(links)
+  .data(linksOfConv)
   .enter()
   .append('line')
   .attr('class', 'cLink')
-  .attr('x1', malexfix)
+  .attr('x1', function(d, i) {
+    return d.source.x;
+  })
   .attr('y1', function(d, i) {
     return d.source.y;
   })
-  .attr('x2', femalefix)
+  .attr('x2', function(d, i) {
+    return d.target.x;
+  })
   .attr('y2', function(d, i) {
     return d.target.y;
-  })
-  .style('stroke', '#000');
+  });
+  //.style('stroke', '#000');
 }
 
 function drawLinks(group, links, scale, xFix) {
@@ -141,10 +176,12 @@ function drawLinks(group, links, scale, xFix) {
   const linksOfConv = links.flatMap((l, i) => {
     const conversations = Array.from({length: l.lines.length}, (c, j) => {
       let {y, ...source} = l.source;
+      const interval = (l.counts > 1) ? (l.counts - 1) : l.counts;
       const temp = {
         source: {
           source,
-          y: (rectNodeSize / l.counts) * j + l.source.y,
+          y: (rectNodeHeight / interval) * j + l.source.y,
+          conv: l.lines[j],
         },
         target: {
           cname: l.target.cname,
@@ -153,7 +190,8 @@ function drawLinks(group, links, scale, xFix) {
           movieId: l.target.movieId,
           movieTitle: l.target.movieTitle,
           x: l.target.x,
-          y: (rectNodeSize / l.counts) * j + l.target.y,
+          y: (rectNodeHeight / interval) * j + l.target.y,
+          conv: l.lines[j],
         },
         movieId: l.movieId,
       };
@@ -177,7 +215,7 @@ function drawLinks(group, links, scale, xFix) {
       scale.domain([0, points.length - 1]);
       return arc(points);
   })
-  .style('stroke', '#000')
+  //.style('stroke', '#000')
   .style('fill', 'none');
 }
 
@@ -193,7 +231,7 @@ function drawNodes(group, nodes, fix, scale) {
   .attr('y', function(d, i) {
       return scale(i);
   })
-  .attr('width', '5px')
-  .attr('height', `${rectNodeSize}px`)
+  .attr('width', `${rectNodeWidth}px`)
+  .attr('height', `${rectNodeHeight}px`)
   .attr('fill', 'red');
 };
