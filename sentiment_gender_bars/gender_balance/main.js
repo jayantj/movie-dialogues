@@ -7,8 +7,7 @@
 //     updateChart(movie);
 // }
 
-
-var svg = d3.select('svg');
+var svg = d3.select('#side_panel').select('svg');
 
 // Get layout parameters
 var svgWidth = +svg.attr('width');
@@ -39,8 +38,9 @@ d3.csv('./movies.csv',
             mm: +row.mm_percent,
             mf: +row.mf_percent,
             ff: +row.ff_percent,
+            genderBal :[{key:'unknown',value:100},{key:'ff',value:parseFloat(row.ff_percent)+parseFloat(row.mf_percent)+parseFloat(row.mm_percent)},{key:'mf',value:parseFloat(row.mf_percent)+parseFloat(row.mm_percent)},{key:'mm',value:parseFloat(row.mm_percent)}],
             title: row.movie_title,
-            themes: {'Anxiety':row.anx_conv,'Anger':row.anger_conv,'Sad':row.sad_conv,'Sexual':row.sexual_conv,'Work': row.work_conv,'Leisure':row.leisure_conv,'Home':row.home_conv,'Money':row.money_conv,'Religion':row.relig_conv,'Death':row.death_conv},
+            themes: {'Anxiety':row.anx_conv,'Anger':row.anger_conv,'Sad':row.sad_conv,'Sexual':row.sexual_conv,'Work': row.work_conv,'Leisure':row.leisure_conv,'Home':row.home_conv,'Money':row.money_conv,'Religion':row.relig_conv,'Death':row.death_conv,'Swear':row.swear_conv},
             id: row.movie_id,
             year: row.movie_year,
             sentiment: row.sentiment
@@ -96,9 +96,10 @@ d3.csv('./movies.csv',
                 mfSum = mfSum + decadeMovies[decade][j].mf;
                 ffSum = ffSum + decadeMovies[decade][j].ff;
             }
-            decadeGender[decade].push(mmSum/decadeMovies[decade].length);
-            decadeGender[decade].push(mfSum/decadeMovies[decade].length);
-            decadeGender[decade].push(ffSum/decadeMovies[decade].length);
+            decadeGender[decade].push({key:'unknown',value: 100});
+            decadeGender[decade].push({key:'ff',value: ffSum/decadeMovies[decade].length+mfSum/decadeMovies[decade].length+mmSum/decadeMovies[decade].length});
+            decadeGender[decade].push({key:'mf',value: mfSum/decadeMovies[decade].length+mmSum/decadeMovies[decade].length});
+            decadeGender[decade].push({key:'mm',value: mmSum/decadeMovies[decade].length});
         }
 
         xScale = d3.scaleLinear()
@@ -109,14 +110,30 @@ d3.csv('./movies.csv',
             .domain([0,80])
             .range([0,chartWidth-140]);
 
-        chartG.append('g')
-            .attr('transform', 'translate(80,370)')
-            .call(d3.axisTop(xThemeScale).ticks(5));
-
-
         xSentimentScale = d3.scaleLinear()
             .domain([-1,1])
             .range([0,chartWidth-140]);
+
+        sentimentAxis = d3.axisBottom(xSentimentScale).ticks(2);
+
+        formatPercent = function(d) {
+            return Math.round(d * 100) / 100 + '%';
+        }
+
+        svg.append('g')
+            .attr('transform', 'translate('+[padding.l+120, padding.t+10]+')')
+            //.attr('transform', 'translate(80,370)')
+            .call(d3.axisTop(xThemeScale).ticks(5));
+
+        svg.append('g')
+            .attr('transform', 'translate('+[padding.l+120, padding.t+330]+')')
+            //.attr('transform', 'translate(80,370)')
+            .call(sentimentAxis);
+
+        svg.append('g')
+            .attr('transform', 'translate('+[padding.l+120, padding.t+530]+')')
+            //.attr('transform', 'translate(80,370)')
+            .call(d3.axisBottom(xScale).ticks(5).tickFormat(formatPercent));
 
         rScale = d3.scaleLinear()
             .range([0,50]);
@@ -154,8 +171,6 @@ function updateChart(movie) {
     // }, {});
     filteredMovie[0].topThreeThemes = props.slice(0,3);
 
-
-
     //filteredMovie = filteredMovie[0];
 
     //filteredMovie = movies;
@@ -163,118 +178,182 @@ function updateChart(movie) {
     g = svg.append('g');
     g.append('text')
         .style('color', 'black')
-        .attr('transform', 'translate(150,40)')
-        .text('Gender conversation (%)');
+        .attr('transform', 'translate(160,500)')
+        .text('Gender balance in conversations (%)');
 
 
     var bars = chartG.selectAll('.bar')
-        .data(filteredMovie);
+        .data(filteredMovie[0].genderBal);
+    
     var barsEnter = bars.enter()
         .append('g');
-        
+    
+    
     barsEnter.append('rect')
-        //.attr('x', 150)
-        //.attr('y', 200)
+        .attr('x', 120)
+        .attr('y', 450)
         .attr('height', '30px')
         .attr('width', function(d){
-            return xScale(100);
+            return xScale(d.value);
         })
         .attr('class','genderBar')
         .style("fill", function(d, i){
-            return genderColorMap['unknown'];
+            return genderColorMap[d.key];
+        })
+        .on("mouseover", function() {
+            tooltip.style("display", null);
+        })
+        .on("mouseout", function() {
+            tooltip.style("display", "none");
+        })
+        .on("mousemove", function(d) {
+            var xPosition = d3.mouse(this)[0] - 15;
+            var yPosition = d3.mouse(this)[1] - 25;
+            tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+            tooltip.select("text").text(formatPercent(d.value));
         }); 
 
-    barsEnter.append('rect')
-        //.attr('x', 150)
-        //.attr('y', 200)
-        .attr('height', '30px')
-        .attr('width', function(d){
-            return xScale(d.mm+d.mf+d.ff);
-        })
-        .attr('class','genderBar')
-        .style("fill", function(d, i){
-            return genderColorMap['ff'];
-        });
+        var tooltip = chartG.append("g")
+          .attr("class", "tooltip")
+          .style("display", "none");
+            
+        tooltip.append("rect")
+          .attr("width", 30)
+          .attr("height", 20)
+          .attr("fill", "white")
+          .style("opacity", 0.5);
 
-    barsEnter.append('rect')
-        //.attr('x', 150)
-        //.attr('y', 200)
-        .attr('height', '30px')
-        .attr('width', function(d){
-            return xScale(d.mf+d.mm);
-        })
-        .attr('class','genderBar')
-        .style("fill", function(d, i){
-            return genderColorMap['mf'];
-        });
+        tooltip.append("text")
+          .attr("x", 15)
+          .attr("dy", "1.2em")
+          .style("text-anchor", "middle")
+          .attr("font-size", "12px")
+          .attr("font-weight", "bold");
+    // barsEnter.append('text')
+    //     .attr('x', 120)
+    //     .attr('y', 440)
+    //     .attr('transform', function(d,i) {
+    //         return 'translate (' +  + ')';
+    //     })
+    //     .attr('dy', '0.7em')
+    //     .text(formatPercent(d.value));
 
-    barsEnter.append('rect')
-        //.attr('x', 150)
-        //.attr('y', 200)
-        .attr('height', '30px')
-        .attr('width', function(d){
-            return xScale(d.mm);
-        })
-        .attr('class','genderBar')
-        .style("fill", function(d, i){
-            return genderColorMap['mm'];
-        });
+
+    // barsEnter.append('rect')
+    //     .attr('x', 120)
+    //     .attr('y', 450)
+    //     .attr('height', '30px')
+    //     .attr('width', function(d){
+    //         return xScale(d.mm+d.mf+d.ff);
+    //     })
+    //     .attr('class','genderBar')
+    //     .style("fill", function(d, i){
+    //         return genderColorMap['ff'];
+    //     });
+
+    // barsEnter.append('rect')
+    //     .attr('x', 120)
+    //     .attr('y', 450)
+    //     .attr('height', '30px')
+    //     .attr('width', function(d){
+    //         return xScale(d.mf+d.mm);
+    //     })
+    //     .attr('class','genderBar')
+    //     .style("fill", function(d, i){
+    //         return genderColorMap['mf'];
+    //     });
+
+    // barsEnter.append('rect')
+    //     .attr('x', 120)
+    //     .attr('y', 450)
+    //     .attr('height', '30px')
+    //     .attr('width', function(d){
+    //         return xScale(d.mm);
+    //     })
+    //     .attr('class','genderBar')
+    //     .style("fill", function(d, i){
+    //         return genderColorMap['mm'];
+    //     });
+
+    chartG.append('g')
+        .append('text')
+        .attr('y', 450)
+        .attr('transform', 'translate(-30,0)')
+        .style('color', 'black')
+        .attr('dy', '1.4em')
+        .text(filteredMovie[0].title)
+        .attr('class','genderBarText');
 
 //Decade bar
 
     var bars = chartG.selectAll('.bar')
-        .data(filteredMovie);
+        .data(decadeGender[(filteredMovie[0].year-filteredMovie[0].year%10).toString() + 's']);
 
     var barsEnter = bars.enter()
         .append('g');
         
     barsEnter.append('rect')
-        //.attr('x', 150)
-        .attr('y', 60)
+        .attr('x', 120)
+        .attr('y', 490)
         .attr('height', '30px')
         .attr('width', function(d){
-            return xScale(100);
+            return xScale(d.value);
         })
         .attr('class','genderBar')
         .style("fill", function(d, i){
-            return genderColorMap['unknown'];
+            return genderColorMap[d.key];
         });
+        // .on("mousemove", function(d) {
+        //   console.log(d);
+        //   var xPosition = d3.mouse(this)[0] - 5;
+        //   var yPosition = d3.mouse(this)[1] - 5;
+        //   tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+        //   tooltip.select("text").text(d[1]-d[0]);
 
-    barsEnter.append('rect')
-        //.attr('x', 150)
-        .attr('y', 60)
-        .attr('height', '30px')
-        .attr('width', function(d){
-            return xScale(decadeGender[(d.year-d.year%10).toString() + 's'][0] + decadeGender[(d.year-d.year%10).toString() + 's'][1] + decadeGender[(d.year-d.year%10).toString() + 's'][2]);
-        })
-        .attr('class','genderBar')
-        .style("fill", function(d, i){
-            return genderColorMap['ff'];
-        });
+    // barsEnter.append('rect')
+    //     .attr('x', 120)
+    //     .attr('y', 490)
+    //     .attr('height', '30px')
+    //     .attr('width', function(d){
+    //         return xScale(decadeGender[(d.year-d.year%10).toString() + 's'][0] + decadeGender[(d.year-d.year%10).toString() + 's'][1] + decadeGender[(d.year-d.year%10).toString() + 's'][2]);
+    //     })
+    //     .attr('class','genderBar')
+    //     .style("fill", function(d, i){
+    //         return genderColorMap['ff'];
+    //     });
 
-    barsEnter.append('rect')
-        //.attr('x', 150)
-        .attr('y', 60)
-        .attr('height', '30px')
-        .attr('width', function(d){
-            return xScale(decadeGender[(d.year-d.year%10).toString() + 's'][0] + decadeGender[(d.year-d.year%10).toString() + 's'][1]);
-        })
-        .attr('class','genderBar')
-        .style("fill", function(d, i){
-            return genderColorMap['mf'];
-        });
+    // barsEnter.append('rect')
+    //     .attr('x', 120)
+    //     .attr('y', 490)
+    //     .attr('height', '30px')
+    //     .attr('width', function(d){
+    //         return xScale(decadeGender[(d.year-d.year%10).toString() + 's'][0] + decadeGender[(d.year-d.year%10).toString() + 's'][1]);
+    //     })
+    //     .attr('class','genderBar')
+    //     .style("fill", function(d, i){
+    //         return genderColorMap['mf'];
+    //     });
 
-    barsEnter.append('rect')
-        //.attr('x', 150)
-        .attr('y', 60)
-        .attr('height', '30px')
-        .attr('width', function(d){
-            return xScale(decadeGender[(d.year-d.year%10).toString() + 's'][0]);
-        })
-        .attr('class','genderBar')
-        .style("fill", function(d, i){
-            return genderColorMap['mm'];
-        });
+    // barsEnter.append('rect')
+    //     .attr('x', 120)
+    //     .attr('y', 490)
+    //     .attr('height', '30px')
+    //     .attr('width', function(d){
+    //         return xScale(decadeGender[(d.year-d.year%10).toString() + 's'][0]);
+    //     })
+    //     .attr('class','genderBar')
+    //     .style("fill", function(d, i){
+    //         return genderColorMap['mm'];
+    //     });
+
+    chartG.append('g')
+        .append('text')
+        .attr('y', 490)
+        .attr('transform', 'translate(80,0)')
+        .style('color', 'black')
+        .attr('dy', '1.4em')
+        .text((filteredMovie[0].year-filteredMovie[0].year%10).toString() + 's')
+        .attr('class','genderBarText');
 
     var genderBalScale = d3.scaleOrdinal()
         .domain(["Male-male","Male<->female","Female-female","Gender unknown"])
@@ -282,7 +361,7 @@ function updateChart(movie) {
 
     svg.append("g")
         .attr("class", "legendOrdinal")
-        .attr("transform", "translate(350,70)");
+        .attr("transform", "translate(200,630)");
 
     var legendOrdinal = d3.legendColor()
         //.shape('circle')
@@ -296,7 +375,7 @@ function updateChart(movie) {
     g = svg.append('g');
     g.append('text')
         .style('color', 'black')
-        .attr('transform', 'translate(125,270)')
+        .attr('transform', 'translate(200,330)')
         .text('Sentiment');
 
     // svg.append("defs")
@@ -343,17 +422,37 @@ function updateChart(movie) {
         .attr("stop-color", sentimentColorScale(2));
 
     chartG.append("rect")
-        .attr("y", 250)
+        .attr("x", 120)
+        .attr("y", 300)
         .attr("width", xSentimentScale(1))
         .attr("height", "20px")
         .style("fill", "url(#linear-gradient)");
 
-    chartG.append("line")
-        .attr('transform', 'translate(' + xSentimentScale(filteredMovie[0].sentiment)+ ',0)')
-        .attr("x1", 0)
-        .attr("x2", 0)
-        .attr("y1", 230)
-        .attr("y2", 260);
+    var sentimentTicks = xSentimentScale.ticks();
+    sentimentTicks.push(parseFloat(filteredMovie[0].sentiment));
+    sentimentAxis.tickValues(sentimentTicks);
+
+    chartG.append("rect")
+        .attr('transform', 'translate(' + (xSentimentScale(filteredMovie[0].sentiment)).toString() + ',0)')
+        .attr("x", 120)
+        .attr("y", 295)
+        .attr('height',"30px")
+        .attr('width',"4px");
+
+    // chartG.append("rect")
+    //     .attr("x", 120)
+    //     .attr("y", 340)
+    //     .attr("width", xSentimentScale(1))
+    //     .attr("height", "20px")
+    //     .style("fill", "url(#linear-gradient)");
+
+    // chartG.append("rect")
+    //     .attr('transform', 'translate(' + (xSentimentScale(filteredMovie[0].sentiment)).toString() + ',0)')
+    //     .attr("x", 120)
+    //     .attr("y", 335)
+    //     .attr('height',"30px")
+    //     .attr('width',"4px");
+
 
     // Top 3 Themes
     // rScale.domain([0,filteredMovie[0].topThreeThemes[0].value]);
@@ -442,6 +541,12 @@ function updateChart(movie) {
     chartG = svg.append('g')
         .attr('transform', 'translate('+[padding.l, padding.t]+')');
 
+    g = svg.append('g');
+    g.append('text')
+        .style('color', 'black')
+        .attr('transform', 'translate(220,40)')
+        .text('Themes');
+
     var tBars = chartG.selectAll('.themeBars')
         .data(props);
 
@@ -480,9 +585,9 @@ function updateChart(movie) {
         });
 
     tBarsEnter.append('rect')
-        .attr('x', 80)
+        .attr('x', 120)
         .attr('y', function(d,i){
-            return 380+parseFloat(i/2)*20;
+            return 20+parseFloat(i/2)*20;
         })
         .attr('height', 10)
         .attr('width', function(d){
@@ -492,9 +597,9 @@ function updateChart(movie) {
         .attr('class','themeBar');
 
     tBarsEnter.append('text')
-        .attr('x', 20)
+        .attr('x', 60)
         .attr('y', function(d,i){
-            return 380+parseFloat(i/2)*20;
+            return 20+parseFloat(i/2)*20;
         })
         .style('color', 'black')
         .attr('dy', '0.8em')

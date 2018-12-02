@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Decade Grouped Scatterplot</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div id="main">
+        <svg width="780" height="580" style="border: 1px solid #777;">
+        </svg>
+        <b>Genres:</b>
+        <select id="genreAttrSelector" onchange="onCategoryChanged()">
+	    	<option value="drama">Drama</option>
+	    	<option value="thriller">Thriller</option>
+	    	<option value="comedy">Comedy</option>
+	    	<option value="action">Action</option>
+	    	<option value="crime">Crime</option>
+	    	<option value="romance">Romance</option>
+            <option value="adventure">Adventure</option>
+            <option value="mystery">Mystery</option>
+            <option value="horror">Horror</option>
+            <option value="fantasy">Fantasy</option>
+            <option value="war">War</option>
+	    </select> 
+    </div>
+</body>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src ="//d3js.org/d3-scale-chromatic.v0.3.min.js"></script>
+<script src="./d3-tip.js"></script>
+<script src="./scatterplot_decades.js"></script>
+</html>
