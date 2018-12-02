@@ -1,3 +1,5 @@
+var onGenreChanged;
+
 (function() {    
     var dataDir = '../data/'
     var svg = d3.select('svg');
@@ -31,8 +33,8 @@
 
     // Map for referencing min/max per each attribute
     var extentByAttribute = {};
-    var brushCell;
     var cellEnter;
+    var genre;
 
     //Create Splom Cell
     function SplomCell(x, y, col, row) {
@@ -48,12 +50,6 @@
     dataAttributes.forEach(function(attrY, row){
             cells.push(new SplomCell('movie_year', attrY, 0, row));
     });
-
-    var brush = d3.brush()
-        .extent([[0, 0], [chartWidth - chartpad, chartHeight - chartpad]])
-        .on("start", brushstart)
-        .on("brush", brushmove)
-        .on("end", brushend);
 
     d3.csv(dataDir + 'movies.csv',
         // Load data and use this function to process each row
@@ -147,14 +143,19 @@
                 return "translate("+[tx, ty]+")";
              }); 
 
-             cellEnter.each(function(cell){
+             /*cellEnter.each(function(cell){
                 cell.init(this);
                 cell.update(this, dataset);
-            });
-            /*cellEnter.append('g')
-    	        .attr('class', 'brush')
-                .call(brush);*/
+            });*/
+            updateChart(movies);
     });
+
+    function updateChart(movies) { 
+        cellEnter.each(function(cell){
+         cell.init(this);
+         cell.update(this, movies);
+        });
+    }
 
     //Splom Cell Methods
     //Initialize
@@ -187,18 +188,27 @@
             .append('circle')
             .attr('class', 'dot')
             .style("fill", function(d) { return colorScale(d.bechdel); })
-            .attr('r', 3)
+            .attr('r', 4)
             .on('click', function(d,i){
                 var movieid = d.movie_id;
-                var selected = svg.select(this);
-                console.log(selected);
-                if(d.classed('selected')){
-                    d.classed('selected', false);
+                var selected = d3.select(this);
+                if(selected.classed('selected')){
+                    //selected.classed('selected', false);
+                    svg.selectAll(".dot")
+                    .classed("selected", function(d){
+                        if(d.movie_id == movieid){
+                            return false;
+                        };
+                    })
                     svg.selectAll(".dot")
                     .classed("hidden", false);
                 }
                 else{
-                    d.classed('selected', true);
+                    //selected.classed('selected', true);
+                    svg.selectAll(".dot")
+                    .classed("selected", function(d){
+                        return d.movie_id == movieid;
+                    })
                     svg.selectAll(".dot")
                         .classed("hidden", function(d){
                             return d.movie_id != movieid;
@@ -207,7 +217,10 @@
             });
 
 
-        dots.merge(dotsEnter).attr('cx', function(d){
+        dots.merge(dotsEnter)
+        .transition()
+        .duration(550)
+        .attr('cx', function(d){
                 return xScale(d[_this.x]);
             })
             .attr('cy', function(d){
@@ -216,51 +229,19 @@
 
         dots.exit().remove();
     }
-
-    //***************Brushing Functions****************/
-    function brushstart(cell) {
-        // cell is the SplomCell object
-
-        // Check if this g element is different than the previous brush
-        if(brushCell !== this) {
-
-            // Clear the old brush
-            brush.move(d3.select(brushCell), null);
-
-            // Update the global scales for the subsequent brushmove events
-            xScale.domain(d3.extent(movies, function(d){return d['movie_year'];}));
-            yScale.domain(extentByAttribute[cell.y]);
-
-            // Save the state of this g element as having an active brush
-            brushCell = this;
+    
+    onGenreChanged = function() {
+        var select = d3.select('#genreAttrSelector').node();
+        // Get current value of select element
+        genre = select.options[select.selectedIndex].value;
+        //console.log(genre);  
+        var genreMovies = movies.filter(function(d){
+            console.log(d);
+            return d.genres.indexOf(genre) >= 0;
+        });
+        //console.log(genreMovies);
+        updateChart(genreMovies);
         }
-    }
-
-    function brushmove(cell) {
-        // cell is the SplomCell object
-
-        // Get the extent or bounding box of the brush event, this is a 2x2 array
-        var e = d3.event.selection;
-        if(e) {
-
-            // Select all .dot circles, and add the "hidden" class if the data for that circle
-            // lies outside of the brush-filter applied for this SplomCells x and y attributes
-            svg.selectAll(".dot")
-                .classed("hidden", function(d){
-                    return e[0][0] > xScale(d[cell.x]) || xScale(d[cell.x]) > e[1][0]
-                        || e[0][1] > yScale(d[cell.y]) || yScale(d[cell.y]) > e[1][1];
-                })
-        }
-    }
-
-    function brushend() {
-        // If there is no longer an extent or bounding box then the brush has been removed
-        if(!d3.event.selection) {
-            // Bring back all hidden .dot elements
-            svg.selectAll('.hidden').classed('hidden', false);
-            // Return the state of the active brushCell to be undefined
-            brushCell = undefined;
-        }
-    }
-
 })();
+    //Genre Change Function
+
