@@ -1,6 +1,6 @@
 (function() {    
     var dataDir = '../data/'
-    var svg = d3.select('#decades-scatter svg');
+    var svg = d3.select('svg');
 
     // Hand code the svg dimensions, you can also use +svg.attr('width') or +svg.attr('height')
     var svgWidth = +svg.attr('width');
