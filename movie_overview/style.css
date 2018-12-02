@@ -83,7 +83,7 @@ circle:hover {
 }
 
 .d3-tip thead tr {
-  paddin-top: 10px;
+  padding-top: 10px;
 }
 
 body {
@@ -97,4 +97,8 @@ label {
 
 #main {
     margin: 20px;
+}
+
+.wrapper {
+  display: flex;
 }
