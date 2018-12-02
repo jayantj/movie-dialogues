@@ -2,7 +2,7 @@ function filterArcs(selectedTheme, arcs) {
     arcs.each(function(d,i) {
         d3.select(this).classed('themeFade',false);
         var themeList = ['anxiety','anger','sad','sexual','work','leisure','home','money','religion','death','swear'];
-        if(!d.source.conv.themes[themeList.indexOf(selectedTheme.toLowerCase())]) {
+        if(!d.source.conv.themes[themeList.indexOf(selectedTheme.toLowerCase())] && selectedTheme != "none") {
             d3.select(this).classed('themeFade',true);
         }
     });
@@ -153,15 +153,7 @@ function updateChart(movie) {
     }, filteredMovie[0].themes);
 
     props.sort(function(p1, p2) { return p2.value - p1.value; });
-    // filteredMovie[0].topThreeThemes = props.slice(0, 3).reduce(function(obj, prop) {
-    //   obj[prop.key] = prop.value;
-    //   return obj;
-    // }, {});
     filteredMovie[0].topThreeThemes = props.slice(0,3);
-
-    //filteredMovie = filteredMovie[0];
-
-    //filteredMovie = movies;
     
     g = svg.append('g');
     g.append('text')
@@ -217,51 +209,6 @@ function updateChart(movie) {
           .style("text-anchor", "middle")
           .attr("font-size", "12px")
           .attr("font-weight", "bold");
-    // barsEnter.append('text')
-    //     .attr('x', 120)
-    //     .attr('y', 440)
-    //     .attr('transform', function(d,i) {
-    //         return 'translate (' +  + ')';
-    //     })
-    //     .attr('dy', '0.7em')
-    //     .text(formatPercent(d.value));
-
-
-    // barsEnter.append('rect')
-    //     .attr('x', 120)
-    //     .attr('y', 450)
-    //     .attr('height', '30px')
-    //     .attr('width', function(d){
-    //         return xScale(d.mm+d.mf+d.ff);
-    //     })
-    //     .attr('class','genderBar')
-    //     .style("fill", function(d, i){
-    //         return genderColorMap['ff'];
-    //     });
-
-    // barsEnter.append('rect')
-    //     .attr('x', 120)
-    //     .attr('y', 450)
-    //     .attr('height', '30px')
-    //     .attr('width', function(d){
-    //         return xScale(d.mf+d.mm);
-    //     })
-    //     .attr('class','genderBar')
-    //     .style("fill", function(d, i){
-    //         return genderColorMap['mf'];
-    //     });
-
-    // barsEnter.append('rect')
-    //     .attr('x', 120)
-    //     .attr('y', 450)
-    //     .attr('height', '30px')
-    //     .attr('width', function(d){
-    //         return xScale(d.mm);
-    //     })
-    //     .attr('class','genderBar')
-    //     .style("fill", function(d, i){
-    //         return genderColorMap['mm'];
-    //     });
 
     chartG.append('g')
         .append('text')
@@ -291,48 +238,6 @@ function updateChart(movie) {
         .style("fill", function(d, i){
             return genderColorMap[d.key];
         });
-        // .on("mousemove", function(d) {
-        //   console.log(d);
-        //   var xPosition = d3.mouse(this)[0] - 5;
-        //   var yPosition = d3.mouse(this)[1] - 5;
-        //   tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-        //   tooltip.select("text").text(d[1]-d[0]);
-
-    // barsEnter.append('rect')
-    //     .attr('x', 120)
-    //     .attr('y', 490)
-    //     .attr('height', '30px')
-    //     .attr('width', function(d){
-    //         return xScale(decadeGender[(d.year-d.year%10).toString() + 's'][0] + decadeGender[(d.year-d.year%10).toString() + 's'][1] + decadeGender[(d.year-d.year%10).toString() + 's'][2]);
-    //     })
-    //     .attr('class','genderBar')
-    //     .style("fill", function(d, i){
-    //         return genderColorMap['ff'];
-    //     });
-
-    // barsEnter.append('rect')
-    //     .attr('x', 120)
-    //     .attr('y', 490)
-    //     .attr('height', '30px')
-    //     .attr('width', function(d){
-    //         return xScale(decadeGender[(d.year-d.year%10).toString() + 's'][0] + decadeGender[(d.year-d.year%10).toString() + 's'][1]);
-    //     })
-    //     .attr('class','genderBar')
-    //     .style("fill", function(d, i){
-    //         return genderColorMap['mf'];
-    //     });
-
-    // barsEnter.append('rect')
-    //     .attr('x', 120)
-    //     .attr('y', 490)
-    //     .attr('height', '30px')
-    //     .attr('width', function(d){
-    //         return xScale(decadeGender[(d.year-d.year%10).toString() + 's'][0]);
-    //     })
-    //     .attr('class','genderBar')
-    //     .style("fill", function(d, i){
-    //         return genderColorMap['mm'];
-    //     });
 
     chartG.append('g')
         .append('text')
@@ -366,27 +271,6 @@ function updateChart(movie) {
         .attr('transform', 'translate(200,330)')
         .text('Sentiment');
 
-    // svg.append("defs")
-    //     .append("linearGradient")
-    //     .attr("id", "sentiment-slider")
-    //     .attr("x1", "0%").attr("y1", "0%")
-    //     .attr("x2", "100%").attr("y2", "0%")
-    //     .selectAll("stop") 
-    //     .data(d3.range([-1,1]))                
-    //     .enter().append("stop");
-
-    // var slider = chartG.selectAll('.slider')
-    //     .data(filteredMovie);
-    // var sliderEnter = slider.enter()
-    //     .append('g');
-    // sliderEnter.append('rect')
-    //     .attr('y', 250)
-    //     .attr('height', '10px')
-    //     .attr('width', function(d){
-    //         return xSentimentScale(1);
-    //     })
-    //     .attr('class','sentimentBar');
-
     chartG = svg.append('g')
         .attr('transform', 'translate('+[padding.l, padding.t]+')');
 
@@ -398,8 +282,6 @@ function updateChart(movie) {
         .append("defs")
         .append("linearGradient")
         .attr("id", "linear-gradient");
-       
-    //.attr("gradientTransform", "rotate(45)");
 
     linearGradient.append("stop")
         .attr("offset", "0%")
@@ -426,20 +308,6 @@ function updateChart(movie) {
         .attr("y", 295)
         .attr('height',"30px")
         .attr('width',"4px");
-
-    // chartG.append("rect")
-    //     .attr("x", 120)
-    //     .attr("y", 340)
-    //     .attr("width", xSentimentScale(1))
-    //     .attr("height", "20px")
-    //     .style("fill", "url(#linear-gradient)");
-
-    // chartG.append("rect")
-    //     .attr('transform', 'translate(' + (xSentimentScale(filteredMovie[0].sentiment)).toString() + ',0)')
-    //     .attr("x", 120)
-    //     .attr("y", 335)
-    //     .attr('height',"30px")
-    //     .attr('width',"4px");
 
     //themes
     chartG = svg.append('g')
@@ -470,22 +338,28 @@ function updateChart(movie) {
         })
         .on('click', function(d){
             // Remove the currently selected classname from that element
-            d3.select('.themeBar.selected').classed('selected', false);
+            //d3.select('.themeBar.selected').classed('selected', false);
             var clicked = d3.select(this);
+            var selectedTheme = d.key;
             // Add the selected classname to element that was just clicked
-            d3.selectAll('.themeBar').classed('filteredout',true);
-
-            clicked.classed('filteredout', false);
-            clicked.classed('hovered', false);
-            clicked.classed('selected', true);
+            if(clicked.classed('selected')) {
+                clicked.classed('selected', false);
+                d3.selectAll('.themeBar').classed('filteredout',false);
+                selectedTheme = 'none';
+            } else {
+                d3.selectAll('.themeBar').classed('filteredout',true);
+                clicked.classed('filteredout',false);
+                clicked.classed('hovered', false);
+                clicked.classed('selected',true);
+            }
 
             var maleArcs = d3.select('.male').selectAll('path');
             var femaleArcs = d3.select('.female').selectAll('path');
             var crossGenderLines = d3.select('.cross-g').selectAll('line');
 
-            filterArcs(d.key,maleArcs);
-            filterArcs(d.key,femaleArcs);
-            //filterArcs(d.key,crossGenderLines);
+            filterArcs(selectedTheme,maleArcs);
+            filterArcs(selectedTheme,femaleArcs);
+            filterArcs(selectedTheme,crossGenderLines);
         });
 
         

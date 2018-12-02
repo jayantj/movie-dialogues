@@ -51,7 +51,6 @@ circle:hover {
   box-sizing: border-box;
   display: inline;
   font-size: 10px;
-  width: 100%;
   line-height: 1;
   color: rgba(240, 240, 240, 0.95);
   content: "\25BC";
@@ -307,6 +306,6 @@ stroke-opacity: 0.4;
 .link.themeFade {
   stroke-width: 0;
 }
-.clink.themeFade {
+.cLink.themeFade {
   stroke-width: 0;
 }
