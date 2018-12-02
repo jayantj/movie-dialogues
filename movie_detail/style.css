@@ -96,8 +96,8 @@ body {
     stroke:orange;
 }
 .link.themeFade {
-    stroke-width: 0;
+    stroke-width:0;
 }
-.clink.themeFade {
-    stroke-width: 0;
+.cLink.themeFade {
+    stroke-width:0;
 }
