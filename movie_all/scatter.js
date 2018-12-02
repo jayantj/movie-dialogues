@@ -23,8 +23,8 @@ var onGenreChanged;
     var chartHeight = (svgHeight - padding.t - padding.b)/N;
 
     //Global x and y scale and axies for 3 scatterplots
-    xScale = d3.scaleLinear().range([0, chartWidth - chartpad]);
-    yScale = d3.scaleLinear().range([chartHeight - chartpad, 0]);
+    var xScale = d3.scaleLinear().range([0, chartWidth - chartpad]);
+    var yScale = d3.scaleLinear().range([chartHeight - chartpad, 0]);
     var xAxis = d3.axisBottom(xScale).tickValues([1920,1930,1940,1950,1960,1970,1980,1990,2000]);//.tickFormat(d3.format(".0%"));
     var yAxis = d3.axisLeft(yScale);
 
@@ -142,11 +142,6 @@ var onGenreChanged;
                 var ty = d.row * chartHeight + chartpad / 2;
                 return "translate("+[tx, ty]+")";
              }); 
-
-             /*cellEnter.each(function(cell){
-                cell.init(this);
-                cell.update(this, dataset);
-            });*/
             updateChart(movies);
     });
 
@@ -193,7 +188,6 @@ var onGenreChanged;
                 var movieid = d.movie_id;
                 var selected = d3.select(this);
                 if(selected.classed('selected')){
-                    //selected.classed('selected', false);
                     svg.selectAll(".dot")
                     .classed("selected", function(d){
                         if(d.movie_id == movieid){
@@ -204,7 +198,6 @@ var onGenreChanged;
                     .classed("hidden", false);
                 }
                 else{
-                    //selected.classed('selected', true);
                     svg.selectAll(".dot")
                     .classed("selected", function(d){
                         return d.movie_id == movieid;
@@ -230,18 +223,12 @@ var onGenreChanged;
         dots.exit().remove();
     }
     
-    onGenreChanged = function() {
-        var select = d3.select('#genreAttrSelector').node();
-        // Get current value of select element
-        genre = select.options[select.selectedIndex].value;
-        //console.log(genre);  
+    onGenreChanged = function(genre) {
         var genreMovies = movies.filter(function(d){
-            console.log(d);
             return d.genres.indexOf(genre) >= 0;
         });
-        //console.log(genreMovies);
         updateChart(genreMovies);
         }
 })();
-    //Genre Change Function
+
 
