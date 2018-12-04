@@ -316,3 +316,6 @@ stroke-opacity: 0.4;
 .cLink.themeFade {
   stroke-width: 0;
 }
+.viz-frame {
+  padding-top:100px;
+}
