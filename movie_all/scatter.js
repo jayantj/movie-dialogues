@@ -47,6 +47,7 @@ var onGenreChanged;
         this.y = y;
         this.col = col;
         this.row = row;
+        this.highlightedDecade = null;
     }
 
 
@@ -191,6 +192,7 @@ var onGenreChanged;
 
     // Highlight when decade selected
     SplomCell.prototype.highlight = function(g, decade) {
+        this.highlightedDecade = decade;
         d3.select(g)
             .selectAll('.dot')
            .classed('hidden', function(d) {
@@ -199,8 +201,9 @@ var onGenreChanged;
 
     }
 
-    // Unhighlight any highlighted dots
+    // Unhighlight
     SplomCell.prototype.unhighlight = function(g) {
+        this.highlightedDecade = null;
         d3.select(g)
             .selectAll('.dot')
            .classed('hidden', false)
@@ -253,8 +256,8 @@ var onGenreChanged;
             });
 
         dots.merge(dotsEnter)
-        .transition()
-        .duration(550)
+        // .transition()
+        // .duration(550)
         .attr('cx', function(d){
                 return xScale(d[_this.x]);
             })
@@ -263,6 +266,8 @@ var onGenreChanged;
             });
 
         dots.exit().remove();
+        if(this.highlightedDecade)
+            this.highlight(g, this.highlightedDecade)
     }
     
     onGenreChanged = function(genre) {
