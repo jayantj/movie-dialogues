@@ -297,11 +297,11 @@ stroke-opacity: 0.4;
 }
 .male path {
   stroke: #7e7e7e;
-  stroke-width: 1;
+  stroke-width: 1.25;
 }
 .female path {
   stroke: #7e7e7e;
-  stroke-width: 1;
+  stroke-width: 1.25;
 }
 .male path:hover {
   stroke:orange;
@@ -322,6 +322,13 @@ stroke-opacity: 0.4;
 .cLink.themeFade {
   stroke-width: 0;
 }
-.viz-frame {
+.dialogue-tip {
+  width: 250px;
+  background-color: #fff;
+  padding: 10px 5px;
+  border-radius: 5px;
+  border: 1px solid #000;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}.viz-frame {
   padding-top:100px;
 }
