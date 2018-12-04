@@ -34,7 +34,23 @@ var onGenreChanged;
     // Map for referencing min/max per each attribute
     var extentByAttribute = {};
     var cellEnter;
+    var brushCell;
     var genre;
+
+    //brush variable
+    var brush = d3.brush()
+    .extent([[0, 0], [chartWidth - chartpad, chartHeight - chartpad]])
+    .on("start", brushstart)
+    .on("brush", brushmove)
+    .on("end", brushend);
+
+    //Tooltip
+    var toolTip = d3.tip()
+    .attr("class", "d3-tip")
+    .offset([-12, 0])
+    .html(function(d) {
+        return "<h5>"+d['movie_title']+", "+d.movie_year+"</h5>";
+    });
 
     //Create Splom Cell
     function SplomCell(x, y, col, row) {
@@ -158,6 +174,13 @@ var onGenreChanged;
                 var ty = d.row * chartHeight + chartpad / 2;
                 return "translate("+[tx, ty]+")";
              }); 
+
+            cellEnter.append('g')
+             .attr('class', 'brush')
+             .call(brush); 
+            
+            svg.call(toolTip);
+
             updateChart(movies);
     });
 
@@ -228,9 +251,12 @@ var onGenreChanged;
                 }
             });
 
+        dotsEnter.on('mouseover', toolTip.show)
+            .on('mouseout', toolTip.hide);
+
         dots.merge(dotsEnter)
-        .transition()
-        .duration(550)
+        //.transition()
+        //.duration(550)
         .attr('cx', function(d){
                 return xScale(d[_this.x]);
             })
@@ -249,6 +275,52 @@ var onGenreChanged;
                 return d.genres.indexOf(genre) >= 0;
             });
             updateChart(genreMovies);
+        }
+    }
+
+    /******Brushing for ScatterPlot *******/
+    function brushstart(cell) {
+        // cell is the SplomCell object
+
+        // Check if this g element is different than the previous brush
+        if(brushCell !== this) {
+
+            // Clear the old brush
+            brush.move(d3.select(brushCell), null);
+
+            // Update the global scales for the subsequent brushmove events
+            xScale.domain(extentByAttribute[cell.x]);
+            yScale.domain(extentByAttribute[cell.y]);
+
+            // Save the state of this g element as having an active brush
+            brushCell = this;
+        }
+    }
+
+    function brushmove(cell) {
+        // cell is the SplomCell object
+
+        // Get the extent or bounding box of the brush event, this is a 2x2 array
+        var e = d3.event.selection;
+        if(e) {
+
+            // Select all .dot circles, and add the "hidden" class if the data for that circle
+            // lies outside of the brush-filter applied for this SplomCells x and y attributes
+            svg.selectAll(".dot")
+                .classed("hidden", function(d){
+                    return e[0][0] > xScale(d[cell.x]) || xScale(d[cell.x]) > e[1][0]
+                        || e[0][1] > yScale(d[cell.y]) || yScale(d[cell.y]) > e[1][1];
+                })
+        }
+    }
+
+    function brushend() {
+        // If there is no longer an extent or bounding box then the brush has been removed
+        if(!d3.event.selection) {
+            // Bring back all hidden .dot elements
+            svg.selectAll('.hidden').classed('hidden', false);
+            // Return the state of the active brushCell to be undefined
+            brushCell = undefined;
         }
     }
 })();
