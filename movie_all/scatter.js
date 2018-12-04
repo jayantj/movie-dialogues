@@ -51,6 +51,10 @@ var onGenreChanged;
     .html(function(d) {
         return "<h5>"+d['movie_title']+", "+d.movie_year+"</h5>";
     });
+    // Get decade for movie
+    function decadeForRow(row) {
+        return row.movie_year - row.movie_year % 10;
+    };
 
     //Create Splom Cell
     function SplomCell(x, y, col, row) {
@@ -58,6 +62,7 @@ var onGenreChanged;
         this.y = y;
         this.col = col;
         this.row = row;
+        this.highlightedDecade = null;
     }
 
 
@@ -99,7 +104,7 @@ var onGenreChanged;
                 'death_conv': +row['death_conv'],
                 'swear_conv': +row['swear_conv'],
                 'netspeak_conv': +row['netspeak_conv'],
-
+                'decade': decadeForRow(row)
             };
         },
         function(error, dataset) {
@@ -154,11 +159,18 @@ var onGenreChanged;
                 var d3_tick = d3.select(this)
                 if(d3_tick.classed('tick-selected')){
                     d3_tick.classed('tick-selected', false)
-                    onDecadeChange("All")
+                    onDecadeChanged("All")
+                    chartG.selectAll('.cell').each(function(cell) {
+                        cell.unhighlight(this)
+                    })
                 }
                 else {
+                    d3.selectAll(".x.axis .tick").classed('tick-selected', false)
                     d3_tick.classed('tick-selected', true)
-                    onDecadeChange(d);
+                    chartG.selectAll('.cell').each(function(cell) {
+                        cell.highlight(this, d)
+                    })
+                    onDecadeChanged(d);
                 }
 
             });
@@ -200,6 +212,25 @@ var onGenreChanged;
           .attr('class', 'frame')
           .attr('width', chartWidth - chartpad)
           .attr('height', chartHeight - chartpad);
+    }
+
+    // Highlight when decade selected
+    SplomCell.prototype.highlight = function(g, decade) {
+        this.highlightedDecade = decade;
+        d3.select(g)
+            .selectAll('.dot')
+           .classed('hidden', function(d) {
+                return d.decade != decade;
+           })
+
+    }
+
+    // Unhighlight
+    SplomCell.prototype.unhighlight = function(g) {
+        this.highlightedDecade = null;
+        d3.select(g)
+            .selectAll('.dot')
+           .classed('hidden', false)
     }
 
     //Update function
@@ -255,8 +286,13 @@ var onGenreChanged;
             .on('mouseout', toolTip.hide);
 
         dots.merge(dotsEnter)
+<<<<<<< HEAD
         //.transition()
         //.duration(550)
+=======
+        // .transition()
+        // .duration(550)
+>>>>>>> fade28698ad0f703b07a43e53749ab45b6f145c1
         .attr('cx', function(d){
                 return xScale(d[_this.x]);
             })
@@ -265,6 +301,8 @@ var onGenreChanged;
             });
 
         dots.exit().remove();
+        if(this.highlightedDecade)
+            this.highlight(g, this.highlightedDecade)
     }
     
     onGenreChanged = function(genre) {

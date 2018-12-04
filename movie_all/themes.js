@@ -1,4 +1,4 @@
-var onDecadeChange;
+var onDecadeChanged;
 
 (function() {    
     var dataDir = '../data/'
@@ -96,6 +96,53 @@ var onDecadeChange;
     }
 
 
+    function populateDecadeDropdown(movies, decades) {
+        var decadeDropdown = d3.select('#decade-select')
+
+        decadeDropdown
+        .selectAll('option')
+        .data(decades, function(d) {
+            return d
+        })
+        .enter()
+        .append("option")
+        .attr('value', function(d) { return d; })
+        .text(function(d) { return d; })
+
+        decadeDropdown
+        .on('change', function() {
+            var decade = parseInt(this.value);
+            console.log(decade)
+            populateMovieDropdown(filterMoviesByDecade(movies, decade))
+        })
+    }
+
+    function populateMovieDropdown(movies) {
+        console.log(movies)
+        var moviesDropdown = d3.select('#movie-select')
+        var options = moviesDropdown.selectAll('option')
+            .data(movies, function(d) {
+                if(d)
+                    return d.movie_id
+                else
+                    return d
+            })
+        options
+            .enter()
+            .append("option")
+            .attr('value', function(d) {
+                return d.movie_id;
+            })
+            .text(function(d) {
+                return d.movie_title;
+            })
+        options.exit().remove()
+        moviesDropdown
+        .on('change', function() {
+            console.log(this);
+        })
+    }
+
     d3.csv(dataDir + 'movies.csv', function(error, dataset) {
         // Log and return from an error
         if(error) {
@@ -148,24 +195,27 @@ var onDecadeChange;
                 var d3_label = d3.select(this)
                 var genre = this.id;
                 if(d3_label.classed('genre-selected')){
-                    d3_label.classed('genre-selected', false)
-                    onGenreChanged("All")
+                    d3_label.classed('genre-selected', false);
+                    onGenreChanged("All");
                     svg.selectAll('.genre').selectAll('.theme')
-                        .classed('hidden', false)
+                        .classed('hidden', false);
                     svg.selectAll('.genre').selectAll('text.genre-label')
-                        .classed('hidden', false)
+                        .classed('hidden', false);
                 }
                 else {
-                    d3_label.classed('genre-selected', true)
+                    d3.select('.genre-selected').classed('genre-selected', false);
+                    d3_label.classed('genre-selected', true);
                     onGenreChanged(this.id);
                     svg.selectAll('.genre').selectAll('.theme')
                         .classed('hidden', function(d) {
                             return d.genre != genre;
                         })
+
                     svg.selectAll('.genre').selectAll('text.genre-label')
                         .classed('hidden', function(d) {
                             return d != genre;
                         })
+
                 }
         })
         var tableTextSize = 18;
@@ -217,6 +267,8 @@ var onDecadeChange;
             return d3.min(Object.values(d.value.themes))
         });
         var allDecades = Array.from(new Set(moviesData.map(decadeForRow)));
+        allDecades.sort();
+        populateDecadeDropdown(moviesData, allDecades);
         allDecades.forEach(function(d) {
             var decadeThemeScores = themeScoresByGenre(filterMoviesByDecade(moviesData, d))
             var decadeMax = d3.max(decadeThemeScores, function(d) {
@@ -307,7 +359,7 @@ var onDecadeChange;
         };
         createBubbleChart(themesGenreScores);
 
-        onDecadeChange = function(decade) {
+        onDecadeChanged = function(decade) {
             if(decade == 'All')
                 createBubbleChart(themesGenreScores)
             else
