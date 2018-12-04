@@ -36,6 +36,11 @@ var onGenreChanged;
     var cellEnter;
     var genre;
 
+    // Get decade for movie
+    function decadeForRow(row) {
+        return row.movie_year - row.movie_year % 10;
+    };
+
     //Create Splom Cell
     function SplomCell(x, y, col, row) {
         this.x = x;
@@ -83,7 +88,7 @@ var onGenreChanged;
                 'death_conv': +row['death_conv'],
                 'swear_conv': +row['swear_conv'],
                 'netspeak_conv': +row['netspeak_conv'],
-
+                'decade': decadeForRow(row)
             };
         },
         function(error, dataset) {
@@ -136,11 +141,18 @@ var onGenreChanged;
                 var d3_tick = d3.select(this)
                 if(d3_tick.classed('tick-selected')){
                     d3_tick.classed('tick-selected', false)
-                    onDecadeChange("All")
+                    onDecadeChanged("All")
+                    chartG.selectAll('.cell').each(function(cell) {
+                        cell.unhighlight(this)
+                    })
                 }
                 else {
+                    d3.selectAll(".x.axis .tick").classed('tick-selected', false)
                     d3_tick.classed('tick-selected', true)
-                    onDecadeChange(d);
+                    chartG.selectAll('.cell').each(function(cell) {
+                        cell.highlight(this, d)
+                    })
+                    onDecadeChanged(d);
                 }
 
             });
@@ -175,6 +187,23 @@ var onGenreChanged;
           .attr('class', 'frame')
           .attr('width', chartWidth - chartpad)
           .attr('height', chartHeight - chartpad);
+    }
+
+    // Highlight when decade selected
+    SplomCell.prototype.highlight = function(g, decade) {
+        d3.select(g)
+            .selectAll('.dot')
+           .classed('hidden', function(d) {
+                return d.decade != decade;
+           })
+
+    }
+
+    // Unhighlight any highlighted dots
+    SplomCell.prototype.unhighlight = function(g) {
+        d3.select(g)
+            .selectAll('.dot')
+           .classed('hidden', false)
     }
 
     //Update function

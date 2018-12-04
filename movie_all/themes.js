@@ -1,4 +1,4 @@
-var onDecadeChange;
+var onDecadeChanged;
 
 (function() {    
     var dataDir = '../data/'
@@ -148,24 +148,27 @@ var onDecadeChange;
                 var d3_label = d3.select(this)
                 var genre = this.id;
                 if(d3_label.classed('genre-selected')){
-                    d3_label.classed('genre-selected', false)
-                    onGenreChanged("All")
+                    d3_label.classed('genre-selected', false);
+                    onGenreChanged("All");
                     svg.selectAll('.genre').selectAll('.theme')
-                        .classed('hidden', false)
+                        .classed('hidden', false);
                     svg.selectAll('.genre').selectAll('text.genre-label')
-                        .classed('hidden', false)
+                        .classed('hidden', false);
                 }
                 else {
-                    d3_label.classed('genre-selected', true)
+                    d3.select('.genre-selected').classed('genre-selected', false);
+                    d3_label.classed('genre-selected', true);
                     onGenreChanged(this.id);
                     svg.selectAll('.genre').selectAll('.theme')
                         .classed('hidden', function(d) {
                             return d.genre != genre;
                         })
+
                     svg.selectAll('.genre').selectAll('text.genre-label')
                         .classed('hidden', function(d) {
                             return d != genre;
                         })
+
                 }
         })
         var tableTextSize = 18;
@@ -307,7 +310,7 @@ var onDecadeChange;
         };
         createBubbleChart(themesGenreScores);
 
-        onDecadeChange = function(decade) {
+        onDecadeChanged = function(decade) {
             if(decade == 'All')
                 createBubbleChart(themesGenreScores)
             else
