@@ -286,13 +286,8 @@ var onGenreChanged;
             .on('mouseout', toolTip.hide);
 
         dots.merge(dotsEnter)
-<<<<<<< HEAD
         //.transition()
         //.duration(550)
-=======
-        // .transition()
-        // .duration(550)
->>>>>>> fade28698ad0f703b07a43e53749ab45b6f145c1
         .attr('cx', function(d){
                 return xScale(d[_this.x]);
             })
