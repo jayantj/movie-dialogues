@@ -37,6 +37,13 @@ circle:hover {
   fill-opacity: 1;
 }
 
+.theme.hidden {
+  opacity: .5;
+}
+.genre text.hidden {
+  opacity: .5;
+}
+
 .d3-tip {
   line-height: 1;
   padding: 6px;

@@ -145,9 +145,28 @@ var onDecadeChange;
                 return 'translate('+[tx, topMargin]+')';
             })
         genreG.on('click', function() {
-            // Call function to filter by genre here
-            onGenreChanged(this.id)
-            // console.log(this.id)
+                var d3_label = d3.select(this)
+                var genre = this.id;
+                if(d3_label.classed('genre-selected')){
+                    d3_label.classed('genre-selected', false)
+                    onGenreChanged("All")
+                    svg.selectAll('.genre').selectAll('.theme')
+                        .classed('hidden', false)
+                    svg.selectAll('.genre').selectAll('text.genre-label')
+                        .classed('hidden', false)
+                }
+                else {
+                    d3_label.classed('genre-selected', true)
+                    onGenreChanged(this.id);
+                    svg.selectAll('.genre').selectAll('.theme')
+                        .classed('hidden', function(d) {
+                            return d.genre != genre;
+                        })
+                    svg.selectAll('.genre').selectAll('text.genre-label')
+                        .classed('hidden', function(d) {
+                            return d != genre;
+                        })
+                }
         })
         var tableTextSize = 18;
         genreG
@@ -155,6 +174,7 @@ var onDecadeChange;
             .text(function(d) {
                 return capitalizeFirstLetter(d);
             })
+            .attr('class', 'genre-label')
             .attr('transform', function(d) {
                 return 'translate(' + [10, svgHeight - topMargin] + '), rotate(330)'
             })
@@ -229,6 +249,9 @@ var onDecadeChange;
             var themesG = genreG.selectAll('.theme')
                 .data(function(d) {
                     var data = d3.entries(d.value.themes);
+                    data.forEach(function(row) {
+                        row['genre'] = d.key;
+                    })
                     return data
                 });
             var textWidth = 25;

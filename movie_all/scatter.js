@@ -237,11 +237,15 @@ var onGenreChanged;
     }
     
     onGenreChanged = function(genre) {
-        var genreMovies = movies.filter(function(d){
-            return d.genres.indexOf(genre) >= 0;
-        });
-        updateChart(genreMovies);
+        if(genre == 'All')
+            updateChart(movies)
+        else {
+            var genreMovies = movies.filter(function(d){
+                return d.genres.indexOf(genre) >= 0;
+            });
+            updateChart(genreMovies);
         }
+    }
 })();
 
 
