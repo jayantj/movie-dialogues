@@ -93,8 +93,10 @@ circle:hover {
 }
 
 body {
-    font-family: "Open Sans";
-    margin: 0;
+  font-family: roboto, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  margin: 0;
 }
 
 label {
@@ -115,8 +117,10 @@ label {
 }
 
 body {
-    font-family: "Open Sans";
-    margin: 0;
+  font-family: roboto, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  margin: 0;
 }
 
 .wrapper {
@@ -220,7 +224,9 @@ body {
 }
 
 body {
-  font-family: "Open Sans";
+  font-family: roboto, sans-serif;
+  font-style: normal;
+  font-weight: 400;
   margin: 0;
 }
 
