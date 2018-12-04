@@ -25,7 +25,7 @@ var onGenreChanged;
     //Global x and y scale and axies for 3 scatterplots
     var xScale = d3.scaleLinear().range([0, chartWidth - chartpad]);
     var yScale = d3.scaleLinear().range([chartHeight - chartpad, 0]);
-    var xAxis = d3.axisBottom(xScale).tickValues([1920,1930,1940,1950,1960,1970,1980,1990,2000]);//.tickFormat(d3.format(".0%"));
+    var xAxis = d3.axisBottom(xScale).tickValues([1920,1930,1940,1950,1960,1970,1980,1990,2000,2010]);//.tickFormat(d3.format(".0%"));
     var yAxis = d3.axisLeft(yScale);
 
     //ordinal color scale
@@ -102,7 +102,8 @@ var onGenreChanged;
             });
 
             //Render Axes
-            xScale.domain(d3.extent(dataset, function(d){return d['movie_year'];}));
+            //xScale.domain(d3.extent(dataset, function(d){return d['movie_year'];}));
+            xScale.domain([1920,2012]);
             chartG.append('g')
                 .attr('class', 'x axis')
                 .attr('transform', function(d,i) {
@@ -123,7 +124,8 @@ var onGenreChanged;
                     return 'translate('+[0, i * chartHeight + chartpad / 2]+')';
                 })
                 .each(function(attribute){
-                    yScale.domain(extentByAttribute[attribute]);
+                    //yScale.domain(extentByAttribute[attribute]);
+                    yScale.domain([-5,100]);
                     d3.select(this).call(yAxis);
                     d3.select(this).append('text')
                         .text(attribute)
@@ -182,8 +184,11 @@ var onGenreChanged;
         var cell = d3.select(g);
 
         // Update the global x,yScale objects for this cell's x,y attribute domains
-        xScale.domain(d3.extent(movies, function(d){return d['movie_year'];}));
-        yScale.domain(extentByAttribute[this.y]);
+        //xScale.domain(d3.extent(movies, function(d){return d['movie_year'];}));
+        //yScale.domain(extentByAttribute[this.y]);
+        xScale.domain([1920,2012]);
+        yScale.domain([-5,100]);
+        
 
         // Save a reference of this SplomCell, to use within anon function scopes
         var _this = this;
