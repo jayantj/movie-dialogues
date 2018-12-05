@@ -118,8 +118,14 @@ var onDecadeChanged;
 
     function populateMovieDropdown(movies) {
         var moviesDropdown = d3.select('#movie-select')
+        var moviesAlphabetical = movies.sort(function(m1, m2) {
+            if(m1.movie_title < m2.movie_title)
+                return -1;
+            else
+                return 1;
+        })
         var options = moviesDropdown.selectAll('option')
-            .data(movies, function(d) {
+            .data(moviesAlphabetical, function(d) {
                 if(d)
                     return d.movie_id
                 else
