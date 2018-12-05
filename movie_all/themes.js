@@ -178,14 +178,18 @@ var onDecadeChanged;
         // Create groups per genre
         var rowLabelWidth = 60;
         var columnLabelHeight = 70;
-        var topMargin = 20;
-        var leftMargin = 30;
-        var rightMargin = 0;
-        var bottomMargin = 0;
+        var topMargin = 70;
+        var leftMargin = 75;
+        var rightMargin = 20;
+        var bottomMargin = 40;
 
-        var columnWidth = Math.floor((svgWidth - rowLabelWidth - rightMargin) / genresOfInterest.length);
+        var columnWidth = Math.floor((svgWidth - leftMargin - rightMargin) / genresOfInterest.length);
         var rowHeight = Math.floor((svgHeight - columnLabelHeight - bottomMargin) / themesOfInterest.length);
-        var genreG = svg.selectAll('.genre')
+        // Create a group element for appending chart elements
+        var chartG = svg.append('g')
+            .attr('transform', 'translate('+[leftMargin, topMargin]+')');
+        var genreG = chartG.append('g')
+            .selectAll('.genre')
             .data(Array.from(genresOfInterest), function(d) {
                 return d;
             })
@@ -196,10 +200,10 @@ var onDecadeChanged;
                 return d;
             })
             .attr('width', columnWidth)
-            .attr('height', svgHeight)
+            .attr('height', svgHeight-topMargin-bottomMargin)
             .attr('transform', function(d, i) {
-                var tx = rowLabelWidth + i * columnWidth;
-                return 'translate('+[tx, topMargin]+')';
+                var tx = i * columnWidth;
+                return 'translate('+[tx, 0]+')';
             })
         genreG.on('click', function() {
                 var d3_label = d3.select(this)
@@ -235,10 +239,13 @@ var onDecadeChanged;
             })
             .attr('class', 'genre-label')
             .attr('transform', function(d) {
-                return 'translate(' + [10, svgHeight - topMargin] + '), rotate(330)'
+                return 'translate(' + [10, svgHeight - topMargin - bottomMargin] + '), rotate(330)'
             });
+
+
         var tableTextSize = 18;
-        var themeLabelG = svg.selectAll('.theme-label')
+        var themeLabelG = chartG.append('g')
+            .selectAll('.theme-label')
             .data(Array.from(themesOfInterest), function(d) {
                 return d;
             })
