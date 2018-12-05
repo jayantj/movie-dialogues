@@ -112,13 +112,11 @@ var onDecadeChanged;
         decadeDropdown
         .on('change', function() {
             var decade = parseInt(this.value);
-            console.log(decade)
             populateMovieDropdown(filterMoviesByDecade(movies, decade))
         })
     }
 
     function populateMovieDropdown(movies) {
-        console.log(movies)
         var moviesDropdown = d3.select('#movie-select')
         var options = moviesDropdown.selectAll('option')
             .data(movies, function(d) {
@@ -137,9 +135,14 @@ var onDecadeChanged;
                 return d.movie_title;
             })
         options.exit().remove()
+        moviesDropdown.append("option")
+            .attr('selected', '')
+            .attr('disabled', '')
+            .attr('hidden', '')
+            .text('Choose a movie')
         moviesDropdown
         .on('change', function() {
-            console.log(this);
+            onSelectMovie(this.value);
         })
     }
 
