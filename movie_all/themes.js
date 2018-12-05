@@ -132,8 +132,9 @@ var onDecadeChanged;
                 return d.movie_id;
             })
             .text(function(d) {
-                return d.movie_title;
+                return d.movie_title + ' (' + d.movie_year + ')';
             })
+            .style('text-transform', 'capitalize')
         options.exit().remove()
         moviesDropdown.append("option")
             .attr('selected', '')
