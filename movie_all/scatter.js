@@ -18,8 +18,19 @@ var onSelectMovie;
     var chartG = svg.append('g')
         .attr('transform', 'translate('+[padding.l, padding.t]+')');
 
+        //chart title
+    svg.append('g')
+        .append('text')
+        .attr('transform', 'translate(20,20)')
+        .text('Movies by intersex conversation')
+        .attr('class','miniTitles');
+
     var dataAttributes = ['mm_percent', 'mf_percent', 'ff_percent'];
+<<<<<<< HEAD
     var dataAttributes2 = ['% Male to Male Conversations', '% Male to Female Conversations', '% Female to Female Conversations'];
+=======
+    var axesLabels = {'mm_percent':'Male to Male Conversations', 'mf_percent':'Male to Female Conversations', 'ff_percent':'Female to Female Conversations'};
+>>>>>>> 9ad01642541ab422f81f0278eef21c66a3f3e6ce
     var N = dataAttributes.length;
     var chartWidth = (svgWidth - padding.l - padding.r);
     var chartHeight = (svgHeight - padding.t - padding.b)/N;
@@ -162,7 +173,11 @@ var onSelectMovie;
                     yScale.domain([-5,100]);
                     d3.select(this).call(yAxis);
                     d3.select(this).append('text')
+<<<<<<< HEAD
                         .text(function(d){return dataAttributes2[dataAttributes.indexOf(attribute)]})
+=======
+                        .text(axesLabels[attribute])
+>>>>>>> 9ad01642541ab422f81f0278eef21c66a3f3e6ce
                         .attr('class', 'axis-label')
                         .attr('transform', 'translate('+[-26, chartHeight / 2]+')rotate(270)');
                 });
@@ -267,6 +282,40 @@ var onSelectMovie;
 
         // Save a reference of this SplomCell, to use within anon function scopes
         var _this = this;
+        var avgScore = d3.mean(data, function(d) {
+            return d[_this.y];
+        })
+
+        var lineG = cell.selectAll('.avg-line')
+            .data([avgScore])
+        var lineGEnter = lineG.enter()
+            .append('g')
+            .attr('class', 'avg-line')
+
+        lineGEnter
+            .append('line')
+            .attr('stroke-width', 1)
+            .attr("stroke-dasharray", ("3, 3"))
+            .attr('stroke', 'black')
+            .attr('x1', 0)
+            .attr('x2', chartWidth - chartpad)
+            .attr('y1', 0)
+            .attr('y2', 0)
+
+        lineGEnter
+            .append('text')
+            .style('color', 'black')
+            .attr('class', 'avg-text')
+            .attr("font-size", "12px")
+            .attr('transform', 'translate(5, -5)')
+
+        lineG.merge(lineGEnter)
+            .transition()
+            .duration(500)
+            .attr('transform', 'translate(' + [0, yScale(avgScore)] + ')')
+
+        cell.select('.avg-text')
+            .text('Average = ' + avgScore.toFixed(1))
 
         var dots = cell.selectAll('.dot')
             .data(data, function(d){

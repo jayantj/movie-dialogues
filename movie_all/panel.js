@@ -26,6 +26,14 @@ var chartHeight = svgHeight - padding.t - padding.b;
 var chartG = svg.append('g')
     .attr('transform', 'translate('+[padding.l, padding.t]+')');
 
+
+var toolTip = d3.tip()
+    .attr("class", "d3-tip")
+    .offset([-12, 0])
+    .html(function(d) {
+        return "<h5>"+formatPercent(d.value)+"</h5>";
+    });
+
 var genderColorMap = {'mm':'#FFD700','mf':'#FFB14E','ff':'#FA8775','unknown':'gray'};
 
 d3.csv('./../data/movies.csv',
@@ -35,7 +43,8 @@ d3.csv('./../data/movies.csv',
             mm: +row.mm_percent,
             mf: +row.mf_percent,
             ff: +row.ff_percent,
-            genderBal :[{key:'unknown',value:100},{key:'ff',value:parseFloat(row.ff_percent)+parseFloat(row.mf_percent)+parseFloat(row.mm_percent)},{key:'mf',value:parseFloat(row.mf_percent)+parseFloat(row.mm_percent)},{key:'mm',value:parseFloat(row.mm_percent)}],
+            //genderBal :[{key:'unknown',value:100},{key:'ff',value:parseFloat(row.ff_percent)+parseFloat(row.mf_percent)+parseFloat(row.mm_percent)},{key:'mf',value:parseFloat(row.mf_percent)+parseFloat(row.mm_percent)},{key:'mm',value:parseFloat(row.mm_percent)}],
+            genderBal :[{key:'mm',value:parseFloat(row.mm_percent)},{key:'mf',value:parseFloat(row.mf_percent)},{key:'ff',value:parseFloat(row.ff_percent)}, {key:'unknown',value:100-parseFloat(row.mm_percent)-parseFloat(row.mf_percent)-parseFloat(row.ff_percent)}],
             title: row.movie_title,
             themes: {'Anxiety':row.anx_conv,'Anger':row.anger_conv,'Sad':row.sad_conv,'Sexual':row.sexual_conv,'Work': row.work_conv,'Leisure':row.leisure_conv,'Home':row.home_conv,'Money':row.money_conv,'Religion':row.relig_conv,'Death':row.death_conv,'Swear':row.swear_conv},
             id: row.movie_id,
@@ -93,10 +102,10 @@ d3.csv('./../data/movies.csv',
                 mfSum = mfSum + decadeMovies[decade][j].mf;
                 ffSum = ffSum + decadeMovies[decade][j].ff;
             }
-            decadeGender[decade].push({key:'unknown',value: 100});
-            decadeGender[decade].push({key:'ff',value: ffSum/decadeMovies[decade].length+mfSum/decadeMovies[decade].length+mmSum/decadeMovies[decade].length});
-            decadeGender[decade].push({key:'mf',value: mfSum/decadeMovies[decade].length+mmSum/decadeMovies[decade].length});
             decadeGender[decade].push({key:'mm',value: mmSum/decadeMovies[decade].length});
+            decadeGender[decade].push({key:'mf',value: mfSum/decadeMovies[decade].length});
+            decadeGender[decade].push({key:'ff',value: ffSum/decadeMovies[decade].length});
+            decadeGender[decade].push({key:'unknown',value: 100-(mmSum/decadeMovies[decade].length)-(mfSum/decadeMovies[decade].length)-(ffSum/decadeMovies[decade].length)});
         }
 
         xScale = d3.scaleLinear()
@@ -134,6 +143,8 @@ d3.csv('./../data/movies.csv',
 
         rScale = d3.scaleLinear()
             .range([0,50]);
+        
+        svg.call(toolTip);
 
         updateChart('m0');
     });
@@ -158,11 +169,19 @@ function updateChart(movie) {
 
     filteredMovie[0].topThreeThemes = props.slice(0,3);
     
+    var sentimentToolTip = d3.tip()
+        .attr("class", "d3-tip")
+        .offset([-12, 0])
+        .html(function(d) {
+            return "<h5>"+filteredMovie[0].sentiment+"</h5>";
+    });
+
+    svg.call(sentimentToolTip);
     g = svg.append('g');
     g.append('text')
-        .style('color', 'black')
-        .attr('transform', 'translate(160,500)')
-        .text('Gender balance in conversations (%)');
+        .attr('transform', 'translate(150,500)')
+        .text('Intersex conversations: Movie vs Decade')
+        .attr('class','miniTitles');
 
 
     var bars = chartG.selectAll('.bar')
@@ -179,39 +198,28 @@ function updateChart(movie) {
         .attr('width', function(d){
             return xScale(d.value);
         })
+        .attr('transform', function(d) {
+            var xTransform = 0;
+            var index = filteredMovie[0].genderBal.findIndex(function(each) {
+              return each.key == d.key;
+            })
+            for(var i=0;i<index;i++) {
+                xTransform = xTransform + xScale(filteredMovie[0].genderBal[i].value);
+            }
+            return 'translate('+xTransform.toString()+',0)';
+        })
         .attr('class','genderBar')
         .style("fill", function(d, i){
             return genderColorMap[d.key];
         })
-        .on("mouseover", function() {
-            tooltip.style("display", null);
-        })
-        .on("mouseout", function() {
-            tooltip.style("display", "none");
-        })
+        .on('mouseover', toolTip.show)
+        .on('mouseout', toolTip.hide)
         .on("mousemove", function(d) {
             var xPosition = d3.mouse(this)[0] - 15;
             var yPosition = d3.mouse(this)[1] - 25;
-            tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
-            tooltip.select("text").text(formatPercent(d.value));
-        }); 
-
-        var tooltip = chartG.append("g")
-          .attr("class", "tooltip")
-          .style("display", "none");
-            
-        tooltip.append("rect")
-          .attr("width", 30)
-          .attr("height", 20)
-          .attr("fill", "white")
-          .style("opacity", 0.5);
-
-        tooltip.append("text")
-          .attr("x", 15)
-          .attr("dy", "1.2em")
-          .style("text-anchor", "middle")
-          .attr("font-size", "12px")
-          .attr("font-weight", "bold");
+            toolTip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+            //toolTip.select("text").text(formatPercent(d.value));
+        });
 
     chartG.append('g')
         .append('text')
@@ -240,6 +248,25 @@ function updateChart(movie) {
         .attr('class','genderBar')
         .style("fill", function(d, i){
             return genderColorMap[d.key];
+        })
+        .attr('transform', function(d) {
+            var xTransform = 0;
+            var data = decadeGender[(filteredMovie[0].year-filteredMovie[0].year%10).toString() + 's'];
+            var index = data.findIndex(function(each) {
+              return each.key == d.key;
+            })
+            for(var i=0;i<index;i++) {
+                xTransform = xTransform + xScale(data[i].value);
+            }
+            return 'translate('+xTransform.toString()+',0)';
+        })
+        .on('mouseover', toolTip.show)
+        .on('mouseout', toolTip.hide)
+        .on("mousemove", function(d) {
+            var xPosition = d3.mouse(this)[0] - 15;
+            var yPosition = d3.mouse(this)[1] - 25;
+            toolTip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+            //toolTip.select("text").text(formatPercent(d.value));
         });
 
     chartG.append('g')
@@ -269,9 +296,9 @@ function updateChart(movie) {
     
     g = svg.append('g');
     g.append('text')
-        .style('color', 'black')
-        .attr('transform', 'translate(200,330)')
-        .text('Sentiment');
+        .attr('transform', 'translate(170,350)')
+        .text('Sentiment: '+filteredMovie[0].title)
+        .attr('class','miniTitles');
 
 
     chartG = svg.append('g')
@@ -310,7 +337,9 @@ function updateChart(movie) {
         .attr("x", 120)
         .attr("y", 295)
         .attr('height',"30px")
-        .attr('width',"4px");
+        .attr('width',"4px")
+        .on('mouseover', sentimentToolTip.show)
+        .on('mouseout', sentimentToolTip.hide);
 
     //themes
     chartG = svg.append('g')
@@ -319,8 +348,9 @@ function updateChart(movie) {
     g = svg.append('g');
     g.append('text')
         .style('color', 'black')
-        .attr('transform', 'translate(220,40)')
-        .text('Themes');
+        .attr('transform', 'translate(180,40)')
+        .text('Themes: '+ filteredMovie[0].title)
+        .attr('class','miniTitles');
 
     var tBars = chartG.selectAll('.themeBars')
         .data(props);

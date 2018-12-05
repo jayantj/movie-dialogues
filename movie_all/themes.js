@@ -239,9 +239,14 @@ var onDecadeChanged;
             })
             .attr('class', 'genre-label')
             .attr('transform', function(d) {
+<<<<<<< HEAD
                 return 'translate(' + [10, svgHeight - topMargin - bottomMargin] + '), rotate(330)'
             });
 
+=======
+                return 'translate(' + [10, svgHeight - topMargin] + '), rotate(330)'
+            })
+>>>>>>> 9ad01642541ab422f81f0278eef21c66a3f3e6ce
 
         var tableTextSize = 18;
         var themeLabelG = chartG.append('g')
@@ -263,8 +268,22 @@ var onDecadeChanged;
         themeLabelG
             .append('text')
             .text(function(d) {
+<<<<<<< HEAD
                 return capitalizeFirstLetter(d);
             });
+=======
+                if (d=='relig') {
+                    return 'Religion';
+                }
+                else if(d == 'anx') {
+                    return 'Anxiety';
+                } else if (d == 'sad') {
+                    return 'Sadness';
+                }
+                else return capitalizeFirstLetter(d);
+            })
+            .style('text-anchor', 'middle')
+>>>>>>> 9ad01642541ab422f81f0278eef21c66a3f3e6ce
 
 
         // var themeColorScale = d3.scaleOrdinal(d3.schemeCategory20);
