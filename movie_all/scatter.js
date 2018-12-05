@@ -1,4 +1,5 @@
 var onGenreChanged;
+var onSelectMovie;
 
 (function() {    
     var dataDir = '../data/'
@@ -265,28 +266,20 @@ var onGenreChanged;
             .style("fill", function(d) { return colorScale(d.bechdel); })
             .attr('r', 4)
             .on('click', function(d,i){
-                var movieid = d.movie_id;
+                var movieId = d.movie_id;
                 var selected = d3.select(this);
                 if(selected.classed('selected')){
                     svg.selectAll(".dot")
                     .classed("selected", function(d){
-                        if(d.movie_id == movieid){
+                        if(d.movie_id == movieId){
                             return false;
                         };
                     })
                     svg.selectAll(".dot")
                     .classed("hidden", false);
                 }
-                else{
-                    svg.selectAll(".dot")
-                    .classed("selected", function(d){
-                        return d.movie_id == movieid;
-                    })
-                    svg.selectAll(".dot")
-                        .classed("hidden", function(d){
-                            return d.movie_id != movieid;
-                        })
-                }
+                else
+                    onSelectMovie(movieId)
             });
 
         dotsEnter.on('mouseover', toolTip.show)
@@ -316,6 +309,17 @@ var onGenreChanged;
             });
             updateChart(genreMovies);
         }
+    }
+
+    onSelectMovie = function(movieId) {
+        svg.selectAll(".dot")
+        .classed("selected", function(d){
+            return d.movie_id == movieId;
+        })
+        svg.selectAll(".dot")
+            .classed("hidden", function(d){
+                return d.movie_id != movieId;
+            })
     }
 
     /******Brushing for ScatterPlot *******/
