@@ -255,6 +255,40 @@ var onSelectMovie;
 
         // Save a reference of this SplomCell, to use within anon function scopes
         var _this = this;
+        var avgScore = d3.mean(data, function(d) {
+            return d[_this.y];
+        })
+
+        var lineG = cell.selectAll('.avg-line')
+            .data([avgScore])
+        var lineGEnter = lineG.enter()
+            .append('g')
+            .attr('class', 'avg-line')
+
+        lineGEnter
+            .append('line')
+            .attr('stroke-width', 1)
+            .attr("stroke-dasharray", ("3, 3"))
+            .attr('stroke', 'black')
+            .attr('x1', 0)
+            .attr('x2', chartWidth - chartpad)
+            .attr('y1', 0)
+            .attr('y2', 0)
+
+        lineGEnter
+            .append('text')
+            .style('color', 'black')
+            .attr('class', 'avg-text')
+            .attr("font-size", "12px")
+            .attr('transform', 'translate(5, -5)')
+
+        lineG.merge(lineGEnter)
+            .transition()
+            .duration(500)
+            .attr('transform', 'translate(' + [0, yScale(avgScore)] + ')')
+
+        cell.select('.avg-text')
+            .text('Average = ' + avgScore.toFixed(1))
 
         var dots = cell.selectAll('.dot')
             .data(data, function(d){
