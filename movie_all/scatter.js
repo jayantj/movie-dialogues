@@ -17,6 +17,13 @@ var onGenreChanged;
     var chartG = svg.append('g')
         .attr('transform', 'translate('+[padding.l, padding.t]+')');
 
+        //chart title
+    svg.append('g')
+        .append('text')
+        .attr('transform', 'translate(20,20)')
+        .text('Movies by intersex conversation')
+        .attr('class','miniTitles');
+
     var dataAttributes = ['mm_percent', 'mf_percent', 'ff_percent'];
     var N = dataAttributes.length;
     var chartWidth = (svgWidth - padding.l - padding.r);

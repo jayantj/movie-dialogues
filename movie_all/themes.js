@@ -228,9 +228,6 @@ var onDecadeChanged;
             .attr('transform', function(d) {
                 return 'translate(' + [10, svgHeight - topMargin] + '), rotate(330)'
             })
-            .style('fill', 'black')
-            .style('font-size', tableTextSize)
-            .style('font-family', 'Open Sans')
 
         var themeLabelG = svg.selectAll('.theme-label')
             .data(Array.from(themesOfInterest), function(d) {
@@ -250,12 +247,17 @@ var onDecadeChanged;
         themeLabelG
             .append('text')
             .text(function(d) {
-                return capitalizeFirstLetter(d);
+                if (d=='relig') {
+                    return 'Religion';
+                }
+                else if(d == 'anx') {
+                    return 'Anxiety';
+                } else if (d == 'sad') {
+                    return 'Sadness';
+                }
+                else return capitalizeFirstLetter(d);
             })
             .style('text-anchor', 'middle')
-            .style('fill', 'black')
-            .style('font-size', tableTextSize)
-            .style('font-family', 'Open Sans')
 
 
         // var themeColorScale = d3.scaleOrdinal(d3.schemeCategory20);

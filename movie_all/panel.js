@@ -160,9 +160,9 @@ function updateChart(movie) {
     
     g = svg.append('g');
     g.append('text')
-        .style('color', 'black')
-        .attr('transform', 'translate(160,500)')
-        .text('Gender balance in conversations (%)');
+        .attr('transform', 'translate(150,500)')
+        .text('Intersex conversations: Movie vs Decade')
+        .attr('class','miniTitles');
 
 
     var bars = chartG.selectAll('.bar')
@@ -269,9 +269,9 @@ function updateChart(movie) {
     
     g = svg.append('g');
     g.append('text')
-        .style('color', 'black')
-        .attr('transform', 'translate(200,330)')
-        .text('Sentiment');
+        .attr('transform', 'translate(170,350)')
+        .text('Sentiment: '+filteredMovie[0].title)
+        .attr('class','miniTitles');
 
 
     chartG = svg.append('g')
@@ -319,8 +319,9 @@ function updateChart(movie) {
     g = svg.append('g');
     g.append('text')
         .style('color', 'black')
-        .attr('transform', 'translate(220,40)')
-        .text('Themes');
+        .attr('transform', 'translate(180,40)')
+        .text('Themes: '+ filteredMovie[0].title)
+        .attr('class','miniTitles');
 
     var tBars = chartG.selectAll('.themeBars')
         .data(props);
