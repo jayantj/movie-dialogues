@@ -169,6 +169,14 @@ function updateChart(movie) {
 
     filteredMovie[0].topThreeThemes = props.slice(0,3);
     
+    var sentimentToolTip = d3.tip()
+        .attr("class", "d3-tip")
+        .offset([-12, 0])
+        .html(function(d) {
+            return "<h5>"+filteredMovie[0].sentiment+"</h5>";
+    });
+
+    svg.call(sentimentToolTip);
     g = svg.append('g');
     g.append('text')
         .attr('transform', 'translate(150,500)')
@@ -329,7 +337,9 @@ function updateChart(movie) {
         .attr("x", 120)
         .attr("y", 295)
         .attr('height',"30px")
-        .attr('width',"4px");
+        .attr('width',"4px")
+        .on('mouseover', sentimentToolTip.show)
+        .on('mouseout', sentimentToolTip.hide);
 
     //themes
     chartG = svg.append('g')
