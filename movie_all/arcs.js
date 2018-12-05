@@ -6,7 +6,7 @@ var svgMain = d3.select('#main').select('svg');
 var svgMainWidth = +svgMain.attr('width');
 var svgMainHeight = +svgMain.attr('height');
 
-var MainPadding = {t: 40, r: 180, b: 40, l: 180};
+var MainPadding = {t: 60, r: 200, b: 60, l: 200};
 
 var rectNodeHeight = 60;
 var rectNodeWidth = 5;
@@ -40,6 +40,17 @@ var female = [];
 
 var mRadianScale = function() { return ;};
 var fRadianScale = function() { return ;};
+
+var toolTip = d3.tip()
+  .attr('class', 'dialogue-tip')
+  .direction('s')
+  .offset([-12, 0])
+  .html(function(d) {
+    return d.source.conv.dialogues.map((dialogue, i) => {
+      return `<span>${dialogue.characterName} : ${dialogue.text}</span><br/>`;
+    });
+  });
+  svgMain.call(toolTip);
 
 
 d3.json('./../data/conv/m0.json', function(error, dataset) {
@@ -163,8 +174,13 @@ function drawCrossLinks (group, links, s1, s2) {
   })
   .attr('y2', function(d, i) {
     return d.target.y;
-  });
-  //.style('stroke', '#000');
+  })
+  .on('click', function(d, i) {
+    var clicked = d3.select(this);
+    console.log(clicked);
+    toolTip.show(d, i);
+  })
+  .on('mouseout', toolTip.hide);
 }
 
 function drawLinks(group, links, scale, xFix) {
@@ -215,7 +231,6 @@ function drawLinks(group, links, scale, xFix) {
       scale.domain([0, points.length - 1]);
       return arc(points);
   })
-  //.style('stroke', '#000')
   .style('fill', 'none');
 }
 
