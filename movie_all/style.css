@@ -324,11 +324,18 @@ stroke-opacity: 0.4;
 }
 .dialogue-tip {
   width: 250px;
-  background-color: #fff;
+  background: rgba(240, 240, 240, 0.95);
+  font-size: 12px;
   padding: 10px 5px;
   border-radius: 5px;
-  border: 1px solid #000;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.movie-title {
+  font-size: 24px;
+  font-family: komu-b, sans-serif;
+}
+.character-name {
+  font-size: 12px;
 }
 .theme-label {
   font-family: roboto, sans-serif;
