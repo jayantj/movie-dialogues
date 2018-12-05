@@ -2,13 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Themes Bar Chart + Decade Grouped Scatterplot</title>
+    <title>Movie dialogues</title>
     <link rel="stylesheet" href="./bootstrap.min.css">
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="https://use.typekit.net/yog7gku.css">
 </head>
 <body>
-  <div id="movie-finder">
+  <div id="movie-finder" style="padding-bottom: 50px">
+    <font face="komu-b, sans-serif" size="34px" color="#364156">Movie Dialogues over the years</font>
     <select class="custom-select" id="decade-select">
         <option selected disabled hidden>Choose here</option>
     </select>
@@ -17,14 +18,14 @@
     </select>
   </div>
   <div>
-      <hr style="border-top: 2px solid rgba(0,0,0,.1)">
+      <hr style="border-top: 2px solid rgba(0,0,0,0.5)">
   </div>
   <div class="wrapper">
-    <div id="decades-scatter" class="viz-frame">
+    <div id="decades-scatter">
         <svg width="800" height="580">
         </svg>
     </div>
-    <div id="genres-themes" class="viz-frame">
+    <div id="genres-themes">
       <svg width="800" height="580">
       </svg>
     </div>
