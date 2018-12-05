@@ -1,4 +1,4 @@
-index,movie_id,mm_percent,mf_percent,ff_percent,movie_title,movie_year,imdb_rating,imdb_votes,genres,bechdel,sentiment,tot_conv,affect_conv,posemo_conv,negemo_conv,anx_conv,anger_conv,sad_conv,sexual_conv,work_conv,leisure_conv,home_conv,money_conv,relig_conv,death_conv,swear_conv,netspeak_conv
+index,movie_id,mm_percent,mf_percent,ff_percent,movie_title,movie_year,imdb_rating,imdb_votes,genres,bechdel,sentiment,tot_conv,affect_conv,posemo_conv,negemo_conv,anxiety_conv,anger_conv,sadness_conv,sexual_conv,work_conv,leisure_conv,home_conv,money_conv,religion_conv,death_conv,swear_conv,netspeak_conv
 145,m0,27.86069652,46.26865672,18.4079602,10 things i hate about you,1999,6.9,62847,"['comedy', 'romance']",1,0.06963149,201,134,104,76,11,47,18,14,51,49,9,19,13,8,32,13
 345,m1,23.65591398,17.20430108,0,1492: conquest of paradise,1992,6.2,10421,"['adventure', 'biography', 'drama', 'history']",?,0.063081718,93,61,47,43,8,13,14,2,24,4,4,9,29,7,4,0
 74,m2,58.42696629,21.91011236,0,15 minutes,2001,6.1,25854,"['action', 'crime', 'drama', 'thriller']",?,0.054388832,178,135,91,95,17,60,25,25,70,47,33,37,9,27,38,31

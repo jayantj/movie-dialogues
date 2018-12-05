@@ -1,3 +1,32 @@
+/********Label Styling*****************/
+.theme-label text{
+  font-family: roboto, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 12px;
+  text-anchor: middle;
+  color: #707070;
+}
+
+.genre-label text{
+  font-family: roboto, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 8px;
+  text-anchor: middle;
+  color: #f7f7f7;
+}
+
+.genre text{
+  font-family: roboto, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 8px;
+  text-anchor: middle;
+  color: #707070;
+}
+/*************************************/
+
 .axis,
 .frame {
   shape-rendering: crispEdges;
@@ -18,18 +47,20 @@
   fill: #555;
 }
 
+
+
 .frame {
   fill: none;
   stroke: #aaa;
 }
 
 circle {
-  fill-opacity: .7;
+  fill-opacity: 1;
 }
 
 circle.hidden {
   fill: #ccc !important;
-  fill-opacity: .2;
+  fill-opacity: .05;
 }
 
 circle:hover {

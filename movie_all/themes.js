@@ -14,31 +14,31 @@ var onDecadeChanged;
     var themesOfInterest = [
         // 'posemo',
         // 'negemo',
-        'anx',
+        'anxiety',
         'anger',
-        'sad',
+        'death',
+        'home',
+        'leisure',
+        'money',
+        'religion',
+        'sadness',
         'sexual',
         // 'work',
-        'leisure',
-        'home',
-        'money',
-        'relig',
-        'death',
         'swear',
         // 'netspeak',
     ];
     var genresOfInterest = [
-        'drama',
-        'thriller',
-        'comedy',
         'action',
+        'adventure',
+        'comedy',
         'crime',
+        'drama',
+        'fantasy',
+        'horror',
+        'mystery',
         'romance',
         'sci-fi',
-        'adventure',
-        'mystery',
-        'horror',
-        'fantasy',
+        'thriller',
         'war'
     ];
 
@@ -217,8 +217,7 @@ var onDecadeChanged;
                         })
 
                 }
-        })
-        var tableTextSize = 18;
+        });
         genreG
             .append('text')
             .text(function(d) {
@@ -227,11 +226,8 @@ var onDecadeChanged;
             .attr('class', 'genre-label')
             .attr('transform', function(d) {
                 return 'translate(' + [10, svgHeight - topMargin] + '), rotate(330)'
-            })
-            .style('fill', 'black')
-            .style('font-size', tableTextSize)
-            .style('font-family', 'Open Sans')
-
+            });
+        var tableTextSize = 18;
         var themeLabelG = svg.selectAll('.theme-label')
             .data(Array.from(themesOfInterest), function(d) {
                 return d;
@@ -246,16 +242,12 @@ var onDecadeChanged;
             .attr('height', rowHeight)
             .attr('transform', function(d, i) {
                 return 'translate('+[leftMargin, topMargin + rowHeight / 2 + tableTextSize / 2 + i * rowHeight]+')';
-            })
+            });
         themeLabelG
             .append('text')
             .text(function(d) {
                 return capitalizeFirstLetter(d);
-            })
-            .style('text-anchor', 'middle')
-            .style('fill', 'black')
-            .style('font-size', tableTextSize)
-            .style('font-family', 'Open Sans')
+            });
 
 
         // var themeColorScale = d3.scaleOrdinal(d3.schemeCategory20);
@@ -309,6 +301,7 @@ var onDecadeChanged;
             var textWidth = 25;
             var textShiftX = 25;
             var textShiftY = 8;
+
             var themesGEnter = themesG.enter()
                 .append('g')
                 .attr('class', 'theme')
@@ -327,13 +320,9 @@ var onDecadeChanged;
                     return columnWidth;
                 })
 
-            var labelSize = 10;
+            //var labelSize = 10;
             themesGEnter.append('text')
                 .text('')
-                .style('text-anchor', 'middle')
-                .style('fill', 'white')
-                .style('font-size', labelSize)
-                .style('font-family', 'Open Sans')
                 .attr('transform', function(d, i) {
                     return 'translate('+ [columnWidth / 2, rowHeight / 2 - tableTextSize] + ')';
                 })

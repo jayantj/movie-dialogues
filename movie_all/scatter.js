@@ -49,7 +49,7 @@ var onGenreChanged;
     .attr("class", "d3-tip")
     .offset([-12, 0])
     .html(function(d) {
-        return "<h5>"+d['movie_title']+", "+d.movie_year+"</h5>";
+        return "<h5>"+d['movie_title']+", "+d.movie_year+", "+d.mm_percent+"</h5>";
     });
     // Get decade for movie
     function decadeForRow(row) {
@@ -256,7 +256,7 @@ var onGenreChanged;
             .append('circle')
             .attr('class', 'dot')
             .style("fill", function(d) { return colorScale(d.bechdel); })
-            .attr('r', 4)
+            .attr('r', 3)
             .on('click', function(d,i){
                 var movieid = d.movie_id;
                 var selected = d3.select(this);
