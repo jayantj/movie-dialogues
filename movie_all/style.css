@@ -5,25 +5,70 @@
   font-style: normal;
   font-size: 12px;
   text-anchor: middle;
-  color: #707070;
+  fill: #707070;
 }
 
-.genre-label text{
+.genre-label {
   font-family: roboto, sans-serif;
   font-weight: 700;
   font-style: normal;
   font-size: 8px;
   text-anchor: middle;
-  color: #f7f7f7;
+  fill: red;
 }
 
-.genre text{
+.theme text{
   font-family: roboto, sans-serif;
   font-weight: 700;
   font-style: normal;
   font-size: 8px;
   text-anchor: middle;
-  color: #707070;
+  fill: #707070;
+}
+
+.y.axis .tick text{
+  font-family: roboto, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 8px;
+  /*text-anchor: middle;*/
+  fill: #707070;
+}
+
+.y.axis .axis-label{
+  font-family: roboto, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 12px;
+  /*text-anchor: middle;*/
+  fill: #707070;
+}
+
+.x.axis .tick text{
+  font-family: roboto, sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 8px;
+  /*text-anchor: middle;*/
+  fill: #ffffff;
+}
+
+.decade-button{
+  fill:#364156;
+  width: 42px;
+  height: 19px;
+}
+
+.tick-selected .decade-button{
+  fill:#9A9CA2;
+  width: 42px;
+  height: 19px;
+}
+
+.tick-hover .decade-button{
+  fill:#4C5A76;
+  width: 42px;
+  height: 19px;
 }
 /*************************************/
 

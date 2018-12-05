@@ -8,7 +8,7 @@ var onSelectMovie;
     // Hand code the svg dimensions, you can also use +svg.attr('width') or +svg.attr('height')
     var svgWidth = +svg.attr('width');
     var svgHeight = +svg.attr('height');
-    var padding = {t: 40, r: 40, b: 40, l: 40};
+    var padding = {t: 130, r: 40, b: 40, l: 75};
     var chartpad = 10;
 
     // Compute chart dimensions
@@ -19,6 +19,7 @@ var onSelectMovie;
         .attr('transform', 'translate('+[padding.l, padding.t]+')');
 
     var dataAttributes = ['mm_percent', 'mf_percent', 'ff_percent'];
+    var dataAttributes2 = ['% Male to Male Conversations', '% Male to Female Conversations', '% Female to Female Conversations'];
     var N = dataAttributes.length;
     var chartWidth = (svgWidth - padding.l - padding.r);
     var chartHeight = (svgHeight - padding.t - padding.b)/N;
@@ -131,11 +132,21 @@ var onSelectMovie;
                 .attr('transform', function(d,i) {
                     return 'translate('+[0, chartHeight*N]+')';
                 })
-                .call(xAxis)
-                .append('text')
+                .call(xAxis);
+
+            //Add buttons to x axis ticks
+            d3.selectAll(".x.axis .tick")
+                .insert('rect','text')
+                .attr('class', 'decade-button')
+                .attr('rx', 10)
+                .attr("transform", "translate(-20,6)");
+            
+            d3.selectAll(".x.axis .tick text")
+                .attr("transform", "translate(1,4)");    
+                /*.append('text')
                 .text('Movie Decades')
                 .attr('class', 'axis-label')
-                .attr('transform', 'translate('+[chartWidth/2 , 30]+')');
+                .attr('transform', 'translate('+[chartWidth/2 , 30]+')');*/
 
             chartG.selectAll('.y.axis')
                 .data(dataAttributes)
@@ -147,15 +158,24 @@ var onSelectMovie;
                 })
                 .each(function(attribute){
                     //yScale.domain(extentByAttribute[attribute]);
+                    console.log(attribute.index);
                     yScale.domain([-5,100]);
                     d3.select(this).call(yAxis);
                     d3.select(this).append('text')
-                        .text(attribute)
+                        .text(function(d){return dataAttributes2[dataAttributes.indexOf(attribute)]})
                         .attr('class', 'axis-label')
                         .attr('transform', 'translate('+[-26, chartHeight / 2]+')rotate(270)');
                 });
 
             d3.selectAll(".x.axis .tick")
+            .on("mouseover",function(d){
+                //var d3_tick = d3.select(this)
+                d3.select(this).classed('tick-hover',true)
+            })
+            .on("mouseout",function(d){
+                //var d3_tick = d3.select(this)
+                d3.select(this).classed('tick-hover',false)
+            })
             .on("click", function(d) {
                 var d3_tick = d3.select(this)
                 if(d3_tick.classed('tick-selected')){
