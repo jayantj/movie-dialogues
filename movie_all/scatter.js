@@ -402,7 +402,7 @@ var onColorChanged;
             .classed("hidden", function(d){
                 return d.movie_id != movieId;
             })
-        detailViewPanelInitialize(movieId);
+        updatePanel(movieId);
         onSelectMovieChange(movieId);
     }
 
