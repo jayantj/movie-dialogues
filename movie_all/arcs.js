@@ -62,10 +62,10 @@ var arcDiagram = function(selectedMovie) {
 
       maleScale = d3.scaleLinear()
       .domain([0, male.length - 1])
-      .range([MainPadding.t, mainChartHeight]);
+      .range([MainPadding.t + 20, mainChartHeight]);
       femaleScale = d3.scaleLinear()
       .domain([0, female.length - 1])
-      .range([MainPadding.t, mainChartHeight]);
+      .range([MainPadding.t + 20, mainChartHeight]);
 
       mRadianScale = d3.scaleLinear()
       .range([Math.PI / 2, 3 * Math.PI / 2]);
@@ -76,10 +76,12 @@ var arcDiagram = function(selectedMovie) {
       const maleG = svgMain.append('g').attr('class', 'male');
       const femaleG = svgMain.append('g').attr('class', 'female');
       const crossG = svgMain.append('g').attr('class', 'cross-g');
+      const labelG = svgMain.append('g').attr('class', 'label');
 
       const maleGroup = svgMain.select('.male');
       const femaleGroup = svgMain.select('.female');
       const crossLinkGroup = svgMain.select('.cross-g');
+      const labelGroup = svgMain.select('.label')
 
       linearLayout(male, malexfix, maleScale);
       linearLayout(female, femalefix, femaleScale);
@@ -106,6 +108,7 @@ var arcDiagram = function(selectedMovie) {
       drawCrossLinks(crossLinkGroup, cLinks);
       drawNodes(maleGroup, male, malexfix, maleScale);
       drawNodes(femaleGroup, female, femalefix, femaleScale);
+      labels(labelGroup, movieTitle, year, rating);
 
       svgMain.append('text')
       .attr('class', 'node-label')
@@ -115,7 +118,7 @@ var arcDiagram = function(selectedMovie) {
 
       svgMain.append('text')
       .attr('class', 'node-label')
-      .attr('transform', `translate(${malexfix}, ${MainPadding.t - 20})`)
+      .attr('transform', `translate(${malexfix}, ${MainPadding.t + 10})`)
       .style('text-anchor', 'middle')
       .text('Male');
 
@@ -127,31 +130,43 @@ var arcDiagram = function(selectedMovie) {
 
       svgMain.append('text')
       .attr('class', 'node-label')
-      .attr('transform', `translate(${femalefix}, ${MainPadding.t - 20})`)
+      .attr('transform', `translate(${femalefix}, ${MainPadding.t + 10})`)
       .style('text-anchor', 'middle')
       .text('Female');
-
-      svgMain.append('text')
-      .attr('class', 'movie-meta title')
-      .attr('transform', `translate(${mainChartWidth / 2 + MainPadding.l}, ${MainPadding.t - 60})`)
-      .style('text-anchor', 'middle')
-      .text(movieTitle.toUpperCase());
-
-      svgMain.append('text')
-      .attr('class', 'movie-meta year')
-      .attr('transform', `translate(${mainChartWidth / 2 + MainPadding.l}, ${MainPadding.t - 40})`)
-      .style('text-anchor', 'middle')
-      .text(`year : ${year.toUpperCase()}`);
-
-      svgMain.append('text')
-      .attr('class', 'movie-meta rating')
-      .attr('transform', `translate(${mainChartWidth / 2 + MainPadding.l}, ${MainPadding.t - 20})`)
-      .style('text-anchor', 'middle')
-      .text(`IMDB rating : ${rating.toUpperCase()}`);
-
   });
 
 };
+
+function labels(labelGroup, movieTitle, year, rating) {
+  const labels = labelGroup.selectAll('.movie-meta')
+  .data([movieTitle, year, rating], function(d) {
+    return d;
+  });
+
+  const labelsEnter = labels.enter()
+  .append('text')
+  .attr('class', function(d, i) {
+    return (i > 0) ? 'movie-meta' : 'movie-meta title'
+  });
+
+  labels.merge(labelsEnter);
+
+  labelsEnter
+  .attr('transform', function(d, i) {
+    return `translate(${mainChartWidth / 2 + MainPadding.l}, ${MainPadding.t - (60 - i * 20)})`;
+  })
+  .style('text-anchor', 'middle')
+  .text(function(d, i) {
+    const addon = {
+      '0': '',
+      '1': 'year :',
+      '2': 'rating : ',
+    }
+    return `${addon[i]}${d}`.toUpperCase();
+  });
+
+  labels.exit().remove();
+}
 
 function linearLayout(nodes, fix, scale) {
   nodes.forEach(function(d, i) {
