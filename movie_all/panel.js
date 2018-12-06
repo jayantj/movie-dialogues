@@ -18,7 +18,7 @@ var svg = d3.select('#side_panel').select('svg');
 var svgWidth = +svg.attr('width');
 var svgHeight = +svg.attr('height');
 
-var padding = {t: 60, r: 40, b: 30, l: 40};
+var padding = {t: 60, r: 40, b: 30, l: 10};
 
 // Compute chart dimensions
 var chartWidth = svgWidth - padding.l - padding.r;
@@ -26,7 +26,7 @@ var chartHeight = svgHeight - padding.t - padding.b;
 
 // Create a group element for appending chart elements
 var chartG = svg.append('g')
-    .attr('transform', 'translate('+[padding.l, padding.t]+')');
+    .attr('transform', 'translate('+[padding.l, padding.t+padding.t]+')');
 
 
 var toolTip = d3.tip()
@@ -135,17 +135,17 @@ d3.csv('./../data/movies.csv',
 
 detailViewPanelInitialize = function() {
     svg.append('g')
-        .attr('transform', 'translate('+[padding.l+120, padding.t+10]+')')
+        .attr('transform', 'translate('+[padding.l+120, padding.t+20]+')')
         //.attr('transform', 'translate(80,370)')
         .call(d3.axisTop(xThemeScale).ticks(5));
 
     svg.append('g')
-        .attr('transform', 'translate('+[padding.l+120, padding.t+330]+')')
+        .attr('transform', 'translate('+[padding.l+120, 450]+')')
         //.attr('transform', 'translate(80,370)')
         .call(sentimentAxis);
 
     svg.append('g')
-        .attr('transform', 'translate('+[padding.l+120, padding.t+530]+')')
+        .attr('transform', 'translate('+[padding.l+120, 650]+')')
         //.attr('transform', 'translate(80,370)')
         .call(d3.axisBottom(xScale).ticks(5).tickFormat(formatPercent));
     
@@ -208,9 +208,10 @@ updatePanel = function(movie) {
 function stackedBars (filteredMovie) {
     g = svg.append('g');
     g.append('text')
-        .attr('transform', 'translate(150,500)')
+        .attr('transform', 'translate(' + (chartWidth / 2 + padding.l)+ ',530)')
         .text('Intersex conversations: Movie vs Decade')
-        .attr('class','miniTitles');
+        .attr('class','miniTitles')
+        .style('text-anchor', 'middle');
 
 
     var bars = chartG.selectAll('.bar')
@@ -312,16 +313,19 @@ function stackedBars (filteredMovie) {
 
     //Gender balance legend
     var genderBalScale = d3.scaleOrdinal()
-        .domain(["Male-male","Male<->female","Female-female","Gender unknown"])
+        .domain(["Male-Male","Male-Female","Female-Female","Gender Unknown"])
         .range([ "#FFD700", "#FFB14E", "#FA8775", "#808080"]);
 
     svg.append("g")
         .attr("class", "legendOrdinal")
-        .attr("transform", "translate(200,630)");
+        .attr("transform", "translate(220,680)");
 
     var legendOrdinal = d3.legendColor()
-        .labelFormat(d3.format(".06f"))
-        .shapePadding(2)
+        //.labelFormat(d3.format(".06f"))
+        .shapePadding(10)
+        .shapeWidth(50)
+        .orient('horizontal')
+        .labelOffset(5)
         .scale(genderBalScale);
 
     svg.select(".legendOrdinal")
@@ -340,12 +344,13 @@ function sentimentSlider(filteredMovie) {
 
     g = svg.append('g');
     g.append('text')
-        .attr('transform', 'translate(170,350)')
-        .text('Sentiment: '+filteredMovie[0].title)
-        .attr('class','miniTitles');
+        .attr('transform', 'translate(' + (chartWidth / 2 + padding.l)+ ', 380)')
+        .text('Sentiment')
+        .attr('class','miniTitles')
+        .style('text-anchor', 'middle');
 
     chartG = svg.append('g')
-        .attr('transform', 'translate('+[padding.l, padding.t]+')');
+        .attr('transform', 'translate('+[padding.l, padding.t+padding.t]+')');
 
     //Sentiment bar and legend    
 
@@ -391,14 +396,15 @@ function sentimentSlider(filteredMovie) {
 
 function themeBars(filteredMovie, props) {
     chartG = svg.append('g')
-        .attr('transform', 'translate('+[padding.l, padding.t]+')');
+        .attr('transform', 'translate('+[padding.l, padding.t+5]+')');
 
     g = svg.append('g');
     g.append('text')
         .style('color', 'black')
-        .attr('transform', 'translate(180,40)')
-        .text('Themes: '+ filteredMovie[0].title)
-        .attr('class','miniTitles');
+        .attr('transform', 'translate(' + (chartWidth / 2 + padding.l)+ ',30)')
+        .text('Themes')
+        .attr('class','miniTitles')
+        .style('text-anchor', 'middle');
 
     var tBars = chartG.selectAll('.themeBars')
         .data(props, function(d) {
