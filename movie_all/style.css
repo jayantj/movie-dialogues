@@ -71,6 +71,7 @@ hr {
   /*text-align: center;*/
   fill: #364156;
   color: #364156;
+  padding-left: 10px;
 }
 
 .colorDropdown {

@@ -242,7 +242,7 @@ var onColorChanged;
 
             svg.append("g")
                 .attr("class", "legendScatter")
-                .attr('transform', 'translate(700, 12)');
+                .attr('transform', 'translate(600, 12)');
 
             var legendScatter = d3.legendColor()
                 .labelFormat(d3.format(".06f"))
@@ -370,7 +370,7 @@ var onColorChanged;
                     .classed("hidden", false);
                 }
                 else
-                    onSelectMovie(movieId)
+                    onSelectMovie(movieId,d.movie_year,d.imdb_rating)
             });
 
         dotsEnter.on('mouseover', toolTip.show)
@@ -409,7 +409,7 @@ var onColorChanged;
         }
     }
 
-    onSelectMovie = function(movieId) {
+    onSelectMovie = function(movieId,movieYear,imdbRating) {
         svg.selectAll(".dot")
         .classed("selected", function(d){
             return d.movie_id == movieId;
@@ -418,6 +418,7 @@ var onColorChanged;
             .classed("hidden", function(d){
                 return d.movie_id != movieId;
             })
+        detailViewPanelInitialize(movieId);
     }
 
     onColorChanged = function(){
