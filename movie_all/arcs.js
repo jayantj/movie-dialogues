@@ -341,10 +341,10 @@ function drawNodes(group, nodes, fix, scale) {
 onSelectMovieChange = function(movieId) {
   if(movieId) {
     arcDiagram(movieId);
-   }// else {
-  //   var select = d3.select('#movie-select').node();
-  //   selectedMovie = select.options[select.selectedIndex].value;
-  //   arcDiagram(selectedMovie);
-  // }
+  } else {
+    var select = d3.select('#movie-select').node();
+    selectedMovie = select.options[select.selectedIndex].value;
+    arcDiagram(selectedMovie);
+  }
 }
 })();

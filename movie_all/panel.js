@@ -1,5 +1,4 @@
 var detailViewPanelInitialize;
-var updatePanel;
 (function () {
 
 function filterArcs(selectedTheme, arcs) {
@@ -129,11 +128,10 @@ d3.csv('./../data/movies.csv',
         }
 
         //updateChart('m0');
-        detailViewPanelInitialize();
         updatePanel(null);
     });
 
-detailViewPanelInitialize = function() {
+detailViewPanelInitialize = function(movieId) {
     svg.append('g')
         .attr('transform', 'translate('+[padding.l+120, padding.t+20]+')')
         //.attr('transform', 'translate(80,370)')
@@ -148,36 +146,12 @@ detailViewPanelInitialize = function() {
         .attr('transform', 'translate('+[padding.l+120, 650]+')')
         //.attr('transform', 'translate(80,370)')
         .call(d3.axisBottom(xScale).ticks(5).tickFormat(formatPercent));
-    
-    var sentimentColorRange = ['green','red']
-        
-    var sentimentColorScale = d3.scaleLinear().range(sentimentColorRange).domain([1,2]);
-
-    var linearGradient = svg.append("g")
-        .append("defs")
-        .append("linearGradient")
-        .attr("id", "linear-gradient");
-
-    linearGradient.append("stop")
-        .attr("offset", "0%")
-        .attr("stop-color", sentimentColorScale(1));
-
-    linearGradient.append("stop")
-        .attr("offset", "100%")
-        .attr("stop-color", sentimentColorScale(2));
-
-    svg.append('g')
-        .append("rect")
-        .attr("x", 160)
-        .attr("y", 360)
-        .attr("width", xSentimentScale(1))
-        .attr("height", "20px")
-        .style("fill", "url(#linear-gradient)");
 
     svg.call(toolTip);
+    updatePanel(movieId);
 }
 
-updatePanel = function(movie) {
+function updatePanel(movie) {
     // Filtered movie data
     if(movie) {
         var filteredMovie = movies.filter(function(d){
@@ -352,46 +326,43 @@ function sentimentSlider(filteredMovie) {
     chartG = svg.append('g')
         .attr('transform', 'translate('+[padding.l, padding.t+padding.t]+')');
 
-    //Sentiment bar and legend    
+    //Sentiment bar and legend
+    var sentimentColorRange = ['green','red']
+        
+    var sentimentColorScale = d3.scaleLinear().range(sentimentColorRange).domain([1,2]);
 
-    svg.append('g').attr('class', 'sentimentSlider')
-    var sBar = svg.select('.sentimentSlider')
-        .selectAll('.sentiment-rect')
-        .data([parseFloat(filteredMovie[0].sentiment)], function(d) {
-            return d;
-        });
+    var linearGradient = svg.append("g")
+        .append("defs")
+        .append("linearGradient")
+        .attr("id", "linear-gradient");
 
-    var sBarEnter = sBar.enter()
-        .append("rect")
-        .attr('class', 'sentiment-rect')
-        // .attr('transform', function(d) {
-        //     return 'translate(' + (xSentimentScale(d)).toString() + ',0)'
-        // })
-        .attr("x", 155)
-        .attr("y", 355)
-        .attr('height',"30px")
-        .attr('width',"4px")
-        .on('mouseover', sentimentToolTip.show)
-        .on('mouseout', sentimentToolTip.hide);
+    linearGradient.append("stop")
+        .attr("offset", "0%")
+        .attr("stop-color", sentimentColorScale(1));
+
+    linearGradient.append("stop")
+        .attr("offset", "100%")
+        .attr("stop-color", sentimentColorScale(2));
+
+    chartG.append("rect")
+        .attr("x", 120)
+        .attr("y", 300)
+        .attr("width", xSentimentScale(1))
+        .attr("height", "20px")
+        .style("fill", "url(#linear-gradient)");
 
     // var sentimentTicks = xSentimentScale.ticks();
     // sentimentTicks.push(parseFloat(filteredMovie[0].sentiment));
     // sentimentAxis.tickValues(sentimentTicks);
 
-    // sBarEnter.append("rect")
-    //     .attr('transform', 'translate(' + (xSentimentScale(filteredMovie[0].sentiment)).toString() + ',0)')
-    //     .attr("x", 120)
-    //     .attr("y", 295)
-    //     .attr('height',"30px")
-    //     .attr('width',"4px")
-    //     .on('mouseover', sentimentToolTip.show)
-    //     .on('mouseout', sentimentToolTip.hide);
-
-    sBar.merge(sBarEnter)
-        .attr('transform', function(d) {
-            return 'translate(' + (xSentimentScale(d)).toString() + ',0)'
-        });
-    sBar.exit().remove();
+    slider = chartG.append("rect")
+        .attr('transform', 'translate(' + (xSentimentScale(filteredMovie[0].sentiment)).toString() + ',0)')
+        .attr("x", 120)
+        .attr("y", 295)
+        .attr('height',"30px")
+        .attr('width',"4px")
+        .on('mouseover', sentimentToolTip.show)
+        .on('mouseout', sentimentToolTip.hide);
 }
 
 function themeBars(filteredMovie, props) {
