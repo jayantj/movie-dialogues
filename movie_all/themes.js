@@ -183,12 +183,10 @@ var onDecadeChanged;
         });
         moviesData = dataset;
         // Create groups per genre
-        var rowLabelWidth = 60;
-        var columnLabelHeight = 70;
         var topMargin = 37;
         var leftMargin = 90;
         var rightMargin = 40;
-        var bottomMargin = 45;
+        var bottomMargin = 65;
 
         var columnWidth = ((svgWidth - leftMargin - rightMargin) / genresOfInterest.length);
         var rowHeight = ((svgHeight - topMargin - bottomMargin) / themesOfInterest.length);
