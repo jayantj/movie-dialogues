@@ -112,25 +112,25 @@ d3.json('./../data/conv/m1.json', function(error, dataset) {
     drawNodes(femaleG, female, femalefix, femaleScale);
 
     svgMain.append('text')
-    .attr('class', 'label')
+    .attr('class', 'node-label')
     .attr('transform', `translate(${malexfix}, ${svgMainHeight - MainPadding.b + 20})`)
     .style('text-anchor', 'middle')
     .text('Male');
 
     svgMain.append('text')
-    .attr('class', 'label')
+    .attr('class', 'node-label')
     .attr('transform', `translate(${malexfix}, ${MainPadding.t - 20})`)
     .style('text-anchor', 'middle')
     .text('Male');
 
     svgMain.append('text')
-    .attr('class', 'label')
+    .attr('class', 'node-label')
     .attr('transform', `translate(${femalefix}, ${svgMainHeight - MainPadding.b + 20})`)
     .style('text-anchor', 'middle')
     .text('Female');
 
     svgMain.append('text')
-    .attr('class', 'label')
+    .attr('class', 'node-label')
     .attr('transform', `translate(${femalefix}, ${MainPadding.t - 20})`)
     .style('text-anchor', 'middle')
     .text('Female');
