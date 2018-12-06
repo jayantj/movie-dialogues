@@ -11,7 +11,7 @@
   <div>
     <div width = "100%" id="control-container">
         <text class = "main-title">Movie Dialogues over the years</text>
-        <span id="findTitle">Pick a movie: </span>
+        <span id="findTitle" style="padding-left:988px;">Pick a movie: </span>
         <select class="custom-select" id="decade-select" style="margin-left: 20px;">
         </select>
         <select class="custom-select" id="movie-select" style="width: 200px;margin-left: 20px;" onchange="onSelectMovieChange()">
@@ -31,16 +31,16 @@
             <svg class = "legend-svg" width="200" height="40">
             </svg>
         </div>
-        <svg id="scatter-svg" width="900" height="580" style="border: 1px solid #777;">
+        <svg id="scatter-svg" width="900" height="580" >
         </svg>
     </div>
     <div id="genres-themes">
         <div id="heatmapTitle" style="padding-top: 10px;">
-            <div class="miniTitles" style="padding-right:410px; display: block">Conversation Themes by Genre</div>
-            <svg class = "legend-svg-heatmap" width="300" height="40" style="margin-top: 2px; padding-left: 20px;">
+            <text class="miniTitles" style="padding-right:370px;">Conversation Themes by Genre</text>
+            <svg class = "legend-svg-heatmap" width="220" height="40">
             </svg>
         </div>
-        <svg id = "themes-svg" width="900" height="580" style="border: 1px solid #777;">
+        <svg id = "themes-svg" width="900" height="580" >
         </svg>
     </div>
     </div>
