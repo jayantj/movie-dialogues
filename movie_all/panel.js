@@ -132,17 +132,29 @@ d3.csv('./../data/movies.csv',
     });
 
 detailViewPanelInitialize = function(movieId) {
-    svg.append('g')
+    svg.selectAll('g.themesAxis')
+        .data([1])
+        .enter()
+        .append('g')
+        .attr('class', 'themesAxis')
         .attr('transform', 'translate('+[padding.l+120, padding.t+10]+')')
         //.attr('transform', 'translate(80,370)')
         .call(d3.axisTop(xThemeScale).ticks(5));
 
-    svg.append('g')
+    svg.selectAll('g.sentimentAxis')
+        .data([1])
+        .enter()
+        .append('g')
+        .attr('class', 'sentimentAxis')
         .attr('transform', 'translate('+[padding.l+120, padding.t+330]+')')
         //.attr('transform', 'translate(80,370)')
         .call(sentimentAxis);
 
-    svg.append('g')
+    svg.selectAll('g.genderAxis')
+        .data([1])
+        .enter()
+        .append('g')
+        .attr('class', 'genderAxis')
         .attr('transform', 'translate('+[padding.l+120, padding.t+530]+')')
         //.attr('transform', 'translate(80,370)')
         .call(d3.axisBottom(xScale).ticks(5).tickFormat(formatPercent));
@@ -312,15 +324,26 @@ function sentimentSlider(filteredMovie) {
 
     svg.call(sentimentToolTip);
 
-    g = svg.append('g');
-    g.append('text')
+    svg.selectAll('g.sentimentTitle')
+        .data([1])
+        .enter()
+        .append('g')
+        .attr('class', 'sentimentTitle')
+        .append('text')
         .attr('transform', 'translate(170,350)')
-        .text('Sentiment: '+filteredMovie[0].title)
-        .attr('class','miniTitles');
+        .attr('class','miniTitles sentimentTitle');
 
-    chartG = svg.append('g')
+    svg.selectAll('g.sentimentTitle').select('text.miniTitles')
+        .text('Sentiment: '+filteredMovie[0].title)
+
+    svg.selectAll('sentimentG')
+        .data([1])
+        .enter()
+        .append('g')
+        .attr('class', 'sentimentG')
         .attr('transform', 'translate('+[padding.l, padding.t]+')');
 
+    var sentimentG = svg.select('g.sentimentG')
     //Sentiment bar and legend
     var sentimentColorRange = ['green','red']
         
@@ -339,7 +362,11 @@ function sentimentSlider(filteredMovie) {
         .attr("offset", "100%")
         .attr("stop-color", sentimentColorScale(2));
 
-    chartG.append("rect")
+    sentimentG.selectAll('rect.sliderBg')
+        .data([1])
+        .enter()
+        .append("rect")
+        .attr('class', 'sliderBg')
         .attr("x", 120)
         .attr("y", 300)
         .attr("width", xSentimentScale(1))
@@ -350,35 +377,62 @@ function sentimentSlider(filteredMovie) {
     // sentimentTicks.push(parseFloat(filteredMovie[0].sentiment));
     // sentimentAxis.tickValues(sentimentTicks);
 
-    slider = chartG.append("rect")
-        .attr('transform', 'translate(' + (xSentimentScale(filteredMovie[0].sentiment)).toString() + ',0)')
+    sentimentG.selectAll('rect.slider')
+        .data([1])
+        .enter()
+        .append("rect")
+        .attr('class', 'slider')
         .attr("x", 120)
         .attr("y", 295)
         .attr('height',"30px")
         .attr('width',"4px")
+
+    sentimentG.selectAll('rect.slider')
+        .attr('transform', 'translate(' + (xSentimentScale(filteredMovie[0].sentiment)).toString() + ',0)')
         .on('mouseover', sentimentToolTip.show)
         .on('mouseout', sentimentToolTip.hide);
+
 }
 
 function themeBars(filteredMovie, props) {
-    chartG = svg.append('g')
-        .attr('transform', 'translate('+[padding.l, padding.t]+')');
 
-    g = svg.append('g');
-    g.append('text')
+    svg.selectAll('text.themesTitle')
+        .data([1])
+        .enter()
+        .append('text')
         .style('color', 'black')
         .attr('transform', 'translate(180,40)')
+        .attr('class','miniTitles themesTitle');
+
+    svg.select('text.themesTitle')
         .text('Themes: '+ filteredMovie[0].title)
-        .attr('class','miniTitles');
 
-    var tBars = chartG.selectAll('.themeBars')
-        .data(props, function(d) {
-            return d.key;
-        });
-
-    var tBarsEnter = tBars.enter()
+    var tBarsEnter = chartG.selectAll('.themeBarG')
+        .data(props, function(d, i) {
+            return i;
+        })
+        .enter()
         .append('g')
-        .attr('class', 'themeBar')
+        .attr('class', 'themeBarG')
+
+    tBarsEnter
+        .append('rect')
+        .attr('x', 120)
+        .attr('y', function(d,i){
+            return 20+parseFloat(i/2)*20 + i * 10 + 4;
+        })
+        .attr('height', 10)
+        .attr('fill','#4778AA')
+        .attr('class','themeBar')
+
+    var themeRects = chartG.selectAll('.themeBarG').select('rect.themeBar')
+    themeRects
+        .transition()
+        .duration(500)
+        .attr('width', function(d){
+            return xThemeScale(parseInt(d.value));
+        })
+    themeRects
         .on('mouseover', function(d) {
             // Use this to select the hovered element
             var hovered = d3.select(this);
@@ -406,7 +460,6 @@ function themeBars(filteredMovie, props) {
                 clicked.classed('hovered', false);
                 clicked.classed('selected',true);
             }
-
             var maleArcs = d3.select('.male').selectAll('path');
             var femaleArcs = d3.select('.female').selectAll('path');
             var crossGenderLines = d3.select('.cross-g').selectAll('line');
@@ -416,38 +469,20 @@ function themeBars(filteredMovie, props) {
             filterArcs(selectedTheme,crossGenderLines);
         });
 
-        
-    tBars.merge(tBarsEnter)
-        .transition()
-        .duration(750)
-        .attr('transform', function(d,i){
-            return 'translate('+[0, i * 10 + 4]+')';
-        });
-
-    tBarsEnter.append('rect')
-        .attr('x', 120)
-        .attr('y', function(d,i){
-            return 20+parseFloat(i/2)*20;
-        })
-        .attr('height', 10)
-        .attr('width', function(d){
-            return xThemeScale(parseInt(d.value));
-        })
-        .attr('fill','#4778AA')
-        .attr('class','themeBar');
-
     tBarsEnter.append('text')
         .attr('x', 60)
         .attr('y', function(d,i){
-            return 20+parseFloat(i/2)*20;
+            return 20+parseFloat(i/2)*20 + i * 10 + 4;
         })
         .style('color', 'black')
         .attr('dy', '0.8em')
+        .attr('class','themeBar')
+
+
+    chartG.selectAll('.themeBarG').select('text.themeBar')
         .text(function(d) {
             return d.key;
         })
-        .attr('class','themeBar');
 
-    tBars.exit().remove();
 }
 })();
