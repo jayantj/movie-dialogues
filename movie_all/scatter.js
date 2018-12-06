@@ -4,12 +4,13 @@ var onColorChanged;
 
 (function() {    
     var dataDir = '../data/'
-    var svg = d3.select('svg');
+    var svg = d3.select('#scatter-svg');
+    var svgLegend = d3.select('.legend-svg');
 
     // Hand code the svg dimensions, you can also use +svg.attr('width') or +svg.attr('height')
     var svgWidth = +svg.attr('width');
     var svgHeight = +svg.attr('height');
-    var padding = {t: 50, r: 40, b: 40, l: 90};
+    var padding = {t: 30, r: 40, b: 40, l: 90};
     var chartpad = 10;
     var category;
 
@@ -45,8 +46,7 @@ var onColorChanged;
         .data(colorOptions)
         .enter()
         .append('option')
-        .text(function (d) {return d;})
-        .style('text-transform', 'capitalize');
+        .text(function (d) {return d;});
 
     var dataAttributes = ['mm_percent', 'mf_percent', 'ff_percent'];
     var axesLabels = {'mm_percent':'Male to Male Conversations', 'mf_percent':'Male to Female Conversations', 'ff_percent':'Female to Female Conversations'};
@@ -240,19 +240,21 @@ var onColorChanged;
             category = 'bechdel'
             updateChart(movies);
 
-            svg.append("g")
+            svgLegend.append("g")
                 .attr("class", "legendScatter")
-                .attr('transform', 'translate(700, 12)');
+                .attr('transform', 'translate(5, 5)');
 
             var legendScatter = d3.legendColor()
-                .labelFormat(d3.format(".06f"))
-                .shapePadding(2)
+                //.labelFormat(d3.format(".06f"))
+                //.shapePadding(2)
+                .shapeWidth(30)
+                .labelOffset(5)
                 .scale(colorScaleA)
                 .orient('horizontal')
-                .shapePadding(40)
+                //.shapePadding(40)
                 .labels(['Pass', 'Fail', 'Unknown'])
 
-            svg.select(".legendScatter")
+            svgLegend.select(".legendScatter")
                 .call(legendScatter);
     });
 

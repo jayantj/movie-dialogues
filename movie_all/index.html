@@ -8,31 +8,39 @@
     <link rel="stylesheet" href="https://use.typekit.net/yog7gku.css">
 </head>
 <body>
-  <div style="padding-bottom: 10px;">
-    <font face="komu-b, sans-serif" size="34px" color="#364156">Movie Dialogues over the years</font>
-    <div id="control-container">
-            <span id="findTitle">Find a movie</span>
-            <select class="custom-select" id="decade-select">
-            </select>
-            <select class="custom-select" id="movie-select" style="width: 200px;">
-                <option selected hidden>Select a movie</option>
-            </select>
+  <div>
+    <div width = "100%" id="control-container">
+        <text class = "main-title">Movie Dialogues over the years</text>
+        <span id="findTitle">Pick a movie: </span>
+        <select class="custom-select" id="decade-select" style="margin-left: 20px;">
+        </select>
+        <select class="custom-select" id="movie-select" style="width: 200px;margin-left: 20px;">
+            <option selected hidden>Select Movie</option>
+        </select>
   </div>
   <div>
-      <hr>
+      <hr style="border-top: 1px solid #707070">
   </div>
   <div class="wrapper">
     <div id="decades-scatter">
-        <text class="miniTitles">Movies by intersex Conversation</text>
-          <text class="colorDropdown">Color By:</span>
-          <select class="custom-select" id="color-select" onchange="onColorChanged()">
-          </select>
-          <svg width="900" height="580" style="border: 1px solid #777;">
+        <div style="padding-top: 10px;">
+            <text class="miniTitles">Movies by intersex Conversation</text>
+            <span class="colorDropdown">Color By:</span>
+            <select class="custom-select" id="color-select" style = "margin-left: 10px; margin-right: 20px;"  onchange="onColorChanged()">
+            </select>
+            <svg class = "legend-svg" width="200" height="40">
+            </svg>
+        </div>
+        <svg id="scatter-svg"width="900" height="580" style="border: 1px solid #777;">
         </svg>
     </div>
     <div id="genres-themes">
-        <div id="heatmapTitle" class="miniTitles">Conversation Themes by Genre</div>
-        <svg width="900" height="580" style="border: 1px solid #777;">
+        <div id="heatmapTitle" style="padding-top: 10px;">
+            <text class="miniTitles" style="padding-right:410px;">Conversation Themes by Genre</text>
+            <svg class = "legend-svg" width="200" height="40" style="border: 1px solid #777;">
+            </svg>
+        </div>
+        <svg id = "themes-svg" width="900" height="580" style="border: 1px solid #777;">
         </svg>
     </div>
     </div>

@@ -2,7 +2,8 @@ var onDecadeChanged;
 
 (function() {    
     var dataDir = '../data/'
-    var svg = d3.select('#genres-themes svg');
+    var svg = d3.select('#themes-svg');
+    var svgLegend = d3.select('.legend-svg')
 
     // Get layout parameters
     var svgWidth = +svg.attr('width');
@@ -183,7 +184,7 @@ var onDecadeChanged;
         });
         moviesData = dataset;
         // Create groups per genre
-        var topMargin = 37;
+        var topMargin = 27;
         var leftMargin = 90;
         var rightMargin = 40;
         var bottomMargin = 65;
