@@ -98,17 +98,32 @@ hr {
   display: inline-block;
 }
 
-/*#heatmapTitle {
-  padding-bottom: 3px;
-}*/
 
-.movie-meta {
+.movie-meta.title{
   font-size: 24px;
   font-family: komu-b, sans-serif;
   fill: #364156;
   color: #364156;
 }
-
+.movie-meta.year {
+  font-size: 16px;
+  font-family: komu-b, sans-serif;
+  fill: #364156;
+  color: #364156;
+}
+.movie-meta.rating {
+  font-size: 16px;
+  font-family: komu-b, sans-serif;
+  fill: #364156;
+  color: #364156;
+}
+.node-label {
+  font-family: roboto, sans-serif;
+  font-weight: 900;
+  font-style: normal;
+  font-size: 20px;
+  fill: #707070;
+}
 .main-title {
   font-size: 34px;
   font-family: komu-a, sans-serif;
@@ -228,10 +243,14 @@ circle {
   fill-opacity: .85;
 }
 
+/*****************Overall View Styling END**********/
 
-/*.genre text.hidden {
-  opacity: .5;
-}*/
+/*******Detail View Styling BEGIN************************/
+
+
+/**********Detail View Styling END**********************/
+
+/***********Shared Styling BEGIN************************/
 
 .d3-tip {
   line-height: 1;
@@ -281,6 +300,11 @@ circle {
   padding-top: 10px;
 }
 
+.wrapper {
+  display: flex;
+}
+/***********Shared Styling END**************************/
+
 body {
   font-family: roboto, sans-serif;
   font-style: normal;
@@ -288,37 +312,19 @@ body {
   margin: 0;
 }
 
-label {
+/*label {
     font-size: 13px;
-}
+}*/
 
-#main {
-    margin: 20px;
-}
 
-.wrapper {
-  display: inline;
-}
 .axis-label {
     text-anchor: middle;
     font-size: 12px;
     font-weight: semibold;
 }
 
-body {
-  font-family: roboto, sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  margin: 0;
-}
 
-.wrapper {
-  display: flex;
-}
 
-.divLayout {
-    margin: 20px;
-}
 
 .genderBar {
 	stroke-width: 1;
@@ -419,13 +425,8 @@ body {
   margin: 0;
 }
 
-.wrapper {
-display: flex;
-}
 
-.divLayout {
-  margin: 20px;
-}
+
 
 .genderBar {
 stroke-width: 1;
@@ -518,6 +519,15 @@ stroke-opacity: 0.4;
   padding: 10px 5px;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.movie-meta {
+  font-family: komu-b, sans-serif;
+}
+.title {
+  font-size: 24px
+}
+.year, .rating {
+  font-size: 18px;
 }
 /*.theme-label {
   font-family: roboto, sans-serif;
