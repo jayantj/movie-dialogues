@@ -9,7 +9,7 @@ var onColorChanged;
     // Hand code the svg dimensions, you can also use +svg.attr('width') or +svg.attr('height')
     var svgWidth = +svg.attr('width');
     var svgHeight = +svg.attr('height');
-    var padding = {t: 10, r: 40, b: 40, l: 90};
+    var padding = {t: 50, r: 40, b: 40, l: 90};
     var chartpad = 10;
     var category;
 
@@ -239,6 +239,21 @@ var onColorChanged;
             svg.call(toolTip);
             category = 'bechdel'
             updateChart(movies);
+
+            svg.append("g")
+                .attr("class", "legendScatter")
+                .attr('transform', 'translate(700, 12)');
+
+            var legendScatter = d3.legendColor()
+                .labelFormat(d3.format(".06f"))
+                .shapePadding(2)
+                .scale(colorScaleA)
+                .orient('horizontal')
+                .shapePadding(40)
+                .labels(['Pass', 'Fail', 'Unknown'])
+
+            svg.select(".legendScatter")
+                .call(legendScatter);
     });
 
     function updateChart(movies) { 

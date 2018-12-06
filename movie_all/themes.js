@@ -111,7 +111,6 @@ var onDecadeChanged;
 
         decadeDropdown.selectAll('option')
             .each(function(d) {
-                console.log(d, this);
                 if(d == 1920) {
                     d3.select(this).attr('selected', '');
                     populateMovieDropdown(filterMoviesByDecade(movies, d))
@@ -186,7 +185,7 @@ var onDecadeChanged;
         // Create groups per genre
         var rowLabelWidth = 60;
         var columnLabelHeight = 70;
-        var topMargin = 16;
+        var topMargin = 37;
         var leftMargin = 90;
         var rightMargin = 40;
         var bottomMargin = 45;
@@ -279,7 +278,7 @@ var onDecadeChanged;
             .attr('width', columnWidth)
             .attr('height', rowHeight)
             .attr('transform', function(d, i) {
-                return 'translate('+[-30, (rowHeight / 2)  + (i * rowHeight)]+')';
+                return 'translate('+[-30, (rowHeight / 2)  + (i * rowHeight) + 20]+')';
             });
         themeLabelG
             .append('text')
