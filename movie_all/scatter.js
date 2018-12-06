@@ -26,11 +26,7 @@ var onSelectMovie;
         .attr('class','miniTitles');
 
     var dataAttributes = ['mm_percent', 'mf_percent', 'ff_percent'];
-<<<<<<< HEAD
-    var dataAttributes2 = ['% Male to Male Conversations', '% Male to Female Conversations', '% Female to Female Conversations'];
-=======
     var axesLabels = {'mm_percent':'Male to Male Conversations', 'mf_percent':'Male to Female Conversations', 'ff_percent':'Female to Female Conversations'};
->>>>>>> 9ad01642541ab422f81f0278eef21c66a3f3e6ce
     var N = dataAttributes.length;
     var chartWidth = (svgWidth - padding.l - padding.r);
     var chartHeight = (svgHeight - padding.t - padding.b)/N;
@@ -173,11 +169,7 @@ var onSelectMovie;
                     yScale.domain([-5,100]);
                     d3.select(this).call(yAxis);
                     d3.select(this).append('text')
-<<<<<<< HEAD
-                        .text(function(d){return dataAttributes2[dataAttributes.indexOf(attribute)]})
-=======
                         .text(axesLabels[attribute])
->>>>>>> 9ad01642541ab422f81f0278eef21c66a3f3e6ce
                         .attr('class', 'axis-label')
                         .attr('transform', 'translate('+[-26, chartHeight / 2]+')rotate(270)');
                 });
