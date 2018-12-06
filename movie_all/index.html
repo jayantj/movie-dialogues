@@ -18,15 +18,26 @@
     </select>
   </div>
   <div>
-      <hr style="border-top: 2px solid rgba(0,0,0,0.5)">
+      <hr style="border-top: 1px solid #707070" style="margin: 0rem">
   </div>
   <div class="wrapper">
     <div id="decades-scatter">
-        <svg width="800" height="580">
+        <g class="scatter-titles" transform = "translate(20,40)">
+            <text class="miniTitles" transform = "translate(20,40)">Movies by intersex Conversation</text>
+            <text class="colorDropdown" transform = "translate(380,40)">Color By:</text>
+            <select class="custom-select" id="color-select" transform = "translate(410,40)">
+            </select>
+        </g>
+        <svg width="900" height="580" style="border: 1px solid #777;">
         </svg>
     </div>
     <div id="genres-themes">
-      <svg width="800" height="580">
+        <g class="heatmap-titles" transform = "translate(20,40)">
+            <text class="miniTitles" transform = "translate(20,40)">Conversations by Genre</text>
+            <select class="custom-select" id="color-select" transform = "translate(410,40)">
+            </select>
+        </g>
+      <svg width="900" height="580" style="border: 1px solid #777;">
       </svg>
     </div>
 

@@ -80,15 +80,38 @@
   fill: #364156;
 }
 
+.colorDropdown {
+  font-family: komu-b, sans-serif;
+  font-style: normal;
+  font-size: 20px;
+  fill: #364156;
+}
+
 .movie-title {
   font-size: 24px;
   font-family: komu-b, sans-serif;
 }
 .character-name {
+  font-family: roboto, sans-serif;
+  font-weight: 700;
+  font-style: normal;
   font-size: 12px;
+  fill: #707070;
+}
+
+.scatter-titles text{
+  display: inline-block;
+}
+
+.scatter-titles{
+  display: inline-block;
 }
 /*************************************/
 
+/* Line Divider Style*/
+hr {
+  margin: 0em !important ;
+}
 .axis,
 .frame {
   shape-rendering: crispEdges;
@@ -201,7 +224,7 @@ label {
 }
 
 .wrapper {
-  display: flex;
+  display: inline;
 }
 .axis-label {
     text-anchor: middle;

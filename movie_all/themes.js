@@ -178,8 +178,8 @@ var onDecadeChanged;
         // Create groups per genre
         var rowLabelWidth = 60;
         var columnLabelHeight = 70;
-        var topMargin = 70;
-        var leftMargin = 75;
+        var topMargin = 25;
+        var leftMargin = 90;
         var rightMargin = 20;
         var bottomMargin = 40;
 

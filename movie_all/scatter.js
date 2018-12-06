@@ -1,5 +1,6 @@
 var onGenreChanged;
 var onSelectMovie;
+var onColorChanged;
 
 (function() {    
     var dataDir = '../data/'
@@ -8,22 +9,42 @@ var onSelectMovie;
     // Hand code the svg dimensions, you can also use +svg.attr('width') or +svg.attr('height')
     var svgWidth = +svg.attr('width');
     var svgHeight = +svg.attr('height');
-    var padding = {t: 130, r: 40, b: 40, l: 75};
+    var padding = {t: 30, r: 40, b: 40, l: 90};
     var chartpad = 10;
 
     // Compute chart dimensions
     var movies;
-
+    var colorOptions = ['bechdel','anxiety','anger','death','home','leisure','money','religion','sadness','sexual','swear',];
     // Create a group element for appending chart elements
     var chartG = svg.append('g')
         .attr('transform', 'translate('+[padding.l, padding.t]+')');
 
-        //chart title
-    svg.append('g')
+    //chart title
+    /*svg.append('g')
+        .attr('class', 'scatter-titles')
         .append('text')
-        .attr('transform', 'translate(20,20)')
+        .attr('transform', 'translate(20,40)')
         .text('Movies by intersex conversation')
         .attr('class','miniTitles');
+    
+    svg.selectAll('.scatter-titles')
+        .append('text')
+        .attr('transform', 'translate(380,40)')
+        .text('Color By:')
+        .attr('class','colorDropdown');
+    
+    var select = .select('.scatter-titles')
+        .append('select')
+        .attr('class','color-select')
+        .attr('transform', 'translate(410,40)')
+        .on('change',onColorChanged);*/
+      
+    d3.select('#color-select')
+        .selectAll('opition')
+        .data(colorOptions)
+        .enter()
+        .append('option')
+        .text(function (d) {return d;});
 
     var dataAttributes = ['mm_percent', 'mf_percent', 'ff_percent'];
     var axesLabels = {'mm_percent':'Male to Male Conversations', 'mf_percent':'Male to Female Conversations', 'ff_percent':'Female to Female Conversations'};
@@ -150,10 +171,6 @@ var onSelectMovie;
             
             d3.selectAll(".x.axis .tick text")
                 .attr("transform", "translate(1,4)");    
-                /*.append('text')
-                .text('Movie Decades')
-                .attr('class', 'axis-label')
-                .attr('transform', 'translate('+[chartWidth/2 , 30]+')');*/
 
             chartG.selectAll('.y.axis')
                 .data(dataAttributes)
@@ -164,8 +181,6 @@ var onSelectMovie;
                     return 'translate('+[0, i * chartHeight + chartpad / 2]+')';
                 })
                 .each(function(attribute){
-                    //yScale.domain(extentByAttribute[attribute]);
-                    console.log(attribute.index);
                     yScale.domain([-5,100]);
                     d3.select(this).call(yAxis);
                     d3.select(this).append('text')
