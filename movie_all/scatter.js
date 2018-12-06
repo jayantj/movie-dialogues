@@ -290,7 +290,7 @@ var onColorChanged;
         xScale.domain([1920,2012]);
         yScale.domain([-5,100]);
         var colorExtent = d3.extent(movies, function(d){
-            return Number(d[themes[category]]) ;
+            return Number(d[themes[category]] / d['tot_conv']);
             });
         colorScaleB.domain(colorExtent);
         
@@ -373,7 +373,7 @@ var onColorChanged;
                 return colorScaleA(d[category]);
             }
             else{
-                return colorScaleB(d[themes[category]]);
+                return colorScaleB(d[themes[category]] / d['tot_conv']);
             }  
         });
 
