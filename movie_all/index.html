@@ -11,12 +11,14 @@
   <div>
     <div width = "100%" id="control-container">
         <text class = "main-title">Movie Dialogues over the years</text>
-        <span id="findTitle">Pick a movie: </span>
-        <select class="custom-select" id="decade-select" style="margin-left: 20px;">
-        </select>
-        <select class="custom-select" id="movie-select" style="width: 200px;margin-left: 20px;">
-            <option selected hidden>Select Movie</option>
-        </select>
+        <div>
+            <span id="findTitle">Pick a movie: </span>
+            <select class="custom-select" id="decade-select" style="margin-left: 20px;">
+            </select>
+            <select class="custom-select" id="movie-select" style="width: 200px;margin-left: 20px;">
+                <option selected hidden>Select Movie</option>
+            </select>
+        </div>
   </div>
   <div>
       <hr style="border-top: 1px solid #707070">
@@ -28,10 +30,10 @@
             <span class="colorDropdown">Color By:</span>
             <select class="custom-select" id="color-select" style = "margin-left: 10px; margin-right: 20px;"  onchange="onColorChanged()">
             </select>
-            <svg class = "legend-svg" width="200" height="40">
+            <svg class = "legend-svg" width="800" height="40">
             </svg>
         </div>
-        <svg id="scatter-svg"width="800" height="580" style="border: 1px solid #777;">
+        <svg id="scatter-svg" width="800" height="580" style="border: 1px solid #777;">
         </svg>
     </div>
     <div id="genres-themes">

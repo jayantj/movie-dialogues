@@ -83,7 +83,7 @@ var onColorChanged;
     .attr("class", "d3-tip")
     .offset([-12, 0])
     .html(function(d) {
-        return "<h5>"+d['movie_title']+", "+d.movie_year+", "+d.mm_percent+"</h5>";
+        return "<h5 style='text-transform: capitalize'>"+d['movie_title']+", "+d.movie_year+", "+d.mm_percent+"</h5>";
     });
     // Get decade for movie
     function decadeForRow(row) {
@@ -239,23 +239,7 @@ var onColorChanged;
             svg.call(toolTip);
             category = 'bechdel'
             updateChart(movies);
-
-            svgLegend.append("g")
-                .attr("class", "legendScatter")
-                .attr('transform', 'translate(5, 5)');
-
-            var legendScatter = d3.legendColor()
-                //.labelFormat(d3.format(".06f"))
-                //.shapePadding(2)
-                .shapeWidth(30)
-                .labelOffset(5)
-                .scale(colorScaleA)
-                .orient('horizontal')
-                //.shapePadding(40)
-                .labels(['Pass', 'Fail', 'Unknown'])
-
-            svgLegend.select(".legendScatter")
-                .call(legendScatter);
+            updateLegend(category);
     });
 
     function updateChart(movies) { 
@@ -308,7 +292,6 @@ var onColorChanged;
         var colorExtent = d3.extent(movies, function(d){
             return Number(d[themes[category]]) ;
             });
-        console.log(colorExtent);
         colorScaleB.domain(colorExtent);
         
 
@@ -390,7 +373,6 @@ var onColorChanged;
                 return colorScaleA(d[category]);
             }
             else{
-                console.log(d[themes[category]]);
                 return colorScaleB(d[themes[category]]);
             }  
         });
@@ -426,8 +408,45 @@ var onColorChanged;
     onColorChanged = function(){
         var select = d3.select('#color-select').node();
         category = select.options[select.selectedIndex].value;
-        console.log(category);
         updateChart(movies);
+        updateLegend(category);
+    }
+
+    function updateLegend(category) {
+        console.log(category)
+        svgLegend.selectAll('.legendScatter')
+            .data([1])
+            .enter()
+            .append("g")
+            .attr("class", "legendScatter")
+            .attr('transform', 'translate(565, 10)');
+
+        if(category == 'bechdel') {
+            var legendScatter = d3.legendColor()
+                //.labelFormat(d3.format(".06f"))
+                //.shapePadding(2)
+                .shapeWidth(30)
+                .labelOffset(5)
+                .scale(colorScaleA)
+                .orient('horizontal')
+                //.shapePadding(40)
+                .labels(['Pass', 'Fail', 'Unknown'])
+        }
+        else {
+            var legendScatter = d3.legendColor()
+            //.labelFormat(d3.format(".06f"))
+            //.shapePadding(2)
+            .shapeWidth(30)
+            .labelOffset(5)
+            .scale(colorScaleB)
+            .orient('horizontal')
+            //.shapePadding(40)
+            // .labels(['Pass', 'Fail', 'Unknown'])
+
+        }
+
+        svgLegend.select(".legendScatter")
+            .call(legendScatter);
     }
 
     /******Brushing for ScatterPlot *******/
