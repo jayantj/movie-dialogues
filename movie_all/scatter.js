@@ -403,6 +403,7 @@ var onColorChanged;
                 return d.movie_id != movieId;
             })
         detailViewPanelInitialize(movieId);
+        onSelectMovieChange(movieId);
     }
 
     onColorChanged = function(){

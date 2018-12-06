@@ -1,5 +1,6 @@
 // Global functions called when select elements changed
-
+var onSelectMovieChange;
+(function () {
 var svgMain = d3.select('#main').select('svg');
 
 // Get layout parameters
@@ -320,10 +321,15 @@ var arcDiagram = function(selectedMovie) {
 
 };
 
-var selectedMovie = 'm0';
-arcDiagram(selectedMovie);
-function onSelectMovieChange() {
-  var select = d3.select('#movie-select').node();
-  selectedMovie = select.options[select.selectedIndex].value;
-  arcDiagram(selectedMovie);
+// var selectedMovie = 'm0';
+// arcDiagram(selectedMovie);
+
+onSelectMovieChange = function(movieId) {
+  // var select = d3.select('#movie-select').node();
+  // selectedMovie = select.options[select.selectedIndex].value;
+  // arcDiagram(selectedMovie);
+  // if(!selectedMovie) {
+    arcDiagram(movieId);
+  //}
 }
+})();
