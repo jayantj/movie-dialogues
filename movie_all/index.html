@@ -5,38 +5,34 @@
     <title>Movie dialogues</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="./bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.typekit.net/yog7gku.css">
+    <link rel="stylesheet" href="./yog7gku.css">
 </head>
 <body>
-  <div id="movie-finder" style="padding-bottom: 50px">
+  <div style="padding-bottom: 10px; text-align: center;">
     <font face="komu-b, sans-serif" size="34px" color="#364156">Movie Dialogues over the years</font>
-    <select class="custom-select" id="decade-select">
-        <option selected disabled hidden>Choose here</option>
-    </select>
-    <select class="custom-select" id="movie-select">
-        <option selected hidden>Choose a decade first</option>
-    </select>
   </div>
   <div>
-      <hr style="border-top: 1px solid #707070" style="margin: 0rem">
   </div>
   <div class="wrapper">
     <div id="decades-scatter">
-        <g class="scatter-titles" transform = "translate(20,40)">
-            <text class="miniTitles" transform = "translate(20,40)">Movies by intersex Conversation</text>
-            <text class="colorDropdown" transform = "translate(380,40)">Color By:</text>
-            <select class="custom-select" id="color-select" transform = "translate(410,40)" onchange="onColorChanged()">
-            </select>
-        </g>
+      <div class="miniTitles">Movies by intersex Conversation</div>
+        <div id="control-container">
+          <span id="findTitle">Find a movie</span>
+          <select class="custom-select" id="decade-select">
+          </select>
+          <select class="custom-select" id="movie-select" style="width: 200px;">
+              <option selected hidden>Select a movie</option>
+          </select>
+
+          <span class="colorDropdown">Color By:</span>
+          <select class="custom-select" id="color-select" onchange="onColorChanged()">
+          </select>
+        </div>
         <svg width="900" height="580" style="border: 1px solid #777;">
         </svg>
     </div>
     <div id="genres-themes">
-        <g class="heatmap-titles" transform = "translate(20,40)">
-            <text class="miniTitles" transform = "translate(20,40)">Conversations by Genre</text>
-            <select class="custom-select" id="color-select" transform = "translate(410,40)">
-            </select>
-        </g>
+        <div id="heatmapTitle" class="miniTitles">Conversation Themes by Genre</div>
       <svg width="900" height="580" style="border: 1px solid #777;">
       </svg>
     </div>

@@ -9,7 +9,7 @@ var onColorChanged;
     // Hand code the svg dimensions, you can also use +svg.attr('width') or +svg.attr('height')
     var svgWidth = +svg.attr('width');
     var svgHeight = +svg.attr('height');
-    var padding = {t: 30, r: 40, b: 40, l: 90};
+    var padding = {t: 10, r: 40, b: 40, l: 90};
     var chartpad = 10;
     var category;
 
@@ -41,11 +41,12 @@ var onColorChanged;
         .on('change',onColorChanged);*/
       
     d3.select('#color-select')
-        .selectAll('opition')
+        .selectAll('option')
         .data(colorOptions)
         .enter()
         .append('option')
-        .text(function (d) {return d;});
+        .text(function (d) {return d;})
+        .style('text-transform', 'capitalize');
 
     var dataAttributes = ['mm_percent', 'mf_percent', 'ff_percent'];
     var axesLabels = {'mm_percent':'Male to Male Conversations', 'mf_percent':'Male to Female Conversations', 'ff_percent':'Female to Female Conversations'};

@@ -68,6 +68,7 @@ hr {
   font-family: komu-b, sans-serif;
   font-style: normal;
   font-size: 24px;
+  text-align: center;
   fill: #364156;
   color: #364156;
 }
@@ -78,6 +79,18 @@ hr {
   font-size: 20px;
   fill: #364156;
   color: #364156;
+  padding-left: 230px;
+}
+
+#findTitle{ 
+  font-family: komu-b, sans-serif;
+  font-style: normal;
+  font-size: 20px;
+  padding-left: 90px;
+}
+
+#heatmapTitle {
+  padding-bottom: 38px;
 }
 
 .movie-title {
