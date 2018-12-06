@@ -46,7 +46,7 @@ d3.csv('./../data/movies.csv',
             //genderBal :[{key:'unknown',value:100},{key:'ff',value:parseFloat(row.ff_percent)+parseFloat(row.mf_percent)+parseFloat(row.mm_percent)},{key:'mf',value:parseFloat(row.mf_percent)+parseFloat(row.mm_percent)},{key:'mm',value:parseFloat(row.mm_percent)}],
             genderBal :[{key:'mm',value:parseFloat(row.mm_percent)},{key:'mf',value:parseFloat(row.mf_percent)},{key:'ff',value:parseFloat(row.ff_percent)}, {key:'unknown',value:100-parseFloat(row.mm_percent)-parseFloat(row.mf_percent)-parseFloat(row.ff_percent)}],
             title: row.movie_title,
-            themes: {'Anxiety':row.anx_conv,'Anger':row.anger_conv,'Sad':row.sad_conv,'Sexual':row.sexual_conv,'Work': row.work_conv,'Leisure':row.leisure_conv,'Home':row.home_conv,'Money':row.money_conv,'Religion':row.relig_conv,'Death':row.death_conv,'Swear':row.swear_conv},
+            themes: {'Anxiety':row.anxiety_conv,'Anger':row.anger_conv,'Sad':row.sadness_conv,'Sexual':row.sexual_conv,'Work': row.work_conv,'Leisure':row.leisure_conv,'Home':row.home_conv,'Money':row.money_conv,'Religion':row.religion_conv,'Death':row.death_conv,'Swear':row.swear_conv},
             id: row.movie_id,
             year: row.movie_year,
             sentiment: row.sentiment

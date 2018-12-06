@@ -11,6 +11,7 @@ var onColorChanged;
     var svgHeight = +svg.attr('height');
     var padding = {t: 30, r: 40, b: 40, l: 90};
     var chartpad = 10;
+    var category;
 
     // Compute chart dimensions
     var movies;
@@ -59,8 +60,8 @@ var onColorChanged;
     var yAxis = d3.axisLeft(yScale);
 
     //ordinal color scale
-    var colorScale = d3.scaleOrdinal(d3.schemeSet2).domain(['1','0','?']);
-
+    var colorScaleA = d3.scaleOrdinal(d3.schemeSet2).domain(['1','0','?']);
+    var colorScaleB = d3.scaleSequential(d3.interpolatePurples);
     // Map for referencing min/max per each attribute
     var extentByAttribute = {};
     var cellEnter;
@@ -233,7 +234,7 @@ var onColorChanged;
              .call(brush); 
             
             svg.call(toolTip);
-
+            category = 'bechdel'
             updateChart(movies);
     });
 
@@ -284,6 +285,11 @@ var onColorChanged;
         //yScale.domain(extentByAttribute[this.y]);
         xScale.domain([1920,2012]);
         yScale.domain([-5,100]);
+        var colorExtent = d3.extent(movies, function(d){
+            return Number(d[category]) ;
+            });
+        console.log(colorExtent);
+        colorScaleB.domain(colorExtent);
         
 
         // Save a reference of this SplomCell, to use within anon function scopes
@@ -331,7 +337,17 @@ var onColorChanged;
         var dotsEnter = dots.enter()
             .append('circle')
             .attr('class', 'dot')
-            .style("fill", function(d) { return colorScale(d.bechdel); })
+            //.style("fill", function(d) { return colorScale(d.bechdel); })
+            .style("fill", function(d) { 
+                if(category == 'bechdel'){
+                    console.log(d[category]);
+                    return colorScaleA(d[category]);
+                }
+                else{
+                    console.log(d[category]);
+                    return colorScaleB(d[category]);
+                }  
+             })
             .attr('r', 3)
             .on('click', function(d,i){
                 var movieId = d.movie_id;
@@ -388,6 +404,13 @@ var onColorChanged;
             .classed("hidden", function(d){
                 return d.movie_id != movieId;
             })
+    }
+
+    onColorChanged = function(){
+        var select = d3.select('#color-select').node();
+        category = select.options[select.selectedIndex].value;
+        console.log(category);
+        updateChart(movies);
     }
 
     /******Brushing for ScatterPlot *******/
