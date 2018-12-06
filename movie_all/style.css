@@ -69,6 +69,7 @@ hr {
   font-style: normal;
   font-size: 24px;
   fill: #364156;
+  color: #364156;
 }
 
 .colorDropdown {
@@ -76,11 +77,13 @@ hr {
   font-style: normal;
   font-size: 20px;
   fill: #364156;
+  color: #364156;
 }
 
 .movie-title {
   font-size: 24px;
   font-family: komu-b, sans-serif;
+  color: #364156;
 }
 .character-name {
   font-family: roboto, sans-serif;
