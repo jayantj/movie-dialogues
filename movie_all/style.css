@@ -71,13 +71,9 @@ hr {
   /*text-align: center;*/
   fill: #364156;
   color: #364156;
-<<<<<<< HEAD
   padding-left: 20px;
   display: inline-block;
   vertical-align: top;
-=======
-  padding-left: 10px;
->>>>>>> 504e08df5a30efaea436602fde767f3c94917974
 }
 
 .colorDropdown {

@@ -242,11 +242,7 @@ var onColorChanged;
 
             svgLegend.append("g")
                 .attr("class", "legendScatter")
-<<<<<<< HEAD
                 .attr('transform', 'translate(5, 5)');
-=======
-                .attr('transform', 'translate(600, 12)');
->>>>>>> 504e08df5a30efaea436602fde767f3c94917974
 
             var legendScatter = d3.legendColor()
                 //.labelFormat(d3.format(".06f"))
