@@ -158,6 +158,14 @@ hr {
   fill: #707070;
 }
 
+.legendOrdinal text{
+  font-family: roboto, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 8px;
+  fill: #707070;
+}
+
 /*************************************/
 
 
@@ -353,7 +361,11 @@ body {
     font-size:12px;
 }
 .genderBarText {
+    font-family: roboto, sans-serif;
+    font-weight: 400;
+    font-style: normal;
     font-size:12px;
+    text-transform: capitalize;
 }
 .toolTip {
       position: absolute;

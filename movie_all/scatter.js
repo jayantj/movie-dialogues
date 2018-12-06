@@ -420,7 +420,7 @@ var onColorChanged;
             .enter()
             .append("g")
             .attr("class", "legendScatter")
-            .attr('transform', 'translate(565, 10)');
+            .attr('transform', 'translate(5, 10)');
 
         if(category == 'bechdel') {
             var legendScatter = d3.legendColor()
