@@ -520,6 +520,15 @@ stroke-opacity: 0.4;
   border-radius: 5px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+.movie-meta {
+  font-family: komu-b, sans-serif;
+}
+.title {
+  font-size: 24px
+}
+.year, .rating {
+  font-size: 18px;
+}
 /*.theme-label {
   font-family: roboto, sans-serif;
   font-style: normal;
