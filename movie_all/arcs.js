@@ -46,7 +46,7 @@ var arcDiagram = function(selectedMovie) {
       // Log and return from an error
       console.log(dataset);
       if(error) {
-          console.error('Error while loading ./m0.json dataset.');
+          console.error(`Error while loading ./${selectedMovie}.json dataset.`);
           console.error(error);
           return;
       }
@@ -76,6 +76,11 @@ var arcDiagram = function(selectedMovie) {
       const maleG = svgMain.append('g').attr('class', 'male');
       const femaleG = svgMain.append('g').attr('class', 'female');
       const crossG = svgMain.append('g').attr('class', 'cross-g');
+
+      const maleGroup = svgMain.select('.male');
+      const femaleGroup = svgMain.select('.female');
+      const crossLinkGroup = svgMain.select('.cross-g');
+
       linearLayout(male, malexfix, maleScale);
       linearLayout(female, femalefix, femaleScale);
 
@@ -96,11 +101,11 @@ var arcDiagram = function(selectedMovie) {
         d.target = allCharacters.find(el => el.id === d.target);
       });
 
-      drawLinks(maleG, maleLinks, mRadianScale, malexfix);
-      drawLinks(femaleG, femaleLinks, fRadianScale, femalefix);
-      drawCrossLinks(crossG, cLinks, maleScale, femaleScale);
-      drawNodes(maleG, male, malexfix, maleScale);
-      drawNodes(femaleG, female, femalefix, femaleScale);
+      drawLinks(maleGroup, maleLinks, mRadianScale, malexfix);
+      drawLinks(femaleGroup, femaleLinks, fRadianScale, femalefix);
+      drawCrossLinks(crossLinkGroup, cLinks);
+      drawNodes(maleGroup, male, malexfix, maleScale);
+      drawNodes(femaleGroup, female, femalefix, femaleScale);
 
       svgMain.append('text')
       .attr('class', 'node-label')
@@ -146,190 +151,200 @@ var arcDiagram = function(selectedMovie) {
 
   });
 
-  function linearLayout(nodes, fix, scale) {
-    nodes.forEach(function(d, i) {
-        d.x = fix;
-        d.y = scale(i);
-    })
-  }
+};
 
-  function drawCrossLinks (group, links, s1, s2) {
-    const linksOfConv = links.flatMap((l, i) => {
-      const conversations = Array.from({length: l.lines.length}, (c, j) => {
-        const interval = (l.counts > 1) ? (l.counts - 1) : l.counts;
-        const temp = {
-          source: {
-            cname: l.source.cname,
-            gender: l.source.gender,
-            id: l.source.id,
-            // movieId: l.source.movieId,
-            // movieTitle: l.source.movieTitle,
-            x: l.source.x + rectNodeWidth,
-            y: (rectNodeHeight / interval) * j + l.source.y,
-            conv: l.lines[j],
-          },
-          target: {
-            cname: l.target.cname,
-            gender: l.target.gender,
-            id: l.target.id,
-            // movieId: l.target.movieId,
-            // movieTitle: l.target.movieTitle,
-            x: l.target.x,
-            y: (rectNodeHeight / interval) * j + l.target.y,
-            conv: l.lines[j],
-          },
-          movieId: l.movieId,
-        };
-        return temp;
-      });
-      return conversations;
+function linearLayout(nodes, fix, scale) {
+  nodes.forEach(function(d, i) {
+      d.x = fix;
+      d.y = scale(i);
+  })
+}
+
+function drawCrossLinks (group, links) {
+  const linksOfConv = links.flatMap((l, i) => {
+    const conversations = Array.from({length: l.lines.length}, (c, j) => {
+      const interval = (l.counts > 1) ? (l.counts - 1) : l.counts;
+      const temp = {
+        source: {
+          cname: l.source.cname,
+          gender: l.source.gender,
+          id: l.source.id,
+          // movieId: l.source.movieId,
+          // movieTitle: l.source.movieTitle,
+          x: l.source.x + rectNodeWidth,
+          y: (rectNodeHeight / interval) * j + l.source.y,
+          conv: l.lines[j],
+        },
+        target: {
+          cname: l.target.cname,
+          gender: l.target.gender,
+          id: l.target.id,
+          // movieId: l.target.movieId,
+          // movieTitle: l.target.movieTitle,
+          x: l.target.x,
+          y: (rectNodeHeight / interval) * j + l.target.y,
+          conv: l.lines[j],
+        },
+        // movieId: l.movieId,
+      };
+      return temp;
     });
+    return conversations;
+  });
+  
+  var cLinks = group.selectAll('.cLink')
+  .data(linksOfConv, function(d) {
+    return d.source.id;
+  });
 
-    const cLinks = group.selectAll('line')
-    .data(linksOfConv);
-    
-    cLinks
-    .enter()
-    .append('line')
-    .attr('class', 'cLink')
-    .attr('x1', function(d, i) {
-      return d.source.x;
-    })
-    .attr('y1', function(d, i) {
-      return d.source.y;
-    })
-    .attr('x2', function(d, i) {
-      return d.target.x;
-    })
-    .attr('y2', function(d, i) {
-      return d.target.y;
-    })
-    .on('mouseover', function(d, i) {
-      // var clicked = d3.select(this);
-      // console.log(clicked);
-      toolTip.show(d, i);
-    })
-    .on('mouseout', toolTip.hide);
+  var cLinksEnter = cLinks.enter()
+  .append('line')
+  .attr('class', 'cLink');
 
-    cLinks.exit().remove();
-  }
+  cLinks.merge(cLinksEnter);
 
-  function drawLinks(group, links, scale, xFix) {
-    var arc = d3.lineRadial()
-    // .interpolate()
-    // .tension(0)
-    .angle(function(d) { return scale(d); });
+  cLinksEnter
+  .attr('x1', function(d, i) {
+    return d.source.x;
+  })
+  .attr('y1', function(d, i) {
+    return d.source.y;
+  })
+  .attr('x2', function(d, i) {
+    return d.target.x;
+  })
+  .attr('y2', function(d, i) {
+    return d.target.y;
+  })
+  .on('mouseover', function(d, i) {
+    // var clicked = d3.select(this);
+    // console.log(clicked);
+    toolTip.show(d, i);
+  })
+  .on('mouseout', toolTip.hide)
 
-    const linksOfConv = links.flatMap((l, i) => {
-      const conversations = Array.from({length: l.lines.length}, (c, j) => {
-        let {y, ...source} = l.source;
-        const interval = (l.counts > 1) ? (l.counts - 1) : l.counts;
-        const temp = {
-          source: {
-            source,
-            y: (rectNodeHeight / interval) * j + l.source.y,
-            conv: l.lines[j],
-          },
-          target: {
-            cname: l.target.cname,
-            gender: l.target.gender,
-            id: l.target.id,
-            // movieId: l.target.movieId,
-            // movieTitle: l.target.movieTitle,
-            x: l.target.x,
-            y: (rectNodeHeight / interval) * j + l.target.y,
-            conv: l.lines[j],
-          },
-          movieId: l.movieId,
-        };
-        return temp;
-      });
-      return conversations;
+  cLinks.exit().remove();
+}
+
+function drawLinks(group, links, scale, xFix) {
+  var arc = d3.lineRadial()
+  // .interpolate()
+  // .tension(0)
+  .angle(function(d) { return scale(d); });
+
+  const linksOfConv = links.flatMap((l, i) => {
+    const conversations = Array.from({length: l.lines.length}, (c, j) => {
+      let {y, ...source} = l.source;
+      const interval = (l.counts > 1) ? (l.counts - 1) : l.counts;
+      const temp = {
+        source: {
+          source,
+          y: (rectNodeHeight / interval) * j + l.source.y,
+          conv: l.lines[j],
+        },
+        target: {
+          cname: l.target.cname,
+          gender: l.target.gender,
+          id: l.target.id,
+          // movieId: l.target.movieId,
+          // movieTitle: l.target.movieTitle,
+          x: l.target.x,
+          y: (rectNodeHeight / interval) * j + l.target.y,
+          conv: l.lines[j],
+        },
+        // movieId: l.movieId,
+      };
+      return temp;
     });
+    return conversations;
+  });
 
-    const sameGenderLinks = 
-    group.selectAll('path')
-    .data(linksOfConv);
-    
-    const sameGenderLinksEnter = sameGenderLinks.enter()
-    .append('path')
-    .attr('class', 'link');
+  const sameGenderLinks = 
+  group.selectAll('.link')
+  .data(linksOfConv, function(d) {
+    return d.source.id;
+  });
+  
+  const sameGenderLinksEnter = sameGenderLinks.enter()
+  .append('path')
+  .attr('class', 'link');
 
-    sameGenderLinks.merge(sameGenderLinksEnter);
+  sameGenderLinks.merge(sameGenderLinksEnter);
 
-    sameGenderLinksEnter
-    .attr('transform', function(d, i) {
-      return `translate(${xFix},${d.source.y + (d.target.y-d.source.y)/2}) rotate(90)`
-    })
-    .attr('d', function(d, i) {
-        var xDist = Math.abs(d.target.y - d.source.y);
-        arc.radius(xDist / 2);
-        var points = d3.range(0, Math.ceil(xDist / 3));
-        scale.domain([0, points.length - 1]);
-        return arc(points);
-    })
-    .style('fill', 'none')
-    .on('mouseover', function(d, i) {
-      // var clicked = d3.select(this);
-      // console.log(clicked);
-      toolTip.show(d, i);
-    })
-    .on('mouseout', toolTip.hide);
+  sameGenderLinksEnter
+  .attr('transform', function(d, i) {
+    return `translate(${xFix},${d.source.y + (d.target.y-d.source.y)/2}) rotate(90)`
+  })
+  .attr('d', function(d, i) {
+      var xDist = Math.abs(d.target.y - d.source.y);
+      arc.radius(xDist / 2);
+      var points = d3.range(0, Math.ceil(xDist / 3));
+      scale.domain([0, points.length - 1]);
+      return arc(points);
+  })
+  .style('fill', 'none')
+  .on('mouseover', function(d, i) {
+    // var clicked = d3.select(this);
+    // console.log(clicked);
+    toolTip.show(d, i);
+  })
+  .on('mouseout', toolTip.hide);
 
-    sameGenderLinks.exit().remove();
-  }
+  sameGenderLinks.exit().remove();
+}
 
-  function drawNodes(group, nodes, fix, scale) {
-    
-    const characterNodes = group.selectAll('g')
-    .data(nodes);
+function drawNodes(group, nodes, fix, scale) {
 
-    const characterGroup = characterNodes.enter()
-    .append('g');
+  const characterNodes = group.selectAll('g')
+  .data(nodes, function(d) {
+    return d.id;
+  });
 
-    characterNodes.merge(characterGroup);
+  const characterGroup = characterNodes.enter()
+  .append('g');
 
-    characterGroup
-    .append('rect')
-    .attr('class', 'node')
-    .attr('x', function(d, i) {
-        return fix;
-    })
-    .attr('y', function(d, i) {
-        return scale(i);
-    })
-    .attr('width', `${rectNodeWidth}px`)
-    .attr('height', `${rectNodeHeight}px`)
-    .attr('fill', '#364156');
+  characterNodes.merge(characterGroup);
 
-    characterGroup
-    .append('text')
-    .attr('class', 'character-name')
-    .attr('x', function(d, i) {
-        return fix;
-    })
-    .attr('y', function(d, i) {
-        return scale(i) + rectNodeHeight + 15;
-    })
-    .style('text-anchor', 'middle')
-    .text(function(d, i) {
-      return d.cname;
-    });
+  characterGroup
+  .append('rect')
+  .attr('class', 'node')
+  .attr('x', function(d, i) {
+      return fix;
+  })
+  .attr('y', function(d, i) {
+      return scale(i);
+  })
+  .attr('width', `${rectNodeWidth}px`)
+  .attr('height', `${rectNodeHeight}px`)
+  .attr('fill', '#364156');
 
-    characterNodes.exit().remove();
-  };
+  characterGroup
+  .append('text')
+  .attr('class', 'character-name')
+  .attr('x', function(d, i) {
+      return fix;
+  })
+  .attr('y', function(d, i) {
+      return scale(i) + rectNodeHeight + 15;
+  })
+  .style('text-anchor', 'middle')
+  .text(function(d, i) {
+    return d.cname;
+  });
 
+  characterNodes.exit().remove();
 };
 
 // var selectedMovie = 'm0';
 // arcDiagram(selectedMovie);
 
 onSelectMovieChange = function(movieId) {
-  // var select = d3.select('#movie-select').node();
-  // selectedMovie = select.options[select.selectedIndex].value;
-  // arcDiagram(selectedMovie);
-  // if(!selectedMovie) {
+  if(movieId) {
     arcDiagram(movieId);
-  //}
+  } else {
+    var select = d3.select('#movie-select').node();
+    selectedMovie = select.options[select.selectedIndex].value;
+    arcDiagram(selectedMovie);
+  }
 }
 })();

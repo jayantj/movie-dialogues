@@ -17,7 +17,7 @@ var svg = d3.select('#side_panel').select('svg');
 var svgWidth = +svg.attr('width');
 var svgHeight = +svg.attr('height');
 
-var padding = {t: 60, r: 40, b: 30, l: 40};
+var padding = {t: 60, r: 40, b: 30, l: 10};
 
 // Compute chart dimensions
 var chartWidth = svgWidth - padding.l - padding.r;
@@ -25,7 +25,7 @@ var chartHeight = svgHeight - padding.t - padding.b;
 
 // Create a group element for appending chart elements
 var chartG = svg.append('g')
-    .attr('transform', 'translate('+[padding.l, padding.t]+')');
+    .attr('transform', 'translate('+[padding.l, padding.t+padding.t]+')');
 
 
 var toolTip = d3.tip()
@@ -137,7 +137,7 @@ detailViewPanelInitialize = function(movieId) {
         .enter()
         .append('g')
         .attr('class', 'themesAxis')
-        .attr('transform', 'translate('+[padding.l+120, padding.t+10]+')')
+        .attr('transform', 'translate('+[padding.l+120, padding.t+20]+')')
         //.attr('transform', 'translate(80,370)')
         .call(d3.axisTop(xThemeScale).ticks(5));
 
@@ -146,7 +146,7 @@ detailViewPanelInitialize = function(movieId) {
         .enter()
         .append('g')
         .attr('class', 'sentimentAxis')
-        .attr('transform', 'translate('+[padding.l+120, padding.t+330]+')')
+        .attr('transform', 'translate('+[padding.l+120, 450]+')')
         //.attr('transform', 'translate(80,370)')
         .call(sentimentAxis);
 
@@ -155,7 +155,7 @@ detailViewPanelInitialize = function(movieId) {
         .enter()
         .append('g')
         .attr('class', 'genderAxis')
-        .attr('transform', 'translate('+[padding.l+120, padding.t+530]+')')
+        .attr('transform', 'translate('+[padding.l+120, 650]+')')
         //.attr('transform', 'translate(80,370)')
         .call(d3.axisBottom(xScale).ticks(5).tickFormat(formatPercent));
 
@@ -194,9 +194,10 @@ function updatePanel(movie) {
 function stackedBars (filteredMovie) {
     g = svg.append('g');
     g.append('text')
-        .attr('transform', 'translate(150,500)')
+        .attr('transform', 'translate(' + (chartWidth / 2 + padding.l)+ ',530)')
         .text('Intersex conversations: Movie vs Decade')
-        .attr('class','miniTitles');
+        .attr('class','miniTitles')
+        .style('text-anchor', 'middle');
 
 
     var bars = chartG.selectAll('.bar')
@@ -298,16 +299,19 @@ function stackedBars (filteredMovie) {
 
     //Gender balance legend
     var genderBalScale = d3.scaleOrdinal()
-        .domain(["Male-male","Male<->female","Female-female","Gender unknown"])
+        .domain(["Male-Male","Male-Female","Female-Female","Gender Unknown"])
         .range([ "#FFD700", "#FFB14E", "#FA8775", "#808080"]);
 
     svg.append("g")
         .attr("class", "legendOrdinal")
-        .attr("transform", "translate(200,630)");
+        .attr("transform", "translate(220,680)");
 
     var legendOrdinal = d3.legendColor()
-        .labelFormat(d3.format(".06f"))
-        .shapePadding(2)
+        //.labelFormat(d3.format(".06f"))
+        .shapePadding(10)
+        .shapeWidth(50)
+        .orient('horizontal')
+        .labelOffset(5)
         .scale(genderBalScale);
 
     svg.select(".legendOrdinal")
@@ -330,8 +334,9 @@ function sentimentSlider(filteredMovie) {
         .append('g')
         .attr('class', 'sentimentTitle')
         .append('text')
-        .attr('transform', 'translate(170,350)')
-        .attr('class','miniTitles sentimentTitle');
+        .attr('transform', 'translate(' + (chartWidth / 2 + padding.l)+ ', 380)')
+        .style('text-anchor', 'middle')
+        .attr('class','miniTitles');
 
     svg.selectAll('g.sentimentTitle').select('text.miniTitles')
         .text('Sentiment: '+filteredMovie[0].title)
@@ -341,7 +346,7 @@ function sentimentSlider(filteredMovie) {
         .enter()
         .append('g')
         .attr('class', 'sentimentG')
-        .attr('transform', 'translate('+[padding.l, padding.t]+')');
+        .attr('transform', 'translate('+[padding.l, padding.t+padding.t]+')');
 
     var sentimentG = svg.select('g.sentimentG')
     //Sentiment bar and legend
@@ -395,14 +400,14 @@ function sentimentSlider(filteredMovie) {
 }
 
 function themeBars(filteredMovie, props) {
-
     svg.selectAll('text.themesTitle')
         .data([1])
         .enter()
         .append('text')
         .style('color', 'black')
-        .attr('transform', 'translate(180,40)')
-        .attr('class','miniTitles themesTitle');
+        .attr('transform', 'translate(' + (chartWidth / 2 + padding.l)+ ',30)')
+        .attr('class','miniTitles themesTitle')
+        .style('text-anchor', 'middle');
 
     svg.select('text.themesTitle')
         .text('Themes: '+ filteredMovie[0].title)
