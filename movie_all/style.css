@@ -68,7 +68,7 @@ hr {
   font-family: komu-b, sans-serif;
   font-style: normal;
   font-size: 24px;
-  text-align: center;
+  /*text-align: center;*/
   fill: #364156;
   color: #364156;
 }
@@ -90,7 +90,7 @@ hr {
 }
 
 #heatmapTitle {
-  padding-bottom: 38px;
+  padding-bottom: 3px;
 }
 
 .movie-title {

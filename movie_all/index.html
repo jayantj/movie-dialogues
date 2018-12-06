@@ -5,37 +5,38 @@
     <title>Movie dialogues</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="./bootstrap.min.css">
-    <link rel="stylesheet" href="./yog7gku.css">
+    <link rel="stylesheet" href="https://use.typekit.net/yog7gku.css">
 </head>
 <body>
-  <div style="padding-bottom: 10px; text-align: center;">
+  <div style="padding-bottom: 10px;">
     <font face="komu-b, sans-serif" size="34px" color="#364156">Movie Dialogues over the years</font>
+    <div id="control-container">
+            <span id="findTitle">Find a movie</span>
+            <select class="custom-select" id="decade-select">
+            </select>
+            <select class="custom-select" id="movie-select" style="width: 200px;">
+                <option selected hidden>Select a movie</option>
+            </select>
   </div>
   <div>
+      <hr>
   </div>
   <div class="wrapper">
     <div id="decades-scatter">
-      <div class="miniTitles">Movies by intersex Conversation</div>
-        <div id="control-container">
-          <span id="findTitle">Find a movie</span>
-          <select class="custom-select" id="decade-select">
-          </select>
-          <select class="custom-select" id="movie-select" style="width: 200px;">
-              <option selected hidden>Select a movie</option>
-          </select>
-
-          <span class="colorDropdown">Color By:</span>
+        <text class="miniTitles">Movies by intersex Conversation</text>
+          <text class="colorDropdown">Color By:</span>
           <select class="custom-select" id="color-select" onchange="onColorChanged()">
           </select>
-        </div>
-        <svg width="900" height="580" style="border: 1px solid #777;">
+          <svg width="900" height="580" style="border: 1px solid #777;">
         </svg>
     </div>
     <div id="genres-themes">
         <div id="heatmapTitle" class="miniTitles">Conversation Themes by Genre</div>
-      <svg width="900" height="580" style="border: 1px solid #777;">
-      </svg>
+        <svg width="900" height="580" style="border: 1px solid #777;">
+        </svg>
     </div>
+    </div>
+
 
   </div>
   <div class="wrapper">
