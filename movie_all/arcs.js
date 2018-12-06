@@ -42,7 +42,7 @@ var toolTip = d3.tip()
   svgMain.call(toolTip);
 
 
-d3.json('./../data/conv/m0.json', function(error, dataset) {
+d3.json('./../data/conv/m1.json', function(error, dataset) {
     // Log and return from an error
     console.log(dataset);
     if(error) {
@@ -58,7 +58,9 @@ d3.json('./../data/conv/m0.json', function(error, dataset) {
     maleLinks = dataset.maleLinks;
     femaleLinks = dataset.femaleLinks;
     cLinks = dataset.crossGenderLinks;
-    var movieTitle = male[0].movieTitle;
+    const movieTitle = dataset.movieTitle;
+    const year = dataset.year;
+    const rating = dataset.rating;
 
     maleScale = d3.scaleLinear()
     .domain([0, male.length - 1])
@@ -134,10 +136,22 @@ d3.json('./../data/conv/m0.json', function(error, dataset) {
     .text('Female');
 
     svgMain.append('text')
-    .attr('class', 'movie-title')
-    .attr('transform', `translate(${mainChartWidth / 2 + MainPadding.l}, ${MainPadding.t - 50})`)
+    .attr('class', 'movie-meta title')
+    .attr('transform', `translate(${mainChartWidth / 2 + MainPadding.l}, ${MainPadding.t - 60})`)
     .style('text-anchor', 'middle')
     .text(movieTitle.toUpperCase());
+
+    svgMain.append('text')
+    .attr('class', 'movie-meta year')
+    .attr('transform', `translate(${mainChartWidth / 2 + MainPadding.l}, ${MainPadding.t - 40})`)
+    .style('text-anchor', 'middle')
+    .text(`year : ${year.toUpperCase()}`);
+
+    svgMain.append('text')
+    .attr('class', 'movie-meta rating')
+    .attr('transform', `translate(${mainChartWidth / 2 + MainPadding.l}, ${MainPadding.t - 20})`)
+    .style('text-anchor', 'middle')
+    .text(`IMDB rating : ${rating.toUpperCase()}`);
 
 });
 
@@ -157,8 +171,8 @@ function drawCrossLinks (group, links, s1, s2) {
           cname: l.source.cname,
           gender: l.source.gender,
           id: l.source.id,
-          movieId: l.source.movieId,
-          movieTitle: l.source.movieTitle,
+          // movieId: l.source.movieId,
+          // movieTitle: l.source.movieTitle,
           x: l.source.x + rectNodeWidth,
           y: (rectNodeHeight / interval) * j + l.source.y,
           conv: l.lines[j],
@@ -167,8 +181,8 @@ function drawCrossLinks (group, links, s1, s2) {
           cname: l.target.cname,
           gender: l.target.gender,
           id: l.target.id,
-          movieId: l.target.movieId,
-          movieTitle: l.target.movieTitle,
+          // movieId: l.target.movieId,
+          // movieTitle: l.target.movieTitle,
           x: l.target.x,
           y: (rectNodeHeight / interval) * j + l.target.y,
           conv: l.lines[j],
@@ -225,8 +239,8 @@ function drawLinks(group, links, scale, xFix) {
           cname: l.target.cname,
           gender: l.target.gender,
           id: l.target.id,
-          movieId: l.target.movieId,
-          movieTitle: l.target.movieTitle,
+          // movieId: l.target.movieId,
+          // movieTitle: l.target.movieTitle,
           x: l.target.x,
           y: (rectNodeHeight / interval) * j + l.target.y,
           conv: l.lines[j],
@@ -279,7 +293,7 @@ function drawNodes(group, nodes, fix, scale) {
   })
   .attr('width', `${rectNodeWidth}px`)
   .attr('height', `${rectNodeHeight}px`)
-  .attr('fill', 'red');
+  .attr('fill', '#364156');
 
   characterGroup
   .append('text')
