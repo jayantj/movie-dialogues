@@ -149,7 +149,7 @@ hr {
   display: inline-block;
 }
 
-/*Legend*/
+/*Scatterplot Legend*/
 .legendScatter text{
   font-family: roboto, sans-serif;
   font-weight: 400;
@@ -166,6 +166,13 @@ hr {
   fill: #707070;
 }
 
+.legendThemes text{
+    font-family: roboto, sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 8px;
+    fill: #707070;
+  }
 /*************************************/
 
 

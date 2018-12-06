@@ -325,11 +325,12 @@ var arcDiagram = function(selectedMovie) {
 // arcDiagram(selectedMovie);
 
 onSelectMovieChange = function(movieId) {
-  // var select = d3.select('#movie-select').node();
-  // selectedMovie = select.options[select.selectedIndex].value;
-  // arcDiagram(selectedMovie);
-  // if(!selectedMovie) {
+  if(movieId) {
     arcDiagram(movieId);
-  //}
+  } else {
+    var select = d3.select('#movie-select').node();
+    selectedMovie = select.options[select.selectedIndex].value;
+    arcDiagram(selectedMovie);
+  }
 }
 })();
