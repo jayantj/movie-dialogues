@@ -49,6 +49,7 @@ var onColorChanged;
 
     var dataAttributes = ['mm_percent', 'mf_percent', 'ff_percent'];
     var axesLabels = {'mm_percent':'Male to Male Conversations', 'mf_percent':'Male to Female Conversations', 'ff_percent':'Female to Female Conversations'};
+    var themes =  {'anxiety': 'anxiety_conv','anger':'anger_conv','sadness':'sadness_conv','sexual':'sexual_conv','work': 'work_conv','leisure':'leisure_conv','home':'home_conv','money':'money_conv','religion':'religion_conv','death':'death_conv','swear':'swear_conv'};
     var N = dataAttributes.length;
     var chartWidth = (svgWidth - padding.l - padding.r);
     var chartHeight = (svgHeight - padding.t - padding.b)/N;
@@ -60,8 +61,9 @@ var onColorChanged;
     var yAxis = d3.axisLeft(yScale);
 
     //ordinal color scale
-    var colorScaleA = d3.scaleOrdinal(d3.schemeSet2).domain(['1','0','?']);
-    var colorScaleB = d3.scaleSequential(d3.interpolatePurples);
+    var colorScaleA = d3.scaleOrdinal(['#ffbe67','#b3789d','#9498a4']).domain(['1','0','?']);
+    var colorScaleB = d3.scaleSequential(d3.interpolateBlues);
+    //var colorScaleB = d3.scaleSequential(d3.interpolate('#102542','#2c3f5e', '#485b7c', '#65799b','#8298bc','#a1b9dd','#c1daff'));
     // Map for referencing min/max per each attribute
     var extentByAttribute = {};
     var cellEnter;
@@ -123,9 +125,9 @@ var onColorChanged;
                 'affect_conv': +row['affect_conv'],
                 'posemo_conv': +row['posemo_conv'],
                 'negemo_conv': +row['negemo_conv'],
-                'anx_conv': +row['anx_conv'],
+                'anxiety_conv': +row['anxiety_conv'],
                 'anger_conv': +row['anger_conv'],
-                'sad_conv': +row['sad_conv'],
+                'sadness_conv': +row['sadness_conv'],
                 'sexual_conv': +row['sexual_conv'],
                 'work_conv': +row['work_conv'],
                 'leisure_conv': +row['leisure_conv'],
@@ -286,7 +288,7 @@ var onColorChanged;
         xScale.domain([1920,2012]);
         yScale.domain([-5,100]);
         var colorExtent = d3.extent(movies, function(d){
-            return Number(d[category]) ;
+            return Number(d[themes[category]]) ;
             });
         console.log(colorExtent);
         colorScaleB.domain(colorExtent);
@@ -337,18 +339,7 @@ var onColorChanged;
         var dotsEnter = dots.enter()
             .append('circle')
             .attr('class', 'dot')
-            //.style("fill", function(d) { return colorScale(d.bechdel); })
-            .style("fill", function(d) { 
-                if(category == 'bechdel'){
-                    console.log(d[category]);
-                    return colorScaleA(d[category]);
-                }
-                else{
-                    console.log(d[category]);
-                    return colorScaleB(d[category]);
-                }  
-             })
-            .attr('r', 3)
+            .attr('r', 4)
             .on('click', function(d,i){
                 var movieId = d.movie_id;
                 var selected = d3.select(this);
@@ -370,14 +361,21 @@ var onColorChanged;
             .on('mouseout', toolTip.hide);
 
         dots.merge(dotsEnter)
-        //.transition()
-        //.duration(550)
         .attr('cx', function(d){
                 return xScale(d[_this.x]);
             })
-            .attr('cy', function(d){
+        .attr('cy', function(d){
                 return yScale(d[_this.y]);
-            });
+            })
+        .style("fill", function(d) { 
+            if(category == 'bechdel'){
+                return colorScaleA(d[category]);
+            }
+            else{
+                console.log(d[themes[category]]);
+                return colorScaleB(d[themes[category]]);
+            }  
+        });
 
         dots.exit().remove();
         if(this.highlightedDecade)

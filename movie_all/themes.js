@@ -306,7 +306,7 @@ var onDecadeChanged;
                 .domain([minThemeScore, maxThemeScore])
                 .range([3, 20])
         var buckets = 9;
-        var colours = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"]
+        var colours = ['#102542','#2c3f5e', '#485b7c', '#65799b','#8298bc','#a1b9dd','#c1daff'];
         var themeColorScale = d3.scaleQuantile()
               .domain([minThemeScore, buckets - 1, maxThemeScore])
               .range(colours);
