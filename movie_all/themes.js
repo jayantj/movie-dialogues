@@ -178,16 +178,19 @@ var onDecadeChanged;
         // Create groups per genre
         var rowLabelWidth = 60;
         var columnLabelHeight = 70;
-        var topMargin = 25;
+        var topMargin = 27;
         var leftMargin = 90;
-        var rightMargin = 20;
-        var bottomMargin = 40;
+        var rightMargin = 40;
+        var bottomMargin = 55;
 
-        var columnWidth = Math.floor((svgWidth - leftMargin - rightMargin) / genresOfInterest.length);
-        var rowHeight = Math.floor((svgHeight - columnLabelHeight - bottomMargin) / themesOfInterest.length);
+        var columnWidth = ((svgWidth - leftMargin - rightMargin) / genresOfInterest.length);
+        var rowHeight = ((svgHeight - topMargin - bottomMargin) / themesOfInterest.length);
         // Create a group element for appending chart elements
         var chartG = svg.append('g')
             .attr('transform', 'translate('+[leftMargin, topMargin]+')');
+        console.log('heatmap height = ' + (svgHeight-topMargin-bottomMargin));
+        console.log("row height = " + rowHeight);
+        console.log('heatmap width = ' + (columnWidth * genresOfInterest.length));
         var genreG = chartG.append('g')
             .selectAll('.genre')
             .data(Array.from(genresOfInterest), function(d) {
@@ -204,7 +207,13 @@ var onDecadeChanged;
             .attr('transform', function(d, i) {
                 var tx = i * columnWidth;
                 return 'translate('+[tx, 0]+')';
-            })
+            });
+        genreG.on("mouseover",function(d){
+            d3.select(this).classed('genre-hover',true)
+        })
+        .on("mouseout",function(d){
+            d3.select(this).classed('genre-hover',false)
+        })
         genreG.on('click', function() {
                 var d3_label = d3.select(this)
                 var genre = this.id;
@@ -213,8 +222,8 @@ var onDecadeChanged;
                     onGenreChanged("All");
                     svg.selectAll('.genre').selectAll('.theme')
                         .classed('hidden', false);
-                    svg.selectAll('.genre').selectAll('text.genre-label')
-                        .classed('hidden', false);
+                    /*svg.selectAll('.genre').selectAll('text.genre-label')
+                        .classed('hidden', false);*/
                 }
                 else {
                     d3.select('.genre-selected').classed('genre-selected', false);
@@ -223,13 +232,11 @@ var onDecadeChanged;
                     svg.selectAll('.genre').selectAll('.theme')
                         .classed('hidden', function(d) {
                             return d.genre != genre;
-                        })
-
-                    svg.selectAll('.genre').selectAll('text.genre-label')
+                        });
+                    /*svg.selectAll('.genre').selectAll('text.genre-label')
                         .classed('hidden', function(d) {
                             return d != genre;
-                        })
-
+                        })*/
                 }
         });
         genreG
@@ -239,8 +246,14 @@ var onDecadeChanged;
             })
             .attr('class', 'genre-label')
             .attr('transform', function(d) {
-                return 'translate(' + [10, svgHeight - topMargin - bottomMargin] + '), rotate(330)'
+                return 'translate(' + [20, svgHeight- bottomMargin + 5] + '), rotate(330)'
             });
+        
+        d3.selectAll(".genre")
+            .insert('rect','text')
+            .attr('class', 'decade-button')
+            .attr('rx', 10)
+            .attr("transform", 'translate(' + [-3, svgHeight- bottomMargin + 5] + '), rotate(330)');
 
 
         var tableTextSize = 18;
@@ -258,7 +271,7 @@ var onDecadeChanged;
             .attr('width', columnWidth)
             .attr('height', rowHeight)
             .attr('transform', function(d, i) {
-                return 'translate('+[leftMargin, topMargin + rowHeight / 2 + tableTextSize / 2 + i * rowHeight]+')';
+                return 'translate('+[-30, (rowHeight / 2)  + (i * rowHeight)+ 12]+')';
             });
         themeLabelG
             .append('text')

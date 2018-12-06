@@ -14,7 +14,7 @@
   font-style: normal;
   font-size: 8px;
   text-anchor: middle;
-  fill: red;
+  fill: #ffffff;
 }
 
 .theme text{
@@ -23,7 +23,7 @@
   font-style: normal;
   font-size: 8px;
   text-anchor: middle;
-  fill: #707070;
+  fill: #ffffff;
 }
 
 .y.axis .tick text{
@@ -31,7 +31,6 @@
   font-weight: 400;
   font-style: normal;
   font-size: 8px;
-  /*text-anchor: middle;*/
   fill: #707070;
 }
 
@@ -40,7 +39,6 @@
   font-weight: 700;
   font-style: normal;
   font-size: 12px;
-  /*text-anchor: middle;*/
   fill: #707070;
 }
 
@@ -49,7 +47,6 @@
   font-weight: 700;
   font-style: normal;
   font-size: 8px;
-  /*text-anchor: middle;*/
   fill: #ffffff;
 }
 
@@ -59,17 +56,11 @@
   height: 19px;
 }
 
-.tick-selected .decade-button{
-  fill:#9A9CA2;
-  width: 42px;
-  height: 19px;
+/* Line Divider Style*/
+hr {
+  margin: 0em !important ;
 }
 
-.tick-hover .decade-button{
-  fill:#4C5A76;
-  width: 42px;
-  height: 19px;
-}
 
 /* Titles*/
 
@@ -106,12 +97,52 @@
 .scatter-titles{
   display: inline-block;
 }
+
 /*************************************/
 
-/* Line Divider Style*/
-hr {
-  margin: 0em !important ;
+
+/**** Styling for Selections/Hovers****/
+.tick-selected .decade-button{
+  fill:#9A9CA2;
+  width: 42px;
+  height: 19px;
 }
+
+.tick-hover .decade-button{
+  fill:#4C5A76;
+  width: 42px;
+  height: 19px;
+}
+
+circle.hidden {
+  fill: #ccc !important;
+  fill-opacity: .05;
+}
+
+circle:hover {
+  fill: #111 !important;
+  fill-opacity: 1;
+}
+
+.theme.hidden {
+  fill: #ccc !important;
+  fill-opacity: .3;
+}
+
+.genre-selected .decade-button{
+  fill:#9A9CA2;
+  width: 42px;
+  height: 19px; 
+}
+
+.genre-hover .decade-button{
+  fill:#4C5A76;
+  width: 42px;
+  height: 19px; 
+}
+
+/***************************************************/
+
 .axis,
 .frame {
   shape-rendering: crispEdges;
@@ -143,22 +174,10 @@ circle {
   fill-opacity: 1;
 }
 
-circle.hidden {
-  fill: #ccc !important;
-  fill-opacity: .05;
-}
 
-circle:hover {
-  fill: #111 !important;
-  fill-opacity: 1;
-}
-
-.theme.hidden {
+/*.genre text.hidden {
   opacity: .5;
-}
-.genre text.hidden {
-  opacity: .5;
-}
+}*/
 
 .d3-tip {
   line-height: 1;

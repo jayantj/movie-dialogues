@@ -191,11 +191,9 @@ var onColorChanged;
 
             d3.selectAll(".x.axis .tick")
             .on("mouseover",function(d){
-                //var d3_tick = d3.select(this)
                 d3.select(this).classed('tick-hover',true)
             })
             .on("mouseout",function(d){
-                //var d3_tick = d3.select(this)
                 d3.select(this).classed('tick-hover',false)
             })
             .on("click", function(d) {
@@ -255,6 +253,7 @@ var onColorChanged;
           .attr('class', 'frame')
           .attr('width', chartWidth - chartpad)
           .attr('height', chartHeight - chartpad);
+
     }
 
     // Highlight when decade selected
