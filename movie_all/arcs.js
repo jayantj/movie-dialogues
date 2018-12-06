@@ -6,7 +6,7 @@ var svgMain = d3.select('#main').select('svg');
 var svgMainWidth = +svgMain.attr('width');
 var svgMainHeight = +svgMain.attr('height');
 
-var MainPadding = {t: 60, r: 200, b: 60, l: 200};
+var MainPadding = {t: 90, r: 200, b: 60, l: 200};
 
 var rectNodeHeight = 60;
 var rectNodeWidth = 5;
@@ -20,17 +20,6 @@ console.log('width and height: ', mainChartHeight);
 var radius = 4;
 var malexfix = MainPadding.l + 100;
 var femalefix = svgMainWidth - MainPadding.r - 100;
-
-// Create a group element for appending chart elements
-var chartG = svgMain.append('g')
-    .attr('transform', 'translate('+[MainPadding.l, MainPadding.t]+')');
-
-// Create groups for the x- and y-axes
-var xAxisG = chartG.append('g')
-    .attr('class', 'x axis')
-    .attr('transform', 'translate('+[0, mainChartHeight]+')');
-var yAxisG = chartG.append('g')
-    .attr('class', 'y axis');
 
 var cars = [];
 var maleScale = function() { return ; };
@@ -46,9 +35,9 @@ var toolTip = d3.tip()
   .direction('s')
   .offset([-12, 0])
   .html(function(d) {
-    return d.source.conv.dialogues.map((dialogue, i) => {
-      return `<span>${dialogue.characterName} : ${dialogue.text}</span><br/>`;
-    });
+    return d.source.conv.dialogues.reduce((accu, dialogue, i) => {
+      return `${accu}<span>${dialogue.characterName} : ${dialogue.text}</span><br/>`;
+    }, '');
   });
   svgMain.call(toolTip);
 
@@ -69,12 +58,14 @@ d3.json('./../data/conv/m0.json', function(error, dataset) {
     maleLinks = dataset.maleLinks;
     femaleLinks = dataset.femaleLinks;
     cLinks = dataset.crossGenderLinks;
+    var movieTitle = male[0].movieTitle;
+
     maleScale = d3.scaleLinear()
     .domain([0, male.length - 1])
-    .range([MainPadding.t, mainChartHeight - MainPadding.b]);
+    .range([MainPadding.t, mainChartHeight]);
     femaleScale = d3.scaleLinear()
     .domain([0, female.length - 1])
-    .range([MainPadding.t, mainChartHeight - MainPadding.b]);
+    .range([MainPadding.t, mainChartHeight]);
 
     mRadianScale = d3.scaleLinear()
     .range([Math.PI / 2, 3 * Math.PI / 2]);
@@ -117,6 +108,37 @@ d3.json('./../data/conv/m0.json', function(error, dataset) {
     drawCrossLinks(crossG, cLinks, maleScale, femaleScale);
     drawNodes(maleG, male, malexfix, maleScale);
     drawNodes(femaleG, female, femalefix, femaleScale);
+
+    svgMain.append('text')
+    .attr('class', 'label')
+    .attr('transform', `translate(${malexfix}, ${svgMainHeight - MainPadding.b + 20})`)
+    .style('text-anchor', 'middle')
+    .text('Male');
+
+    svgMain.append('text')
+    .attr('class', 'label')
+    .attr('transform', `translate(${malexfix}, ${MainPadding.t - 20})`)
+    .style('text-anchor', 'middle')
+    .text('Male');
+
+    svgMain.append('text')
+    .attr('class', 'label')
+    .attr('transform', `translate(${femalefix}, ${svgMainHeight - MainPadding.b + 20})`)
+    .style('text-anchor', 'middle')
+    .text('Female');
+
+    svgMain.append('text')
+    .attr('class', 'label')
+    .attr('transform', `translate(${femalefix}, ${MainPadding.t - 20})`)
+    .style('text-anchor', 'middle')
+    .text('Female');
+
+    svgMain.append('text')
+    .attr('class', 'movie-title')
+    .attr('transform', `translate(${mainChartWidth / 2 + MainPadding.l}, ${MainPadding.t - 50})`)
+    .style('text-anchor', 'middle')
+    .text(movieTitle.toUpperCase());
+
 });
 
 function linearLayout(nodes, fix, scale) {
@@ -175,9 +197,9 @@ function drawCrossLinks (group, links, s1, s2) {
   .attr('y2', function(d, i) {
     return d.target.y;
   })
-  .on('click', function(d, i) {
-    var clicked = d3.select(this);
-    console.log(clicked);
+  .on('mouseover', function(d, i) {
+    // var clicked = d3.select(this);
+    // console.log(clicked);
     toolTip.show(d, i);
   })
   .on('mouseout', toolTip.hide);
@@ -231,13 +253,22 @@ function drawLinks(group, links, scale, xFix) {
       scale.domain([0, points.length - 1]);
       return arc(points);
   })
-  .style('fill', 'none');
+  .style('fill', 'none')
+  .on('mouseover', function(d, i) {
+    // var clicked = d3.select(this);
+    // console.log(clicked);
+    toolTip.show(d, i);
+  })
+  .on('mouseout', toolTip.hide);
 }
 
 function drawNodes(group, nodes, fix, scale) {
-  group.selectAll('circle')
+  const characterGroup = group.selectAll('g')
   .data(nodes)
   .enter()
+  .append('g');
+
+  characterGroup
   .append('rect')
   .attr('class', 'node')
   .attr('x', function(d, i) {
@@ -249,6 +280,20 @@ function drawNodes(group, nodes, fix, scale) {
   .attr('width', `${rectNodeWidth}px`)
   .attr('height', `${rectNodeHeight}px`)
   .attr('fill', 'red');
+
+  characterGroup
+  .append('text')
+  .attr('class', 'character-name')
+  .attr('x', function(d, i) {
+      return fix;
+  })
+  .attr('y', function(d, i) {
+      return scale(i) + rectNodeHeight + 15;
+  })
+  .style('text-anchor', 'middle')
+  .text(function(d, i) {
+    return d.cname;
+  });
 };
 
 })();
