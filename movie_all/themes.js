@@ -3,7 +3,7 @@ var onDecadeChanged;
 (function() {    
     var dataDir = '../data/'
     var svg = d3.select('#themes-svg');
-    var svgLegend = d3.select('.legend-svg')
+    var svgLegend = d3.select('.legend-svg-heatmap')
 
     // Get layout parameters
     var svgWidth = +svg.attr('width');
@@ -311,11 +311,31 @@ var onDecadeChanged;
         var radiusScale = d3.scaleSqrt()
                 .domain([minThemeScore, maxThemeScore])
                 .range([3, 20])
-        var buckets = 9;
-        var colours = ['#102542','#2c3f5e', '#485b7c', '#65799b','#8298bc','#a1b9dd','#c1daff'];
-        var themeColorScale = d3.scaleQuantile()
-              .domain([minThemeScore, buckets - 1, maxThemeScore])
+        var colours = ['#c1daff', '#a1b9dd', '#8298bc', '#65799b', '#485b7c', '#2c3f5e', '#102542'];
+        var step = (maxThemeScore - minThemeScore) / colours.length
+        var themeColorScale = d3.scaleQuantize()
+              .domain([minThemeScore, maxThemeScore])
               .range(colours);
+
+        console.log(themeColorScale.ticks())
+        svgLegend.append("g")
+            .attr("class", "legendThemes")
+            .attr("transform", "translate(0,10)");
+
+        var legendThemes = d3.legendColor()
+            .labelFormat(d3.format(".1f"))
+            .shapeWidth(30)
+            .shapePadding(0)
+            .orient('horizontal')
+            .scale(themeColorScale)
+            .labelOffset(5)
+            .labels(function(options) {
+                return ((options['i'] + 1) * step).toFixed(1);
+            });
+
+        svgLegend.select(".legendThemes")
+            .call(legendThemes);
+        // var themeColorScale = d3.scaleSequential(d3.interpolatePurples).domain([minThemeScore,])
         createBubbleChart = function(filteredScores) {
             var radiusScale = d3.scaleSqrt()
                 .domain([minThemeScore, maxThemeScore])
