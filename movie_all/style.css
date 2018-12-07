@@ -456,11 +456,11 @@ text.themeBar {
     stroke-width: 1;
 }
 .male path:hover {
-    stroke:orange;
+    stroke:#6A51A3;
     stroke-width: 3;
 }
 .female path:hover {
-    stroke:orange;
+    stroke:#6A51A3;
     stroke-width: 3;
 }
 .cross-g line {
@@ -468,7 +468,7 @@ text.themeBar {
     stroke-width: 1;
 }
 .cross-g line:hover {
-    stroke:orange;
+    stroke:#6A51A3;
     stroke-width: 3;
 }
 .link.themeFade {
@@ -543,19 +543,6 @@ stroke-opacity: 0.4;
 .female path {
   stroke: #7e7e7e;
   stroke-width: 1.25;
-}
-.male path:hover {
-  stroke:orange;
-}
-.female path:hover {
-  stroke:orange;
-}
-.cross-g line {
-  stroke: #7e7e7e;
-  stroke-width: 0.7;
-}
-.cross-g line:hover {
-  stroke:orange;
 }
 .link.themeFade {
   stroke-width: 0;

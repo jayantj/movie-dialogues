@@ -336,7 +336,7 @@ function drawNodes(group, nodes, fix, scale) {
   })
   .attr('width', `${rectNodeWidth}px`)
   .attr('height', `${rectNodeHeight}px`)
-  .attr('fill', '#364156');
+  .attr('fill', '#6A51A3');
 
   characterGroup
   .append('text')
