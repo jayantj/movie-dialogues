@@ -50,6 +50,29 @@
   fill: #ffffff;
 }
 
+.themessAxis .tick text {
+  font-family: roboto, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 8px;
+  fill: #707070;
+}
+
+.sentimentAxis .tick text {
+  font-family: roboto, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 8px;
+  fill: #707070;
+}
+
+.genderAxis .tick text {
+  font-family: roboto, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 8px;
+  fill: #707070;
+}
 .decade-button{
   fill:#364156;
   width: 42px;
