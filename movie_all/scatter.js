@@ -10,7 +10,7 @@ var onColorChanged;
     // Hand code the svg dimensions, you can also use +svg.attr('width') or +svg.attr('height')
     var svgWidth = +svg.attr('width');
     var svgHeight = +svg.attr('height');
-    var padding = {t: 30, r: 40, b: 40, l: 90};
+    var padding = {t: 30, r: 40, b: 40, l: 50};
     var chartpad = 10;
     var category;
 

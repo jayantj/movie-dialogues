@@ -472,7 +472,6 @@ stroke-opacity: 0.4;
     text-align: center;
 }
 
-
 .dot circle {
   fill: #2381b3;
   opacity: 0.8;
@@ -517,7 +516,7 @@ stroke-opacity: 0.4;
   stroke-width: 0;
 }
 .dialogue-tip {
-  width: 250px;
+  width: 300px;
   background: rgba(240, 240, 240, 0.95);
   font-size: 12px;
   padding: 10px 5px;
@@ -526,12 +525,10 @@ stroke-opacity: 0.4;
 }
 .movie-meta {
   font-family: komu-b, sans-serif;
+  font-size: 18px;
 }
 .title {
   font-size: 24px
-}
-.year, .rating {
-  font-size: 18px;
 }
 /*.theme-label {
   font-family: roboto, sans-serif;

@@ -243,10 +243,10 @@ function stackedBars (filteredMovie) {
     chartG.append('g')
         .append('text')
         .attr('y', 450)
-        .attr('transform', 'translate(-30,0)')
+        .attr('transform', 'translate(80,0)')
         .style('color', 'black')
         .attr('dy', '1.4em')
-        .text(filteredMovie[0].title)
+        .text('Movie')
         .attr('class','genderBarText');
 
     //Decade gender balance bar
