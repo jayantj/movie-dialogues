@@ -200,7 +200,7 @@ function stackedBars (filteredMovie) {
         .append('g')
         .attr('class', 'balanceTitle')
         .append('text')
-        .attr('transform', 'translate(' + (chartWidth / 2 + padding.l)+ ', 530)')
+        .attr('transform', 'translate(' + (chartWidth / 2 + padding.l+40)+ ', 550)')
         .style('text-anchor', 'middle')
         .attr('class','miniTitles');
 
@@ -345,6 +345,20 @@ function stackedBars (filteredMovie) {
 
     svg.select(".legendOrdinal")
         .call(legendOrdinal);
+
+    svg.selectAll('g.footnoteText')
+        .data([1])
+        .enter()
+        .append('g')
+        .attr('class', 'footnoteText')
+        .append('text')
+        .attr('transform', 'translate(' + (padding.l+100)+ ', 780)')
+        //.style('text-anchor', 'middle')
+        .attr('class','footnote');
+
+
+    svg.selectAll('g.footnoteText').select('text.footnote')
+        .text('* The dataset does not contain the information for non binary genders.')
 }
 function sentimentSlider(filteredMovie) {
     
@@ -363,12 +377,12 @@ function sentimentSlider(filteredMovie) {
         .append('g')
         .attr('class', 'sentimentTitle')
         .append('text')
-        .attr('transform', 'translate(' + (chartWidth / 2 + padding.l)+ ', 380)')
+        .attr('transform', 'translate(' + (chartWidth / 2 + padding.l + 50)+ ', 400)')
         .style('text-anchor', 'middle')
         .attr('class','miniTitles');
 
     svg.selectAll('g.sentimentTitle').select('text.miniTitles')
-        .text('Sentiment: '+filteredMovie[0].title)
+        .text('Sentiment')
 
     svg.selectAll('sentimentG')
         .data([1])
@@ -434,12 +448,12 @@ function themeBars(filteredMovie, props) {
         .enter()
         .append('text')
         .style('color', 'black')
-        .attr('transform', 'translate(' + (chartWidth / 2 + padding.l)+ ',30)')
+        .attr('transform', 'translate(' + (chartWidth / 2 + padding.l + 50)+ ',50)')
         .attr('class','miniTitles themesTitle')
         .style('text-anchor', 'middle');
 
     svg.select('text.themesTitle')
-        .text('Themes: '+ filteredMovie[0].title)
+        .text('Themes')
 
     var tBarsEnter = chartG.selectAll('.themeBarG')
         .data(props, function(d, i) {
