@@ -57,9 +57,7 @@
 }
 
 /* Line Divider Style*/
-hr {
-  margin: 0em !important ;
-}
+
 
 
 /* Titles*/
@@ -82,7 +80,7 @@ hr {
   font-size: 20px;
   fill: #364156;
   color: #364156;
-  padding-left: 230px;
+  padding-left: 100px;
   vertical-align: top;
   display: inline-block;
   padding-top: 5px;
@@ -105,18 +103,18 @@ hr {
   fill: #364156;
   color: #364156;
 }
-.movie-meta.year {
+.movie-meta {
   font-size: 16px;
   font-family: komu-b, sans-serif;
   fill: #364156;
   color: #364156;
 }
-.movie-meta.rating {
+/*.movie-meta.rating {
   font-size: 16px;
   font-family: komu-b, sans-serif;
   fill: #364156;
   color: #364156;
-}
+}*/
 .node-label {
   font-family: roboto, sans-serif;
   font-weight: 900;
@@ -356,7 +354,7 @@ body {
     opacity: 0.8;
 }
 rect.themeBar.hovered {
-    fill: #fe902b;
+    fill: #C5DAFC;
 }
 rect.themeBar.selected {
     opacity:1;
@@ -529,6 +527,9 @@ stroke-opacity: 0.4;
 }
 .title {
   font-size: 24px
+}
+#main {
+  margin-bottom: 200px;
 }
 /*.theme-label {
   font-family: roboto, sans-serif;

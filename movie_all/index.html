@@ -11,7 +11,7 @@
   <div>
     <div width = "100%" id="control-container">
         <text class = "main-title">Movie Dialogues over the years</text>
-        <span id="findTitle" style="padding-left:988px;">Pick a movie: </span>
+        <span id="findTitle" style="padding-left:600px;">Pick a movie: </span>
         <select class="custom-select" id="decade-select" style="margin-left: 20px;">
         </select>
         <select class="custom-select" id="movie-select" style="width: 200px;margin-left: 20px;" onchange="onSelectMovieChange()">
@@ -22,6 +22,7 @@
       <hr style="border-top: 1px solid #707070">
   </div>
   <div class="wrapper">
+<<<<<<< HEAD
         <div id="decades-scatter">
             <div style="padding-top: 10px;">
                 <text class="miniTitles">Movies by intersex Conversation</text>
@@ -57,6 +58,42 @@
 	    </div>
 	    <div id="side_panel" class="divLayout">
 	        <svg width="600" height="800" >
+=======
+    <div id="decades-scatter">
+        <div style="padding-top: 10px;">
+            <text class="miniTitles">Movies by intersex Conversation</text>
+            <span class="colorDropdown">Color By:</span>
+            <select class="custom-select" id="color-select" style = "margin-left: 10px; margin-right: 20px;"  onchange="onColorChanged()">
+            </select>
+            <svg class = "legend-svg" width="200" height="50">
+            </svg>
+        </div>
+        <svg id="scatter-svg" width="760" height="580" >
+        </svg>
+    </div>
+    <div id="genres-themes">
+        <div id="heatmapTitle" style="padding-top: 10px;">
+            <text class="miniTitles" style="padding-right:170px;">Conversation Themes by Genre</text>
+            <svg class = "legend-svg-heatmap" width="220" height="50">
+            </svg>
+        </div>
+        <svg id = "themes-svg" width="680" height="580" >
+        </svg>
+    </div>
+    </div>
+
+    <div style = "padding-top:10px padding-bottom:10px">
+      <hr style="border-top: 1px solid #707070">
+    </div>
+  </div>
+  <div class="wrapper">
+		<div id="main" class="divLayout">
+	        <svg width="970" height="800">
+	        </svg>
+	    </div>
+	    <div id="side_panel" class="divLayout">
+	        <svg width="470" height="800">
+>>>>>>> 323c4f9e6fca85b8bde2b69668afd4f1e35dd6a5
 	        </svg>
 	    </div>
 	</div>
@@ -64,13 +101,12 @@
 <script src="./d3.v4.min.js"></script>
 <script src ="./d3-scale-chromatic.v0.3.min.js"></script>
 <script src="./d3-tip.js"></script>
+<script src="./d3-legend.min.js"></script>
 <script src="./themes.js"></script>
 <script src="./scatter.js"></script>
 <script src="./jquery-3.2.1.slim.min.js"></script>
 <script src="./popper.min.js"></script>
 <script src="./bootstrap.min.js"></script>
-<script src="./d3-legend.js"></script>
-<script src="./d3-legend.min.js"></script>
 <script src="./arcs.js"></script>
 <script src="./panel.js"></script>
 </html>
