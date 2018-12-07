@@ -327,6 +327,7 @@ var onDecadeChanged;
             .shapeWidth(30)
             .shapePadding(0)
             .orient('horizontal')
+            .title('Number of Conversations')
             .scale(themeColorScale)
             .labelOffset(5)
             .labels(function(options) {
