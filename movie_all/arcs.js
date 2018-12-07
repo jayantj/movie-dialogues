@@ -237,8 +237,6 @@ function drawCrossLinks (group, links) {
     return d.target.y;
   })
   .on('mouseover', function(d, i) {
-    // var clicked = d3.select(this);
-    // console.log(clicked);
     toolTip.show(d, i);
   })
   .on('mouseout', toolTip.hide)
@@ -304,8 +302,6 @@ function drawLinks(group, links, scale, xFix) {
   })
   .style('fill', 'none')
   .on('mouseover', function(d, i) {
-    // var clicked = d3.select(this);
-    // console.log(clicked);
     toolTip.show(d, i);
   })
   .on('mouseout', toolTip.hide);
