@@ -440,6 +440,7 @@ var onColorChanged;
             .shapeWidth(30)
             .labelOffset(5)
             .scale(colorScaleB)
+            .title('Fraction of Conversations')
             .orient('horizontal')
             //.shapePadding(40)
             // .labels(['Pass', 'Fail', 'Unknown'])
