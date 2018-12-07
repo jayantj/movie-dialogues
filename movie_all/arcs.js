@@ -32,13 +32,24 @@ var fRadianScale = function() { return ;};
 var toolTip = d3.tip()
   .attr('class', 'dialogue-tip')
   .direction('s')
-  .offset([0, 150])
+  .offset(function(d, i) {
+    if(d.source.x === 300 && d.target.x === 300) {
+      return [0, 150];
+    } else {
+      return [0, 0];
+    }
+  })
   .html(function(d) {
     return d.source.conv.dialogues.reduce((accu, dialogue, i) => {
       return `${accu}<span>${dialogue.characterName} : ${dialogue.text}</span><br/>`;
     }, '');
   });
   svgMain.call(toolTip);
+
+const maleG = svgMain.append('g').attr('class', 'male');
+const femaleG = svgMain.append('g').attr('class', 'female');
+const crossG = svgMain.append('g').attr('class', 'cross-g');
+const labelG = svgMain.append('g').attr('class', 'label');
 
 var arcDiagram = function(selectedMovie) {
   d3.json(`./../data/conv/${selectedMovie}.json`, function(error, dataset) {
@@ -71,11 +82,6 @@ var arcDiagram = function(selectedMovie) {
 
       fRadianScale = d3.scaleLinear()
       .range([3 * Math.PI / 2, 5 * Math.PI / 2]);
-
-      const maleG = svgMain.append('g').attr('class', 'male');
-      const femaleG = svgMain.append('g').attr('class', 'female');
-      const crossG = svgMain.append('g').attr('class', 'cross-g');
-      const labelG = svgMain.append('g').attr('class', 'label');
 
       const maleGroup = svgMain.select('.male');
       const femaleGroup = svgMain.select('.female');
