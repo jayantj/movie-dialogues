@@ -17,7 +17,7 @@ var svg = d3.select('#side_panel').select('svg');
 var svgWidth = +svg.attr('width');
 var svgHeight = +svg.attr('height');
 
-var padding = {t: 60, r: 40, b: 30, l: 10};
+var padding = {t: 60, r: 20, b: 30, l: 10};
 
 // Compute chart dimensions
 var chartWidth = svgWidth - padding.l - padding.r;
@@ -114,7 +114,7 @@ d3.csv('./../data/movies.csv',
             .range([0,chartWidth-140]);
 
         xThemeScale = d3.scaleLinear()
-            .domain([0,80])
+            .domain([0,100])
             .range([0,chartWidth-140]);
 
         xSentimentScale = d3.scaleLinear()
@@ -193,12 +193,20 @@ function updatePanel(movie) {
 }
 function stackedBars (filteredMovie) {
     g = svg.append('g');
-    g.append('text')
-        .attr('transform', 'translate(' + (chartWidth / 2 + padding.l)+ ',530)')
-        .text('Intersex conversations: Movie vs Decade')
-        .attr('class','miniTitles')
-        .style('text-anchor', 'middle');
 
+    svg.selectAll('g.balanceTitle')
+        .data([1])
+        .enter()
+        .append('g')
+        .attr('class', 'balanceTitle')
+        .append('text')
+        .attr('transform', 'translate(' + (chartWidth / 2 + padding.l)+ ', 530)')
+        .style('text-anchor', 'middle')
+        .attr('class','miniTitles');
+
+
+    svg.selectAll('g.balanceTitle').select('text.miniTitles')
+        .text('Intersex conversations: Movie vs Decade')
 
     var bars = chartG.selectAll('.bar')
         .data(filteredMovie[0].genderBal, function(d) {
@@ -240,14 +248,29 @@ function stackedBars (filteredMovie) {
             //toolTip.select("text").text(formatPercent(d.value));
         });
 
-    chartG.append('g')
+    svg.selectAll('g.movieBarTitle')
+        .data([1])
+        .enter()
+        .append('g')
+        .attr('class', 'movieBarTitle')
         .append('text')
-        .attr('y', 450)
-        .attr('transform', 'translate(80,0)')
-        .style('color', 'black')
+        .attr('y', 575)
+        .attr('transform', 'translate(110,0)')
         .attr('dy', '1.4em')
-        .text('Movie')
+        .style('text-anchor', 'middle')
         .attr('class','genderBarText');
+
+    svg.selectAll('g.movieBarTitle').select('text.genderBarText')
+        .text('Movie');
+
+    // chartG.append('g')
+    //     .append('text')
+    //     .attr('y', 450)
+    //     .attr('transform', 'translate(80,0)')
+    //     .style('color', 'black')
+    //     .attr('dy', '1.4em')
+    //     .text('Movie')
+    //     .attr('class','genderBarText');
 
     //Decade gender balance bar
 
@@ -288,14 +311,20 @@ function stackedBars (filteredMovie) {
             //toolTip.select("text").text(formatPercent(d.value));
         });
 
-    chartG.append('g')
+    svg.selectAll('g.decadeBarTitle')
+        .data([1])
+        .enter()
+        .append('g')
+        .attr('class', 'decadeBarTitle')
         .append('text')
-        .attr('y', 490)
-        .attr('transform', 'translate(80,0)')
-        .style('color', 'black')
+        .attr('y', 615)
+        .attr('transform', 'translate(110,0)')
         .attr('dy', '1.4em')
-        .text((filteredMovie[0].year-filteredMovie[0].year%10).toString() + 's')
+        .style('text-anchor', 'middle')
         .attr('class','genderBarText');
+
+    svg.selectAll('g.decadeBarTitle').select('text.genderBarText')
+        .text((filteredMovie[0].year-filteredMovie[0].year%10).toString() + 's');
 
     //Gender balance legend
     var genderBalScale = d3.scaleOrdinal()
@@ -304,7 +333,7 @@ function stackedBars (filteredMovie) {
 
     svg.append("g")
         .attr("class", "legendOrdinal")
-        .attr("transform", "translate(220,680)");
+        .attr("transform", "translate(155,700)");
 
     var legendOrdinal = d3.legendColor()
         //.labelFormat(d3.format(".06f"))
@@ -350,7 +379,7 @@ function sentimentSlider(filteredMovie) {
 
     var sentimentG = svg.select('g.sentimentG')
     //Sentiment bar and legend
-    var sentimentColorRange = ['green','red']
+    var sentimentColorRange = ['#f03b33','#488f31']
         
     var sentimentColorScale = d3.scaleLinear().range(sentimentColorRange).domain([1,2]);
 
@@ -424,10 +453,10 @@ function themeBars(filteredMovie, props) {
         .append('rect')
         .attr('x', 120)
         .attr('y', function(d,i){
-            return 20+parseFloat(i/2)*20 + i * 10 + 4;
+            return -30+parseFloat(i/2)*20 + i * 10 + 4;
         })
         .attr('height', 10)
-        .attr('fill','#4778AA')
+        .attr('fill','#687998')
         .attr('class','themeBar')
 
     var themeRects = chartG.selectAll('.themeBarG').select('rect.themeBar')
@@ -477,7 +506,7 @@ function themeBars(filteredMovie, props) {
     tBarsEnter.append('text')
         .attr('x', 60)
         .attr('y', function(d,i){
-            return 20+parseFloat(i/2)*20 + i * 10 + 4;
+            return -30+parseFloat(i/2)*20 + i * 10 + 4;
         })
         .style('color', 'black')
         .attr('dy', '0.8em')
