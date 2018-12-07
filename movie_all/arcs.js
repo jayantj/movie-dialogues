@@ -15,7 +15,6 @@ var rectNodeWidth = 5;
 // Compute chart dimensions
 var mainChartWidth = svgMainWidth - MainPadding.l - MainPadding.r;
 var mainChartHeight = svgMainHeight - MainPadding.t - MainPadding.b;
-console.log('width and height: ', mainChartHeight);
 
 // fixed node radius
 var radius = 4;
@@ -33,7 +32,7 @@ var fRadianScale = function() { return ;};
 var toolTip = d3.tip()
   .attr('class', 'dialogue-tip')
   .direction('s')
-  .offset([-12, 0])
+  .offset([0, 150])
   .html(function(d) {
     return d.source.conv.dialogues.reduce((accu, dialogue, i) => {
       return `${accu}<span>${dialogue.characterName} : ${dialogue.text}</span><br/>`;
@@ -253,7 +252,7 @@ function drawLinks(group, links, scale, xFix) {
       const interval = (l.counts > 1) ? (l.counts - 1) : l.counts;
       const temp = {
         source: {
-          source,
+          ...source,
           y: (rectNodeHeight / interval) * j + l.source.y,
           conv: l.lines[j],
         },
