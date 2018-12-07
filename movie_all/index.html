@@ -22,38 +22,41 @@
       <hr style="border-top: 1px solid #707070">
   </div>
   <div class="wrapper">
-    <div id="decades-scatter">
-        <div style="padding-top: 10px;">
-            <text class="miniTitles">Movies by intersex Conversation</text>
-            <span class="colorDropdown">Color By:</span>
-            <select class="custom-select" id="color-select" style = "margin-left: 10px; margin-right: 20px;"  onchange="onColorChanged()">
-            </select>
-            <svg class = "legend-svg" width="200" height="40">
+        <div id="decades-scatter">
+            <div style="padding-top: 10px;">
+                <text class="miniTitles">Movies by intersex Conversation</text>
+                <span class="colorDropdown">Color By:</span>
+                <select class="custom-select" id="color-select" style = "margin-left: 10px; margin-right: 20px;"  onchange="onColorChanged()">
+                </select>
+                <svg class = "legend-svg" width="200" height="40">
+                </svg>
+            </div>
+            <svg id="scatter-svg" width="900" height="580" >
             </svg>
         </div>
-        <svg id="scatter-svg" width="900" height="580" >
-        </svg>
-    </div>
-    <div id="genres-themes">
-        <div id="heatmapTitle" style="padding-top: 10px;">
-            <text class="miniTitles" style="padding-right:370px;">Conversation Themes by Genre</text>
-            <svg class = "legend-svg-heatmap" width="220" height="40">
+        <div id="genres-themes">
+            <div id="heatmapTitle" style="padding-top: 10px;">
+                <text class="miniTitles" style="padding-right:370px;">Conversation Themes by Genre</text>
+                <svg class = "legend-svg-heatmap" width="220" height="40">
+                </svg>
+            </div>
+            <svg id = "themes-svg" width="900" height="580" >
             </svg>
         </div>
-        <svg id = "themes-svg" width="900" height="580" >
-        </svg>
-    </div>
     </div>
 
 
-  </div>
+    </div>
+    <div>
+        <hr style="border-top: 1px solid #707070">
+    </div>
   <div class="wrapper">
 		<div id="main" class="divLayout">
-	        <svg width="1200" height="800" style="border: 1px solid #777;">
+	        <svg width="1200" height="800" >
 	        </svg>
 	    </div>
 	    <div id="side_panel" class="divLayout">
-	        <svg width="600" height="800" style="border: 1px solid #777;">
+	        <svg width="600" height="800" >
 	        </svg>
 	    </div>
 	</div>
