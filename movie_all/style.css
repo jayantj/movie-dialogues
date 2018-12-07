@@ -50,12 +50,20 @@
   fill: #ffffff;
 }
 
-.themessAxis .tick text {
+.themesAxis .tick text {
   font-family: roboto, sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: 8px;
   fill: #707070;
+}
+
+.themesAxis path{
+  stroke: #707070;
+}
+
+.themesAxis line{
+  stroke: #707070;
 }
 
 .sentimentAxis .tick text {
@@ -66,12 +74,28 @@
   fill: #707070;
 }
 
+.sentimentAxis path{
+  stroke: #707070;
+}
+
+.sentimentAxis line{
+  stroke: #707070;
+}
+
 .genderAxis .tick text {
   font-family: roboto, sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: 8px;
   fill: #707070;
+}
+
+.genderAxis path{
+  stroke: #707070;
+}
+
+.genderAxis line{
+  stroke: #707070;
 }
 .decade-button{
   fill:#364156;
