@@ -410,16 +410,19 @@ text.themeBar {
 }
 .male path:hover {
     stroke:orange;
+    stroke-width: 3;
 }
 .female path:hover {
     stroke:orange;
+    stroke-width: 3;
 }
 .cross-g line {
     stroke: #7e7e7e;
-    stroke-width: 0.7;
+    stroke-width: 1;
 }
 .cross-g line:hover {
     stroke:orange;
+    stroke-width: 3;
 }
 .link.themeFade {
     stroke-width: 0;
@@ -514,7 +517,7 @@ stroke-opacity: 0.4;
   stroke-width: 0;
 }
 .dialogue-tip {
-  width: 300px;
+  width: 350px;
   background: rgba(240, 240, 240, 0.95);
   font-size: 12px;
   padding: 10px 5px;
