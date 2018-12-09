@@ -49,7 +49,7 @@ var onColorChanged;
         .text(function (d) {return d;});
 
     var dataAttributes = ['mm_percent', 'mf_percent', 'ff_percent'];
-    var axesLabels = {'mm_percent':'Male to Male Conversations', 'mf_percent':'Male to Female Conversations', 'ff_percent':'Female to Female Conversations'};
+    var axesLabels = {'mm_percent':'Male to Male', 'mf_percent':'Male to Female', 'ff_percent':'Female to Female'};
     var themes =  {'anxiety': 'anxiety_conv','anger':'anger_conv','sadness':'sadness_conv','sexual':'sexual_conv','work': 'work_conv','leisure':'leisure_conv','home':'home_conv','money':'money_conv','religion':'religion_conv','death':'death_conv','swear':'swear_conv'};
     var N = dataAttributes.length;
     var chartWidth = (svgWidth - padding.l - padding.r);
@@ -83,7 +83,7 @@ var onColorChanged;
     .attr("class", "d3-tip")
     .offset([-12, 0])
     .html(function(d) {
-        return "<h5 style='text-transform: capitalize'>"+d['movie_title']+", "+d.movie_year+", "+d.mm_percent+"</h5>";
+        return "<h5 style='text-transform: capitalize'>"+d['movie_title']+", "+d.movie_year+"</h5>";
     });
     // Get decade for movie
     function decadeForRow(row) {
