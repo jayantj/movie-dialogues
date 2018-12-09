@@ -443,6 +443,11 @@ function sentimentSlider(filteredMovie) {
 }
 
 function themeBars(filteredMovie, props) {
+
+    d3.selectAll('.themeBar').classed('filteredout',false);
+    d3.selectAll('.themeBar').classed('hovered',false);
+    d3.selectAll('.themeBar').classed('selected',false);
+
     svg.selectAll('text.themesTitle')
         .data([1])
         .enter()
