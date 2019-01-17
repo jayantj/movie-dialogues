@@ -1,6 +1,12 @@
 # movie-dialogues
 A data visualization allowing users to explore conversational themes and conversation ratios between sexes across decades and genres. You can view the visualization [here](https://jayantj.github.io/movie-dialogues/movie_all/)
 
+Visualization made by - 
+- [Eyitemi Moju-Igbene](https://github.com/emojuigbene)
+- [Jayant Jain](https://github.com/jayantj)
+- [Kelly Su](https://github.com/CApopsicle)
+- [Nikhila Nyapathy](https://github.com/nikhilanyapathy)
+
 ## Description
 Our visualization explores movie dialogues spanning 9 decades (1927 - 2010). The purpose of our visualization is to show themes and inter/intra sex ratio in the conversations. We want to bring to light how the ratio of female-female conversations has not really changed over the years. Using overview and then detail, our visualization will highlight these movie characteristics and give our users insight into their favorite movies as well as overall trends.
 
